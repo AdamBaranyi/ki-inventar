@@ -10,7 +10,8 @@
     "test:e2e": "playwright test",
     "pruefe": "node scripts/pruefe-quelltext.mjs",
     "sabotage": "node scripts/sabotage.mjs",
-    "check": "bun run pruefe && bun run test && bun run test:skripte && bun run build && bun run test:e2e"
+    "check": "bun run pruefe && bun run test && bun run test:skripte && bun run build && bun run test:e2e",
+    "test:e2e:browsers": "playwright test --config playwright.browsers.config.ts"
   },
   "private": true,
   "packageManager": "bun@1.3.14",
