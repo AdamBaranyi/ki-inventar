@@ -133,3 +133,50 @@
   align-items: center;
   min-height: var(--tippflaeche);
 }
+
+/* Am Handy: Wortmarke und «Menü» in einer Zeile, die Navigation klappt darunter auf. */
+.menue-knopf {
+  display: none;
+}
+
+@media (max-width: 47.99rem) {
+  .kopf__innen {
+    flex-wrap: wrap;
+  }
+
+  .menue-knopf {
+    display: inline-flex;
+    padding-inline: var(--a-4);
+    font-size: var(--text-s);
+  }
+
+  .navi {
+    display: none;
+    width: 100%;
+  }
+
+  .navi--offen {
+    display: block;
+  }
+
+  .navi__liste {
+    flex-direction: column;
+    margin: 0;
+    padding-bottom: var(--a-2);
+  }
+
+  .navi__link {
+    width: 100%;
+    padding-inline: 0;
+    border-bottom: 1px solid var(--linie);
+  }
+
+  .navi__link--aktiv,
+  .navi__link--aktiv:hover {
+    border-bottom: 3px solid var(--tinte);
+  }
+
+  .wortmarke__zusatz {
+    display: none;
+  }
+}

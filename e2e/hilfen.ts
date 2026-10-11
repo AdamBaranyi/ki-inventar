@@ -112,3 +112,11 @@ export async function ohneDruckdialog(page: Page) {
     };
   });
 }
+
+/** Folgt einem Link der Hauptnavigation; am Handy klappt vorher das Menü auf. */
+export async function geheZu(page: Page, name: string) {
+  const menue = page.getByRole('button', { name: 'Menü', exact: true });
+  if (await menue.isVisible()) await menue.click();
+  await page.getByRole('navigation').getByRole('link', { name, exact: true }).click();
+  await page.getByRole('heading', { level: 1 }).first().waitFor();
+}

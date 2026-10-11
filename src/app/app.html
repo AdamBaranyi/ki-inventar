@@ -7,7 +7,22 @@
       <span class="wortmarke__name">{{ t.name }}</span>
       <span class="wortmarke__zusatz">{{ t.zusatz }}</span>
     </a>
-    <nav class="navi" [attr.aria-label]="t.navigation">
+    <button
+      class="knopf knopf--zweit menue-knopf"
+      type="button"
+      aria-controls="hauptnavigation"
+      [attr.aria-expanded]="menueOffen()"
+      (click)="menueOffen.set(!menueOffen())"
+    >
+      {{ menueOffen() ? t.menueZu : t.menue }}
+    </button>
+    <nav
+      id="hauptnavigation"
+      class="navi"
+      [class.navi--offen]="menueOffen()"
+      [attr.aria-label]="t.navigation"
+      (keydown.escape)="schliesseMenue()"
+    >
       <ul class="navi__liste">
         <li>
           <a

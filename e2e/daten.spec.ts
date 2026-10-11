@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 
 import type { Page } from '@playwright/test';
 
-import { oeffne } from './hilfen';
+import { geheZu, oeffne } from './hilfen';
 import { expect, pruefeBildschirm, test } from './qualitaet';
 
 test.beforeEach(async ({ page }) => {
@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 async function mitBeispielAufDaten(page: Page) {
   await oeffne(page);
   await page.getByRole('button', { name: 'Beispiel laden' }).click();
-  await page.getByRole('navigation').getByRole('link', { name: 'Daten' }).click();
+  await geheZu(page, 'Daten');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Daten sichern');
 }
 
@@ -67,7 +67,7 @@ test.describe('Daten', () => {
     await waehleDatei(page, 'kaputt.json', 'kein json');
     await expect(page.getByText('Der Inhalt ist kein gültiges JSON.')).toBeVisible();
     await pruefeBildschirm(page, gesehen, 'Daten mit Fehlermeldung');
-    await page.getByRole('navigation').getByRole('link', { name: 'Übersicht' }).click();
+    await geheZu(page, 'Übersicht');
     await expect(page.getByRole('list', { name: 'Stand' })).toContainText('7 Werkzeuge');
   });
 

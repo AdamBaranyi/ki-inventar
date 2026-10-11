@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter, skip } from 'rxjs';
@@ -16,6 +16,8 @@ export class App {
   protected readonly t = TEXTE.app;
   protected readonly quellcode = QUELLCODE;
   protected readonly dienst = inject(InventarDienst);
+  /** Nur am Handy: Die Navigation klappt hinter «Menü» auf. */
+  protected readonly menueOffen = signal(false);
 
   constructor() {
     // Nach einem Seitenwechsel steht der Fokus auf der neuen Überschrift, damit
@@ -26,7 +28,16 @@ export class App {
         skip(1),
         takeUntilDestroyed(),
       )
-      .subscribe(() => requestAnimationFrame(fokusAufTitel));
+      .subscribe(() => {
+        this.menueOffen.set(false);
+        requestAnimationFrame(fokusAufTitel);
+      });
+  }
+
+  protected schliesseMenue() {
+    if (!this.menueOffen()) return;
+    this.menueOffen.set(false);
+    document.querySelector<HTMLElement>('.menue-knopf')?.focus();
   }
 
   protected zumInhalt(ereignis: Event) {

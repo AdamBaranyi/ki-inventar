@@ -12,6 +12,8 @@ export const TEXTE = {
     zusatz: 'für Schweizer KMU',
     zumInhalt: 'Zum Inhalt springen',
     navigation: 'Hauptnavigation',
+    menue: 'Menü',
+    menueZu: 'Menü schliessen',
     nav: {
       uebersicht: 'Übersicht',
       pruefpunkte: 'Prüfpunkte',

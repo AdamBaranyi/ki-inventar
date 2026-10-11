@@ -12,11 +12,44 @@ test.describe('Startseite', () => {
     await pruefeBildschirm(page, gesehen, 'Start leer');
   });
 
-  test('zeigt Hauptaktion und Hinweis ohne Scrollen', async ({ page }) => {
+  test('zeigt beide Wege ohne Scrollen', async ({ page }) => {
     await oeffne(page);
-    const knopf = await page.getByRole('link', { name: 'Werkzeug erfassen' }).boundingBox();
     const hoehe = page.viewportSize()?.height ?? 0;
-    expect(knopf && knopf.y + knopf.height).toBeLessThanOrEqual(hoehe);
+    for (const ziel of [
+      page.getByRole('link', { name: 'Werkzeug erfassen' }),
+      page.getByRole('button', { name: 'Beispiel laden' }),
+    ]) {
+      const box = await ziel.boundingBox();
+      expect(box && box.y + box.height).toBeLessThanOrEqual(hoehe);
+    }
+  });
+
+  test('am Handy klappt die Navigation hinter «Menü» auf und nach dem Wechsel zu', async ({
+    page,
+    gesehen,
+    isMobile,
+  }) => {
+    test.skip(!isMobile, 'Das Menü gibt es nur am Handy.');
+    await oeffne(page);
+    await expect(page.getByRole('navigation')).toBeHidden();
+    const menue = page.getByRole('button', { name: 'Menü', exact: true });
+    await expect(menue).toHaveAttribute('aria-expanded', 'false');
+    await menue.click();
+    await expect(page.getByRole('button', { name: 'Menü schliessen' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+    await pruefeBildschirm(page, gesehen, 'Menü offen');
+    await page.getByRole('navigation').getByRole('link', { name: 'Fristen' }).click();
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Fristen');
+    await expect(page.getByRole('navigation')).toBeHidden();
+  });
+
+  test('am Desktop steht die Navigation offen, ohne «Menü»', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'Am Handy gibt es das Menü.');
+    await oeffne(page);
+    await expect(page.getByRole('navigation').getByRole('link')).toHaveCount(5);
+    await expect(page.getByRole('button', { name: 'Menü', exact: true })).toBeHidden();
   });
 
   test('mit Beispiel: drei Zahlen, Liste und Grundregeln', async ({ page, gesehen }) => {

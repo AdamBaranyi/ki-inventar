@@ -6,8 +6,10 @@
   margin-top: var(--a-3);
 }
 
-.uebersicht__einleitung {
-  font-size: var(--text-l);
+@media (min-width: 48rem) {
+  .uebersicht__einleitung {
+    font-size: var(--text-l);
+  }
 }
 
 /* Die drei Zahlen als Bilanzzeile: Zahl gross, Wort direkt daneben. */

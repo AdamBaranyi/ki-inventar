@@ -7,9 +7,10 @@
   [attr.aria-labelledby]="kennung() + '-titel'"
 >
   <p class="punkt__kopf">
-    <span class="punkt__dringlichkeit">{{ t.dringlichkeit[p.dringlichkeit] }}</span>
     @if (mitWerkzeug()) {
       <a class="punkt__werkzeug" [routerLink]="['/werkzeug', p.werkzeugId]">{{ p.werkzeugName }}</a>
+    } @else {
+      <span class="punkt__dringlichkeit">{{ t.dringlichkeit[p.dringlichkeit] }}</span>
     }
   </p>
   <h3 class="punkt__titel" [id]="kennung() + '-titel'">

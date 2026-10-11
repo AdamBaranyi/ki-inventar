@@ -1,4 +1,4 @@
-import { oeffne, ohneDruckdialog } from './hilfen';
+import { geheZu, oeffne, ohneDruckdialog } from './hilfen';
 import { expect, pruefeBildschirm, test } from './qualitaet';
 
 test.beforeEach(async ({ page }) => {
@@ -30,7 +30,7 @@ test('Beispiel laden, bearbeiten, erledigen, drucken, exportieren, neu laden: de
   await expect(avv).toContainText('Erledigt am 11.10.2026');
 
   // Drucken: Druckansicht, Kopf mit Firma und Datum, Druckdialog aufgerufen.
-  await page.getByRole('navigation').getByRole('link', { name: 'Verzeichnis' }).click();
+  await geheZu(page, 'Verzeichnis');
   await expect(page.getByRole('heading', { name: 'Verzeichnis der KI-Werkzeuge' })).toBeVisible();
   await expect(page.getByText('Stand 11.10.2026, 7 Werkzeuge, 33 offene Prüfpunkte')).toBeVisible();
   await pruefeBildschirm(page, gesehen, 'Verzeichnis');
@@ -47,7 +47,7 @@ test('Beispiel laden, bearbeiten, erledigen, drucken, exportieren, neu laden: de
   await page.emulateMedia({ media: 'screen' });
 
   // Exportieren.
-  await page.getByRole('navigation').getByRole('link', { name: 'Daten' }).click();
+  await geheZu(page, 'Daten');
   const [datei] = await Promise.all([
     page.waitForEvent('download'),
     page.getByRole('button', { name: 'Sicherung herunterladen (JSON)' }).click(),
@@ -56,7 +56,7 @@ test('Beispiel laden, bearbeiten, erledigen, drucken, exportieren, neu laden: de
 
   // Neu laden: derselbe Stand.
   await page.reload({ waitUntil: 'commit' });
-  await page.getByRole('navigation').getByRole('link', { name: 'Übersicht' }).click();
+  await geheZu(page, 'Übersicht');
   await expect(page.getByRole('list', { name: 'Stand' }).getByRole('listitem')).toHaveText([
     '7 Werkzeuge',
     '33 offene Prüfpunkte',

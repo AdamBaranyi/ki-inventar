@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
 
-import { oeffne } from './hilfen';
+import { geheZu, oeffne } from './hilfen';
 import { expect, pruefeBildschirm, test } from './qualitaet';
 
 test.beforeEach(async ({ page }) => {
@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 async function mitBeispiel(page: Page, pfad: string) {
   await oeffne(page);
   await page.getByRole('button', { name: 'Beispiel laden' }).click();
-  await page.getByRole('navigation').getByRole('link', { name: pfad }).click();
+  await geheZu(page, pfad);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(pfad);
 }
 
