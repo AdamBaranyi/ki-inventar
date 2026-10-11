@@ -91,3 +91,9 @@ verlangt, dass jedes Mal ein Test rot wird.
   folgen dort.
 
 Stand und nächste Schritte: [docs/STATUS.md](docs/STATUS.md).
+
+## Lizenz
+
+Alle Rechte vorbehalten. Der Quelltext ist öffentlich, damit er gelesen und beurteilt werden kann;
+Nutzung, Veränderung und Weitergabe brauchen eine schriftliche Erlaubnis. Einzelheiten und
+Bestandteile Dritter: [LICENSE](LICENSE).

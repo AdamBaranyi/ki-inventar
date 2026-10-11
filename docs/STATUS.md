@@ -23,7 +23,7 @@ Live auf https://adambaranyi.github.io/ki-inventar/, gebaut und geprüft von der
 
 1. Adams Gerätetest am iPhone (Safari): eigenes Werkzeug erfassen, Prüfpunkt erledigen, Sicherung
    herunterladen, Druckansicht als PDF.
-2. Lizenz für den Quellcode wählen (ohne Lizenz gilt: alle Rechte vorbehalten).
+2. Lizenz: erledigt am 11.10.2026, «Alle Rechte vorbehalten» wie Tallyroom und Hundebüechli (`LICENSE`).
 3. Browser-Lauf mit WebKit und Firefox (`playwright.browsers.config.ts`) vor dem nächsten Deploy.
 4. Erinnerungs-Workflows (wöchentlich offene PRs, monatliche Checkliste) wie in Tallyroom.
 5. Subdomain `ki-inventar.adambaranyi.xyz` auf vps1 mit Caddy und Sicherheits-Headern; DNS-Eintrag
