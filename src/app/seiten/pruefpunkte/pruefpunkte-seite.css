@@ -1,0 +1,40 @@
+.liste-seite {
+  max-width: var(--breite-text);
+}
+
+.liste-seite > * + * {
+  margin-top: var(--a-4);
+}
+
+.liste-seite__filter {
+  margin-top: var(--a-6);
+}
+
+.stufe {
+  margin-top: var(--a-7);
+}
+
+.stufe__titel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--a-1) var(--a-3);
+  padding-bottom: var(--a-2);
+  border-bottom: 2px solid var(--tinte);
+}
+
+.stufe__anzahl {
+  color: var(--graphit);
+  font-size: var(--text-m);
+  font-weight: 600;
+}
+
+#stufe-hoechste {
+  color: var(--stopp);
+  border-bottom-color: var(--stopp);
+}
+
+.liste-seite__leer {
+  margin-top: var(--a-6);
+  font-size: var(--text-l);
+}

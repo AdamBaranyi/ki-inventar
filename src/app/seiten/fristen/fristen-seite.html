@@ -1,0 +1,41 @@
+<section class="fristen-seite">
+  <h1 tabindex="-1">{{ titel }}</h1>
+  <p>{{ t.einleitung }}</p>
+  @if (werkzeuge() > 0) {
+    <p class="fristen-seite__bei-dir">{{ mitEu() > 0 ? t.beiDir(mitEu()) : t.keinEu }}</p>
+  }
+
+  <ol class="zeitachse">
+    @for (frist of vorbei; track frist.datum) {
+      <li class="frist frist--gilt">
+        <ng-container [ngTemplateOutlet]="eintrag" [ngTemplateOutletContext]="{ $implicit: frist, stand: t.giltSeit }" />
+      </li>
+    }
+    <li class="zeitachse__heute" aria-current="date">{{ t.heute(heute) }}</li>
+    @for (frist of kommend; track frist.datum) {
+      <li class="frist">
+        <ng-container [ngTemplateOutlet]="eintrag" [ngTemplateOutletContext]="{ $implicit: frist, stand: frist.ungefaehr ? t.geplant : t.kommt }" />
+      </li>
+    }
+  </ol>
+</section>
+
+<ng-template #eintrag let-frist let-stand="stand">
+  <p class="frist__datum zahl">{{ datum(frist) }}</p>
+  <div class="frist__text">
+    <h2 class="frist__titel">{{ frist.titel }}</h2>
+    <p class="frist__stand">{{ stand }}, {{ frist.eu ? t.eu : t.schweiz }}</p>
+    <p>{{ frist.was }}</p>
+    <p><strong>{{ t.betrifft }}:</strong> {{ frist.betrifft }}</p>
+    <p class="frist__quelle">
+      {{ quelleText }}:
+      @if (frist.quelle.url) {
+        <a [href]="frist.quelle.url" target="_blank" rel="noopener noreferrer"
+          >{{ frist.quelle.text }}<span class="unsichtbar"> {{ neuerTab }}</span></a
+        >
+      } @else {
+        {{ frist.quelle.text }}
+      }
+    </p>
+  </div>
+</ng-template>

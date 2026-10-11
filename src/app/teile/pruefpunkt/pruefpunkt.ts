@@ -74,11 +74,20 @@ export class Pruefpunkt {
     this.fokussiere('button');
   }
 
-  /** Nach dem Umschalten verschwindet der gedrückte Knopf; der Fokus bleibt beim Punkt. */
+  /**
+   * Nach dem Umschalten verschwindet der gedrückte Knopf; der Fokus bleibt beim
+   * Punkt. Fällt der Punkt aus einer gefilterten Liste, geht er zum nächsten.
+   */
   private fokussiere(element: 'button' | 'textarea') {
     const kennung = this.kennung();
-    requestAnimationFrame(() =>
-      document.querySelector<HTMLElement>(`#${kennung} .punkt__aktionen ${element}`)?.focus(),
-    );
+    const naechster = document.getElementById(kennung)?.closest('li')?.nextElementSibling;
+    const ersatz = naechster?.querySelector('article')?.id;
+    requestAnimationFrame(() => {
+      const ziel =
+        document.querySelector<HTMLElement>(`#${kennung} .punkt__aktionen ${element}`) ??
+        (ersatz ? document.querySelector<HTMLElement>(`#${ersatz} .punkt__aktionen button`) : null) ??
+        document.querySelector<HTMLElement>('main h1');
+      ziel?.focus({ preventScroll: ziel.tagName === 'H1' });
+    });
   }
 }

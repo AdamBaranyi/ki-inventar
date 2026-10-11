@@ -28,6 +28,17 @@ export const routes: Routes = [
       import('./seiten/werkzeug-formular/werkzeug-formular').then((m) => m.WerkzeugFormular),
   },
   {
+    path: 'pruefpunkte',
+    title: titel(TEXTE.titel.pruefpunkte),
+    loadComponent: () =>
+      import('./seiten/pruefpunkte/pruefpunkte-seite').then((m) => m.PruefpunkteSeite),
+  },
+  {
+    path: 'fristen',
+    title: titel(TEXTE.titel.fristen),
+    loadComponent: () => import('./seiten/fristen/fristen-seite').then((m) => m.FristenSeite),
+  },
+  {
     path: '**',
     title: titel(TEXTE.titel.nichtGefunden),
     loadComponent: () => import('./seiten/nicht-gefunden/nicht-gefunden').then((m) => m.NichtGefunden),

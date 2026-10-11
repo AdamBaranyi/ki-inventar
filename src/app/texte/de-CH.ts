@@ -101,6 +101,20 @@ export const TEXTE = {
     leerOhneWerkzeuge: 'Noch kein Werkzeug erfasst; Prüfpunkte entstehen aus den Antworten.',
     anzahl: (n: number) => (n === 1 ? '1 Punkt' : `${n} Punkte`),
   },
+  fristen: {
+    einleitung:
+      'Wann die EU-KI-Verordnung was verlangt und seit wann das Datenschutzgesetz gilt. Die EU-Pflichten treffen ein Schweizer Unternehmen, sobald Ausgaben in der EU genutzt werden oder Kundschaft dort sitzt.',
+    beiDir: (n: number) =>
+      n === 1 ? 'Bei dir hat 1 Werkzeug EU-Bezug.' : `Bei dir haben ${n} Werkzeuge EU-Bezug.`,
+    keinEu: 'Keines deiner Werkzeuge hat EU-Bezug; die EU-Fristen betreffen dich derzeit nicht direkt.',
+    heute: (datum: string) => `Heute, ${datum}`,
+    giltSeit: 'gilt',
+    kommt: 'kommt',
+    geplant: 'geplant',
+    betrifft: 'Betrifft',
+    eu: 'EU-Bezug nötig',
+    schweiz: 'Schweiz',
+  },
   status: {
     offen: 'Offen',
     erledigt: 'Erledigt',

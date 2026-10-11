@@ -1,0 +1,73 @@
+.fristen-seite {
+  max-width: var(--breite-text);
+}
+
+.fristen-seite > * + * {
+  margin-top: var(--a-4);
+}
+
+.fristen-seite__bei-dir {
+  font-weight: 650;
+}
+
+/* Zeitachse: Datum links in Tabellenziffern, Text rechts; auf dem Handy untereinander. */
+.zeitachse {
+  margin-top: var(--a-6);
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--linie);
+}
+
+.frist {
+  display: grid;
+  gap: var(--a-2) var(--a-5);
+  padding-block: var(--a-5);
+  border-bottom: 1px solid var(--linie);
+}
+
+@media (min-width: 40rem) {
+  .frist {
+    grid-template-columns: 8.5rem 1fr;
+  }
+}
+
+.frist__datum {
+  font-size: var(--text-l);
+  font-weight: 750;
+}
+
+.frist__text > * + * {
+  margin-top: var(--a-2);
+}
+
+.frist__titel {
+  font-size: var(--text-l);
+}
+
+.frist__stand {
+  color: var(--graphit);
+  font-weight: 600;
+}
+
+.frist--gilt .frist__datum,
+.frist--gilt .frist__titel {
+  color: var(--graphit);
+}
+
+.frist__quelle {
+  color: var(--graphit);
+}
+
+.frist__quelle a {
+  display: inline-block;
+  padding-block: 0.6rem;
+  color: var(--tinte);
+}
+
+/* Heute: die Stelle auf der Achse, an der man steht, mit Leuchtstift markiert. */
+.zeitachse__heute {
+  padding: var(--a-2) var(--a-3);
+  margin-block: var(--a-3);
+  background: var(--offen);
+  font-weight: 750;
+}

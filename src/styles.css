@@ -9,3 +9,5 @@
 @import './app/seiten/werkzeug-formular/werkzeug-formular.css';
 @import './app/seiten/werkzeug-karte/werkzeug-karte.css';
 @import './app/teile/pruefpunkt/pruefpunkt.css';
+@import './app/seiten/pruefpunkte/pruefpunkte-seite.css';
+@import './app/seiten/fristen/fristen-seite.css';
