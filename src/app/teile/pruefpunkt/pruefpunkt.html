@@ -1,0 +1,85 @@
+@let p = punkt();
+<article
+  class="punkt"
+  [id]="kennung()"
+  [class.punkt--offen]="p.status === 'offen'"
+  [class.punkt--stopp]="stopp() && p.status === 'offen'"
+  [attr.aria-labelledby]="kennung() + '-titel'"
+>
+  <p class="punkt__kopf">
+    <span class="punkt__dringlichkeit">{{ t.dringlichkeit[p.dringlichkeit] }}</span>
+    @if (mitWerkzeug()) {
+      <a class="punkt__werkzeug" [routerLink]="['/werkzeug', p.werkzeugId]">{{ p.werkzeugName }}</a>
+    }
+  </p>
+  <h3 class="punkt__titel" [id]="kennung() + '-titel'">
+    <span class="punkt__mark">{{ p.titel }}</span>
+  </h3>
+  <p class="punkt__grund">{{ p.grund }}</p>
+  <p class="punkt__quelle">
+    {{ p.quellen.length > 1 ? t.quellen : t.quelle }}:
+    @for (quelle of p.quellen; track quelle.text; let letzte = $last) {
+      @if (quelle.url) {
+        <a [href]="quelle.url" target="_blank" rel="noopener noreferrer"
+          >{{ quelle.text }}<span class="unsichtbar"> {{ t.neuerTab }}</span></a
+        >
+      } @else {
+        {{ quelle.text }}
+      }
+      @if (!letzte) {
+        ,&ngsp;
+      }
+    }
+  </p>
+
+  <div class="punkt__aktionen">
+    @switch (p.status) {
+      @case ('erledigt') {
+        <p class="punkt__stand">
+          <svg class="haken" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          {{ t.erledigtAm(datum()) }}
+        </p>
+        <button class="knopf knopf--leise" type="button" (click)="oeffne()" [attr.aria-describedby]="kennung() + '-titel'">
+          {{ t.wiederOeffnen }}
+        </button>
+      }
+      @case ('nicht-zutreffend') {
+        <p class="punkt__stand">{{ t.nichtZutreffendAm(datum()) }}: «{{ p.begruendung }}»</p>
+        <button class="knopf knopf--leise" type="button" (click)="oeffne()" [attr.aria-describedby]="kennung() + '-titel'">
+          {{ t.wiederOeffnen }}
+        </button>
+      }
+      @default {
+        @if (p.zuletzt) {
+          <p class="punkt__stand">{{ t.wiederOffen(zuletzt()) }}</p>
+        }
+        @if (begruenden()) {
+          <div class="feld">
+            <label class="feld__label" [for]="kennung() + '-begruendung'">{{ t.begruendung }}</label>
+            <textarea class="eingabe" rows="2" [id]="kennung() + '-begruendung'" [formControl]="begruendung"
+              [attr.maxlength]="grenze" [attr.aria-invalid]="fehlt()"
+              [attr.aria-describedby]="fehlt() ? kennung() + '-fehler' : null"></textarea>
+            @if (fehlt()) {
+              <p class="feld__fehler" [id]="kennung() + '-fehler'">{{ t.begruendungFehlt }}</p>
+            }
+          </div>
+          <div class="knopfreihe">
+            <button class="knopf" type="button" (click)="speichereBegruendung()">{{ t.speichern }}</button>
+            <button class="knopf knopf--leise" type="button" (click)="abbrechen()">{{ t.abbrechen }}</button>
+          </div>
+        } @else {
+          <div class="knopfreihe">
+            <button class="knopf" type="button" (click)="erledige()" [attr.aria-describedby]="kennung() + '-titel'">
+              {{ t.alsErledigt }}
+            </button>
+            <button class="knopf knopf--zweit" type="button" (click)="zeigeBegruendung()" [attr.aria-describedby]="kennung() + '-titel'">
+              {{ t.trifftNichtZu }}
+            </button>
+          </div>
+        }
+      }
+    }
+  </div>
+</article>

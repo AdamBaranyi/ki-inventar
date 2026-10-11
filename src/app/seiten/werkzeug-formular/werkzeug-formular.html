@@ -1,0 +1,144 @@
+@if (nichtGefunden()) {
+  <section class="stapel">
+    <h1 tabindex="-1">{{ t.nichtGefundenTitel }}</h1>
+    <p>{{ t.nichtGefunden }}</p>
+    <p><a class="knopf knopf--zweit" routerLink="/">{{ t.zurUebersicht }}</a></p>
+  </section>
+} @else {
+  <section class="formular">
+    <h1 tabindex="-1">{{ ueberschrift() }}</h1>
+    <p class="formular__einleitung">{{ t.einleitung }}</p>
+
+    <form class="formular__fragen" [formGroup]="form" (ngSubmit)="fertig()" novalidate>
+      <fieldset class="frage">
+        <legend class="frage__titel"><span class="frage__nummer zahl">1</span>&ngsp;{{ f.q1.titel }}</legend>
+        <div class="feld">
+          <label class="feld__label" for="f-name">{{ f.q1.name }}</label>
+          <input id="f-name" class="eingabe" type="text" formControlName="name" autocomplete="off"
+            [attr.aria-invalid]="!!fehler('name')" [attr.aria-describedby]="fehler('name') ? 'f-name-fehler' : null" />
+          @if (fehler('name'); as text) {
+            <p class="feld__fehler" id="f-name-fehler">{{ text }}</p>
+          }
+        </div>
+        <div class="feld">
+          <label class="feld__label" for="f-anbieter">{{ f.q1.anbieter }}</label>
+          <input id="f-anbieter" class="eingabe" type="text" formControlName="anbieter" autocomplete="off"
+            [attr.aria-invalid]="!!fehler('anbieter')" [attr.aria-describedby]="fehler('anbieter') ? 'f-anbieter-fehler' : null" />
+          @if (fehler('anbieter'); as text) {
+            <p class="feld__fehler" id="f-anbieter-fehler">{{ text }}</p>
+          }
+        </div>
+        <ki-auswahl name="standort" [steuerung]="form.controls.standort" [optionen]="o.standort"
+          [frage]="f.q1.standort" [hilfe]="f.q1.standortHilfe" />
+      </fieldset>
+
+      <fieldset class="frage">
+        <legend class="frage__titel"><span class="frage__nummer zahl">2</span>&ngsp;{{ f.q2.titel }}</legend>
+        <ki-auswahl name="kategorie" [steuerung]="form.controls.kategorie" [optionen]="o.kategorie"
+          [frage]="f.q2.kategorie" />
+        <div class="feld">
+          <label class="feld__label" for="f-zweck">{{ f.q2.zweck }}</label>
+          <p class="feld__hilfe" id="f-zweck-hilfe">{{ f.q2.zweckHilfe }}</p>
+          <textarea id="f-zweck" class="eingabe" formControlName="zweck" rows="3"
+            [attr.aria-invalid]="!!fehler('zweck')"
+            [attr.aria-describedby]="fehler('zweck') ? 'f-zweck-hilfe f-zweck-fehler' : 'f-zweck-hilfe'"></textarea>
+          @if (fehler('zweck'); as text) {
+            <p class="feld__fehler" id="f-zweck-fehler">{{ text }}</p>
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="frage">
+        <legend class="frage__titel"><span class="frage__nummer zahl">3</span>&ngsp;{{ f.q3.titel }}</legend>
+        <div class="feld">
+          <label class="feld__label" for="f-abteilungen">{{ f.q3.abteilungen }}</label>
+          <input id="f-abteilungen" class="eingabe" type="text" formControlName="abteilungen" autocomplete="off"
+            [attr.aria-invalid]="!!fehler('abteilungen')" [attr.aria-describedby]="fehler('abteilungen') ? 'f-abteilungen-fehler' : null" />
+          @if (fehler('abteilungen'); as text) {
+            <p class="feld__fehler" id="f-abteilungen-fehler">{{ text }}</p>
+          }
+        </div>
+        <div class="feld">
+          <label class="feld__label" for="f-anzahl">{{ f.q3.anzahl }}</label>
+          <input id="f-anzahl" class="eingabe eingabe--kurz" type="number" inputmode="numeric" min="0" step="1"
+            formControlName="anzahl" [attr.aria-invalid]="!!fehler('anzahl')"
+            [attr.aria-describedby]="fehler('anzahl') ? 'f-anzahl-fehler' : null" />
+          @if (fehler('anzahl'); as text) {
+            <p class="feld__fehler" id="f-anzahl-fehler">{{ text }}</p>
+          }
+        </div>
+        <div class="feld">
+          <label class="feld__label" for="f-verantwortlich">{{ f.q3.verantwortlich }}</label>
+          <input id="f-verantwortlich" class="eingabe" type="text" formControlName="verantwortlich" autocomplete="off"
+            [attr.aria-invalid]="!!fehler('verantwortlich')" [attr.aria-describedby]="fehler('verantwortlich') ? 'f-verantwortlich-fehler' : null" />
+          @if (fehler('verantwortlich'); as text) {
+            <p class="feld__fehler" id="f-verantwortlich-fehler">{{ text }}</p>
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="frage">
+        <legend class="frage__titel"><span class="frage__nummer zahl">4</span>&ngsp;{{ f.q4.titel }}</legend>
+        <ki-auswahl name="zugang" [steuerung]="form.controls.zugang" [optionen]="o.zugang" [frage]="f.q4.frage" />
+      </fieldset>
+
+      <fieldset class="frage">
+        <legend class="frage__titel"><span class="frage__nummer zahl">5</span>&ngsp;{{ f.q5.titel }}</legend>
+        <ki-auswahl name="personendaten" [steuerung]="form.controls.personendaten" [optionen]="o.personendaten"
+          [frage]="f.q5.frage" [hilfe]="f.q5.hilfe" />
+      </fieldset>
+
+      <fieldset class="frage">
+        <legend class="frage__titel"><span class="frage__nummer zahl">6</span>&ngsp;{{ f.q6.titel }}</legend>
+        <ki-auswahl name="geheimnisse" [steuerung]="form.controls.geheimnisse" [optionen]="o.jaNein"
+          [frage]="f.q6.frage" [zeile]="true" />
+      </fieldset>
+
+      <fieldset class="frage">
+        <legend class="frage__titel"><span class="frage__nummer zahl">7</span>&ngsp;{{ f.q7.titel }}</legend>
+        <ki-auswahl name="training" [steuerung]="form.controls.training" [optionen]="o.training"
+          [frage]="f.q7.frage" [hilfe]="f.q7.hilfe" />
+      </fieldset>
+
+      <fieldset class="frage">
+        <legend class="frage__titel"><span class="frage__nummer zahl">8</span>&ngsp;{{ f.q8.titel }}</legend>
+        <ki-auswahl name="avv" [steuerung]="form.controls.avv" [optionen]="o.avv" [frage]="f.q8.frage" [zeile]="true" />
+      </fieldset>
+
+      <fieldset class="frage">
+        <legend class="frage__titel"><span class="frage__nummer zahl">9</span>&ngsp;{{ f.q9.titel }}</legend>
+        <ki-auswahl name="ausgabenDritte" [steuerung]="form.controls.ausgabenDritte" [optionen]="o.jaNein"
+          [frage]="f.q9.ausgaben" [zeile]="true" />
+        <ki-auswahl name="entscheidungen" [steuerung]="form.controls.entscheidungen" [optionen]="o.jaNein"
+          [frage]="f.q9.entscheidungen" [zeile]="true" />
+      </fieldset>
+
+      <fieldset class="frage">
+        <legend class="frage__titel"><span class="frage__nummer zahl">10</span>&ngsp;{{ f.q10.titel }}</legend>
+        <ki-auswahl name="euBezug" [steuerung]="form.controls.euBezug" [optionen]="o.jaNein" [frage]="f.q10.eu" [zeile]="true" />
+        <ki-auswahl name="geschult" [steuerung]="form.controls.geschult" [optionen]="o.jaNein" [frage]="f.q10.geschult" [zeile]="true" />
+        <ki-auswahl name="verboten" [steuerung]="form.controls.verboten" [optionen]="o.jaNein" [frage]="f.q10.verboten" [zeile]="true" />
+      </fieldset>
+
+      <div class="formular__offen">
+        @if (fehlend().length) {
+          <p><strong>{{ t.offenTitel }}:</strong> {{ fehlend().join(', ') }}</p>
+        } @else {
+          <p>{{ t.offenLeer }}</p>
+        }
+      </div>
+
+      <div class="formular__leiste">
+        <p class="formular__stand" role="status">
+          @switch (zustand()) {
+            @case ('gespeichert') { {{ t.gespeichert }} }
+            @case ('ungueltig') { {{ t.ungueltig }} }
+            @case ('verweigert') { {{ t.verweigert }} }
+            @default { {{ t.wartet }} }
+          }
+        </p>
+        <button class="knopf" type="submit">{{ t.fertig }}</button>
+      </div>
+    </form>
+  </section>
+}

@@ -70,6 +70,6 @@ const AUSWAHLEN = [
 export type Auswahl = (typeof AUSWAHLEN)[number];
 
 /** Auswahlfragen ohne Antwort, in der Reihenfolge des Formulars. */
-export function fehlendeAngaben(w: Werkzeug): Auswahl[] {
+export function fehlendeAngaben(w: Readonly<Record<Auswahl, unknown>>): Auswahl[] {
   return AUSWAHLEN.filter((feld) => w[feld] === null);
 }

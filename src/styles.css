@@ -6,3 +6,6 @@
 @import './styles/bedienung.css';
 @import './app/rahmen.css';
 @import './app/seiten/uebersicht/uebersicht.css';
+@import './app/seiten/werkzeug-formular/werkzeug-formular.css';
+@import './app/seiten/werkzeug-karte/werkzeug-karte.css';
+@import './app/teile/pruefpunkt/pruefpunkt.css';

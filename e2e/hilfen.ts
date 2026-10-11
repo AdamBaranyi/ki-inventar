@@ -11,13 +11,26 @@ export interface Beobachtung {
   anfragen: { methode: string; url: string }[];
 }
 
+/**
+ * GitHub Pages liefert tiefe Links als 404.html mit Status 404 aus; die App
+ * startet dort trotzdem. Chromium meldet den Status als Konsolenfehler. Nur
+ * genau diese Meldung zum Hauptdokument fällt weg, jede andere bleibt.
+ */
+const PAGES_RUECKFALL = 'Failed to load resource: the server responded with a status of 404 (Not Found)';
+
 /** Beobachtet die Seite von Anfang an: Konsolenfehler, Anfragen, CSP-Verstösse. */
 export async function beobachte(page: Page, basis: string): Promise<Beobachtung> {
   const gesehen: Beobachtung = { fehler: [], fremdeAnfragen: [], anfragen: [] };
   const eigen = new URL(basis).origin;
   page.on('pageerror', (fehler) => gesehen.fehler.push(String(fehler)));
+  const rueckfall = new Set<string>();
+  page.on('response', (antwort) => {
+    if (antwort.request().isNavigationRequest() && antwort.status() === 404) rueckfall.add(antwort.url());
+  });
   page.on('console', (meldung) => {
-    if (meldung.type() === 'error') gesehen.fehler.push(meldung.text());
+    if (meldung.type() !== 'error') return;
+    if (meldung.text() === PAGES_RUECKFALL && rueckfall.has(meldung.location().url)) return;
+    gesehen.fehler.push(meldung.text());
   });
   page.on('request', (anfrage) => {
     const url = anfrage.url();

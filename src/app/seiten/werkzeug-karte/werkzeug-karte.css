@@ -1,0 +1,81 @@
+/* Die Karteikarte: ein Blatt mit kräftiger Kopflinie, ohne Schatten. */
+.karte {
+  max-width: var(--breite-text);
+}
+
+.karte__kopf {
+  display: grid;
+  gap: var(--a-3);
+  padding-bottom: var(--a-5);
+  border-bottom: 2px solid var(--tinte);
+}
+
+.karte__anbieter {
+  font-size: var(--text-l);
+  font-weight: 600;
+}
+
+.karte__meta {
+  color: var(--graphit);
+}
+
+.karte__abschnitt {
+  margin-top: var(--a-7);
+}
+
+.karte__abschnitt > h2 {
+  padding-bottom: var(--a-2);
+  border-bottom: 1px solid var(--linie);
+}
+
+.antworten {
+  margin-top: var(--a-2);
+}
+
+.antworten__zeile {
+  display: grid;
+  gap: 0 var(--a-5);
+  padding-block: var(--a-3);
+  border-bottom: 1px solid var(--linie);
+}
+
+@media (min-width: 40rem) {
+  .antworten__zeile {
+    grid-template-columns: 14rem 1fr;
+  }
+}
+
+.antworten__zeile dt {
+  color: var(--graphit);
+}
+
+.antworten__zeile dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+dd.antworten__offen {
+  color: var(--offen-kante);
+}
+
+/* Bestätigung als nativer Dialog: hält den Fokus, Escape schliesst. */
+.dialog {
+  width: min(32rem, calc(100vw - 2rem));
+  padding: var(--a-6);
+  border: 2px solid var(--tinte);
+  border-radius: var(--radius);
+  background: var(--blatt);
+  color: var(--tinte);
+}
+
+.dialog::backdrop {
+  background: rgb(30 35 41 / 0.45);
+}
+
+.dialog > * + * {
+  margin-top: var(--a-4);
+}
+
+html:has(.dialog[open]) {
+  overflow: hidden;
+}

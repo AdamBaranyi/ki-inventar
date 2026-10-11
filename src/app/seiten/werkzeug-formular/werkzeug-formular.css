@@ -1,0 +1,72 @@
+.formular > * + * {
+  margin-top: var(--a-4);
+}
+
+.formular__einleitung {
+  color: var(--graphit);
+}
+
+.formular__fragen {
+  display: grid;
+  gap: var(--a-7);
+  max-width: var(--breite-text);
+  margin-top: var(--a-6);
+}
+
+/* Eine Frage wie ein Feld auf einem Formular: Nummer, Titel, darunter die Felder. */
+.frage {
+  display: grid;
+  gap: var(--a-5);
+  min-width: 0;
+  margin: 0;
+  padding: var(--a-5) 0 0;
+  border: 0;
+  border-top: 2px solid var(--tinte);
+}
+
+.frage__titel {
+  display: flex;
+  align-items: baseline;
+  gap: var(--a-3);
+  float: left;
+  width: 100%;
+  margin-bottom: var(--a-1);
+  padding: 0;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: var(--zeile-eng);
+}
+
+.frage__titel + * {
+  clear: both;
+}
+
+.frage__nummer {
+  min-width: 1.6em;
+  color: var(--graphit);
+}
+
+.formular__offen {
+  color: var(--graphit);
+}
+
+/* Stand und «Fertig» bleiben beim Scrollen sichtbar. */
+.formular__leiste {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--a-2) var(--a-4);
+  margin-inline: calc(var(--a-4) * -1);
+  padding: var(--a-3) var(--a-4);
+  border-top: 1px solid var(--linie);
+  background: var(--papier);
+}
+
+.formular__stand {
+  font-size: var(--text-s);
+  font-weight: 600;
+}

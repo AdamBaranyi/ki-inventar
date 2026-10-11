@@ -11,6 +11,23 @@ export const routes: Routes = [
     loadComponent: () => import('./seiten/uebersicht/uebersicht').then((m) => m.Uebersicht),
   },
   {
+    path: 'werkzeug/neu',
+    title: titel(TEXTE.titel.neu),
+    loadComponent: () =>
+      import('./seiten/werkzeug-formular/werkzeug-formular').then((m) => m.WerkzeugFormular),
+  },
+  {
+    path: 'werkzeug/:id',
+    title: titel(TEXTE.titel.karte),
+    loadComponent: () => import('./seiten/werkzeug-karte/werkzeug-karte').then((m) => m.WerkzeugKarte),
+  },
+  {
+    path: 'werkzeug/:id/bearbeiten',
+    title: titel(TEXTE.titel.bearbeiten),
+    loadComponent: () =>
+      import('./seiten/werkzeug-formular/werkzeug-formular').then((m) => m.WerkzeugFormular),
+  },
+  {
     path: '**',
     title: titel(TEXTE.titel.nichtGefunden),
     loadComponent: () => import('./seiten/nicht-gefunden/nicht-gefunden').then((m) => m.NichtGefunden),

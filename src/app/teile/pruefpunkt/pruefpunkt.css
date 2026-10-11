@@ -1,0 +1,101 @@
+.punkt {
+  display: grid;
+  gap: var(--a-2);
+  padding-block: var(--a-5);
+  border-bottom: 1px solid var(--linie);
+}
+
+.punkt__kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--a-1) var(--a-4);
+  font-size: var(--text-s);
+}
+
+.punkt__dringlichkeit {
+  color: var(--graphit);
+  font-weight: 650;
+}
+
+.punkt--stopp .punkt__dringlichkeit {
+  color: var(--stopp);
+}
+
+.punkt__werkzeug {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tippflaeche);
+  font-weight: 650;
+}
+
+.punkt__titel {
+  font-size: var(--text-l);
+}
+
+/* Offen: wie mit dem Leuchtstift markiert. Erledigt: Graphit, ohne Mark. */
+.punkt__mark {
+  padding: 0.05em 0.2em;
+  margin-inline: -0.2em;
+  border-radius: 2px;
+  transition: background-color var(--dauer) var(--kurve), color var(--dauer) var(--kurve);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.punkt--offen .punkt__mark {
+  background: var(--offen);
+}
+
+.punkt--stopp .punkt__mark {
+  background: var(--stopp);
+  color: #ffffff;
+}
+
+.punkt:not(.punkt--offen) .punkt__titel {
+  color: var(--graphit);
+}
+
+.punkt__grund {
+  max-width: var(--breite-text);
+}
+
+.punkt__quelle {
+  color: var(--graphit);
+}
+
+.punkt__quelle a {
+  display: inline-block;
+  padding-block: 0.6rem;
+  color: var(--tinte);
+}
+
+.punkt__aktionen {
+  display: grid;
+  gap: var(--a-3);
+  margin-top: var(--a-2);
+}
+
+.punkt__aktionen .feld {
+  max-width: var(--breite-text);
+}
+
+.punkt__stand {
+  display: flex;
+  align-items: center;
+  gap: var(--a-2);
+  color: var(--graphit);
+  font-weight: 600;
+}
+
+.haken {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+}
+
+.punktliste {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

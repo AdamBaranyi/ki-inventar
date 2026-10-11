@@ -1,0 +1,58 @@
+@if (werkzeug(); as w) {
+  <article class="karte">
+    <header class="karte__kopf">
+      <h1 tabindex="-1">{{ w.name }}</h1>
+      @if (w.anbieter) {
+        <p class="karte__anbieter">{{ w.anbieter }}</p>
+      }
+      <p class="karte__meta">{{ meta() }}</p>
+      @if (lage(); as l) {
+        <ki-lage-chips [lage]="l" />
+      }
+      <div class="knopfreihe">
+        <a class="knopf knopf--zweit" [routerLink]="['/werkzeug', w.id, 'bearbeiten']">{{ t.bearbeiten }}</a>
+        <button class="knopf knopf--leise" type="button" (click)="frageLoeschen()">{{ t.loeschen }}</button>
+      </div>
+    </header>
+
+    <section class="karte__abschnitt" aria-labelledby="karte-punkte">
+      <h2 id="karte-punkte">{{ t.pruefpunkte }}</h2>
+      @if (punkte().length) {
+        <ul class="punktliste">
+          @for (punkt of punkte(); track punkt.regel) {
+            <li><ki-pruefpunkt [punkt]="punkt" /></li>
+          }
+        </ul>
+      } @else {
+        <p>{{ t.keinePunkte }}</p>
+      }
+    </section>
+
+    <section class="karte__abschnitt" aria-labelledby="karte-antworten">
+      <h2 id="karte-antworten">{{ t.antworten }}</h2>
+      <dl class="antworten">
+        @for (zeile of antworten(); track zeile.frage) {
+          <div class="antworten__zeile">
+            <dt>{{ zeile.frage }}</dt>
+            <dd [class.antworten__offen]="zeile.offen">{{ zeile.antwort }}</dd>
+          </div>
+        }
+      </dl>
+    </section>
+  </article>
+
+  <dialog #loeschDialog class="dialog" aria-labelledby="loeschen-titel" (cancel)="schliessen()">
+    <h2 id="loeschen-titel">{{ t.loeschenTitel(w.name) }}</h2>
+    <p>{{ t.loeschenText }}</p>
+    <div class="knopfreihe">
+      <button class="knopf" type="button" (click)="loesche()">{{ t.loeschenJa }}</button>
+      <button class="knopf knopf--zweit" type="button" (click)="schliessen()">{{ t.abbrechen }}</button>
+    </div>
+  </dialog>
+} @else {
+  <section class="stapel">
+    <h1 tabindex="-1">{{ f.nichtGefundenTitel }}</h1>
+    <p>{{ f.nichtGefunden }}</p>
+    <p><a class="knopf knopf--zweit" routerLink="/">{{ f.zurUebersicht }}</a></p>
+  </section>
+}
