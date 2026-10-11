@@ -1,0 +1,126 @@
+name: Sicherheit täglich
+
+# Der volle CI-Lauf hängt an Push und Pull Request. Ohne Commit entsteht damit
+# eine Lücke: Ein Paket, das heute sauber ist, kann morgen eine Meldung haben,
+# und ein Geheimnis in einem alten Commit bleibt unbemerkt, solange niemand
+# etwas schiebt. Darum läuft diese Prüfung jeden Tag von selbst.
+#
+# Seit dem 10.10.2026 meldet der Lauf, statt zu blockieren. Rot wird er nur bei
+# einem Geheimnis oder wenn die Prüfung selbst nicht stattfand. Befunde in den
+# Abhängigkeiten landen in einem einzigen Issue «Sicherheitsmeldungen», das bei
+# jeder Änderung der Kennungen ergänzt und bei sauberem Stand geschlossen wird.
+# Grund: Ein geplanter Lauf hängt sein rotes Kreuz an den letzten Commit auf
+# main und schickt jeden Tag eine E-Mail. Nach drei Wochen liest die niemand
+# mehr, und die echte Meldung geht unter. Geurteilt wird in ci.yml auf Push und
+# Pull Request, ab high.
+#
+# Sie ist bewusst schmal — nur Secret-Scan und Abhängigkeiten, keine Builds,
+# keine Browser-Tests. Ein täglicher Lauf, der zwanzig Minuten braucht, wird
+# abgeschaltet; einer, der zwei Minuten braucht, bleibt.
+#
+# Wer die Meldung bekommt: Einen fehlgeschlagenen geplanten Lauf meldet GitHub
+# der Person, die diese Datei angelegt oder die cron-Zeile zuletzt geändert
+# hat, nicht allen Beteiligten. Wer benachrichtigt werden will, committet die
+# Änderung an der cron-Zeile also selbst.
+#
+# Öffentliche Repositories: GitHub schaltet geplante Workflows nach 60 Tagen
+# ohne Repository-Aktivität ab. Regelmässig gemergte Update-PRs halten den
+# Zeitplan am Leben.
+
+on:
+  schedule:
+    # 06:23 UTC — in Zürich 08:23 im Sommer, 07:23 im Winter. Nicht zur vollen
+    # Stunde, weil GitHub dann am meisten Last hat und Läufe sich verspäten.
+    - cron: '23 6 * * *'
+  workflow_dispatch:
+
+# Lesen, und Issues schreiben für die eine Meldung. Sonst nichts.
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: sicherheit-taeglich
+  cancel-in-progress: false
+
+jobs:
+  pruefung:
+    name: Secret-Scan und Abhängigkeiten
+    runs-on: ubuntu-24.04
+    steps:
+      # Die ganze Historie, nicht nur der letzte Stand: ein Geheimnis, das in
+      # einem alten Commit steht, ist im öffentlichen Repository weiter lesbar.
+      # Das Token bleibt nicht in .git/config liegen: Dieser Job darf Issues
+      # schreiben, und kein späterer Schritt soll es dort finden.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # Hält fest, dass wirklich die ganze Historie da ist. Ein flacher Checkout
+      # hätte genau einen Commit, und der Scan sähe grün aus, ohne es zu sein.
+      - name: Historie vollständig
+        run: |
+          count=$(git rev-list --count HEAD)
+          echo "Commits im Checkout: $count"
+          test "$count" -gt 1
+
+      # Binärdatei statt Action, mit geprüfter Prüfsumme aus dem Release.
+      # Dieselbe Fassung wie in ci.yml — beide zusammen aktualisieren.
+      - name: gitleaks 8.30.1 holen
+        run: |
+          curl -sSfL -o gitleaks.tar.gz https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  gitleaks.tar.gz" | sha256sum --check
+          tar -xzf gitleaks.tar.gz gitleaks
+
+      # Ein Fund hier ist ein Notfall und bleibt rot.
+      - name: Secret-Scan über alle Commits
+        run: ./gitleaks git . --no-banner --redact
+
+      # Nur bun selbst, kein «bun install»: bun audit liest package.json und
+      # bun.lock und braucht kein node_modules (geprüft am 10.10.2026 in einem
+      # frischen Checkout). So läuft in einem Job, der Issues schreiben darf,
+      # kein Installationscode fremder Pakete.
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: 1.3.14
+
+      # Befunde sammeln, nicht urteilen. Stufe und Ausnahmen stehen an einer
+      # Stelle, in scripts/audit.sh. Der Exit-Code geht an den nächsten Schritt:
+      # Nur er unterscheidet «sauber» von «Prüfung fand nicht statt» — ohne Netz
+      # endet bun audit mit 1 und einem Text ohne Kennung.
+      - name: Befunde sammeln, ab moderat
+        id: audit
+        run: |
+          status=0
+          bash scripts/audit.sh moderate > audit.txt 2>&1 || status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          {
+            echo '### bun audit, ab moderat, mit Ausnahmen'
+            echo ''
+            echo "Exit-Code: $status"
+            echo ''
+            echo '```'
+            cat audit.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Meldung als Issue, nur bei Änderung
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          STATUS: ${{ steps.audit.outputs.status }}
+        run: bash scripts/sicherheits-meldung.sh audit.txt "$STATUS"
+
+      # Zur Ansicht in der Laufzusammenfassung, auch die ausgenommenen Nummern
+      # und alles Niedrige. Der Exit-Code fällt hier bewusst weg.
+      - name: Alle Befunde zur Ansicht
+        if: always()
+        run: |
+          {
+            echo '### bun audit, alle Stufen'
+            echo ''
+            echo '```'
+            bun audit 2>&1 || true
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"

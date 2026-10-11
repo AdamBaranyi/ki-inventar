@@ -1,0 +1,47 @@
+# Versions-Updates mit sieben Tagen Wartezeit. Sicherheitslücken in Bun-Paketen
+# meldet GitHub nicht (bun.lock wird nicht gelesen); dafür läuft täglich
+# scripts/audit.sh (sicherheit-taeglich.yml). Angular-Pakete gemeinsam heben.
+version: 2
+updates:
+  - package-ecosystem: bun
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Europe/Zurich
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+    assignees:
+      - AdamBaranyi
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      alltag:
+        patterns:
+          - '*'
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # Grosse Sprünge bewusst entscheiden, nicht per Sammel-PR.
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@angular/*'
+        update-types: ['version-update:semver-major']
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: monthly
+      time: '06:00'
+      timezone: Europe/Zurich
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 3
+    assignees:
+      - AdamBaranyi
+    commit-message:
+      prefix: ci
