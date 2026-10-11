@@ -1,0 +1,107 @@
+.uebersicht > * + * {
+  margin-top: var(--a-6);
+}
+
+.uebersicht__einstieg > * + * {
+  margin-top: var(--a-3);
+}
+
+.uebersicht__einleitung {
+  font-size: var(--text-l);
+}
+
+/* Die drei Zahlen als Bilanzzeile: Zahl gross, Wort direkt daneben. */
+.bilanz {
+  display: grid;
+  gap: var(--a-3);
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 48rem) {
+  .bilanz {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--a-6);
+  }
+}
+
+.bilanz__posten {
+  display: flex;
+  align-items: baseline;
+  gap: var(--a-3);
+  padding-bottom: var(--a-3);
+  border-bottom: 2px solid var(--tinte);
+}
+
+.bilanz__zahl {
+  font-size: var(--text-zahl);
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.bilanz__wort {
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* Wie mit dem Leuchtstift über die Zahl gezogen. */
+.leuchtstift {
+  padding: 0 0.12em;
+  background: var(--offen);
+}
+
+.uebersicht__aktionen {
+  margin-top: var(--a-6);
+}
+
+.uebersicht__listentitel {
+  margin-top: var(--a-7);
+}
+
+.register {
+  margin-top: var(--a-3);
+  padding: 0;
+  border-top: 1px solid var(--linie);
+  list-style: none;
+}
+
+.register__zeile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--a-2) var(--a-5);
+  padding-block: var(--a-4);
+  border-bottom: 1px solid var(--linie);
+}
+
+.register__text {
+  display: grid;
+  min-width: 0;
+}
+
+.register__name {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tippflaeche);
+  font-size: var(--text-l);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .register__name:hover {
+    text-decoration: underline;
+  }
+}
+
+.register__meta {
+  color: var(--graphit);
+}
+
+.lage-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--a-2);
+}

@@ -1,0 +1,49 @@
+/*
+ * Ein Verzeichnis auf Papier: Tinte auf Weiss, offene Punkte mit Leuchtstift
+ * markiert. Die einzige Datenfarbe ist der Leuchtstift (--offen), Rot nur für
+ * den Stopp nach R12. Hauptaktionen tragen Tinte.
+ */
+:root {
+  --papier: #fbfaf6;
+  --blatt: #ffffff;
+  --tinte: #1e2329;
+  --graphit: #59636d;
+  --kante: #6f7882;
+  --linie: #d9d6cc;
+  --offen: #ffe36e;
+  --offen-kante: #8a6100;
+  --stopp: #a4271c;
+
+  --schrift: 'Public Sans', 'Helvetica Neue', Arial, sans-serif;
+  --text-s: 1rem;
+  --text-m: 1.125rem;
+  --text-l: 1.3125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.625rem;
+  --text-zahl: 3.5rem;
+
+  --zeile: 1.55;
+  --zeile-eng: 1.15;
+
+  --a-1: 0.25rem;
+  --a-2: 0.5rem;
+  --a-3: 0.75rem;
+  --a-4: 1rem;
+  --a-5: 1.5rem;
+  --a-6: 2rem;
+  --a-7: 3rem;
+  --a-8: 4.5rem;
+
+  --radius: 4px;
+  --tippflaeche: 48px;
+  --breite-text: 42rem;
+  --breite-seite: 62rem;
+
+  --dauer-kurz: 90ms;
+  --dauer: 160ms;
+  --kurve: cubic-bezier(0.2, 0, 0, 1);
+
+  color-scheme: light;
+  accent-color: var(--tinte);
+}

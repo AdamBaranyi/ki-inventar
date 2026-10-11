@@ -1,0 +1,56 @@
+<section class="uebersicht">
+  <h1 tabindex="-1">{{ ueberschrift() }}</h1>
+
+  @if (leer()) {
+    <div class="uebersicht__einstieg">
+      <p class="uebersicht__einleitung">{{ t.einleitung }}</p>
+      <p class="leise">{{ t.lokal }}</p>
+    </div>
+  } @else {
+    <ul class="bilanz" [attr.aria-label]="t.zahlen">
+      <li class="bilanz__posten">
+        <span class="bilanz__zahl zahl">{{ zahlen().werkzeuge }}</span>&ngsp;
+        <span class="bilanz__wort">{{ t.werkzeuge(zahlen().werkzeuge) }}</span>
+      </li>
+      <li class="bilanz__posten">
+        <span class="bilanz__zahl zahl" [class.leuchtstift]="zahlen().offen > 0">{{
+          zahlen().offen
+        }}</span>&ngsp;
+        <span class="bilanz__wort">{{ t.offen(zahlen().offen) }}</span>
+      </li>
+      <li class="bilanz__posten">
+        <span class="bilanz__zahl zahl">{{ zahlen().personendaten }}</span>&ngsp;
+        <span class="bilanz__wort">{{ t.personendaten }}</span>
+      </li>
+    </ul>
+  }
+
+  <div class="knopfreihe uebersicht__aktionen">
+    <a class="knopf" routerLink="/werkzeug/neu">{{ t.erfassen }}</a>
+    @if (leer()) {
+      <button class="knopf knopf--zweit" type="button" (click)="ladeBeispiel()">
+        {{ t.beispiel }}
+      </button>
+    }
+  </div>
+  @if (leer()) {
+    <p class="leise">{{ t.beispielHinweis }}</p>
+  }
+
+  @if (!leer()) {
+    <h2 class="uebersicht__listentitel">{{ t.liste }}</h2>
+    <ul class="register">
+      @for (zeile of zeilen(); track zeile.id) {
+        <li class="register__zeile">
+          <div class="register__text">
+            <a class="register__name" [routerLink]="['/werkzeug', zeile.id]">{{ zeile.name }}</a>
+            @if (zeile.meta) {
+              <span class="register__meta">{{ zeile.meta }}</span>
+            }
+          </div>
+          <ki-lage-chips [lage]="zeile.lage" />
+        </li>
+      }
+    </ul>
+  }
+</section>

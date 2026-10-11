@@ -1,0 +1,8 @@
+/* Alle Stile als Dateien, keine Stile in Komponenten: Angular legt Komponenten-Stile
+   zur Laufzeit als <style> an, und die CSP (style-src 'self') verbietet das. */
+@import './styles/schrift.css';
+@import './styles/token.css';
+@import './styles/basis.css';
+@import './styles/bedienung.css';
+@import './app/rahmen.css';
+@import './app/seiten/uebersicht/uebersicht.css';

@@ -1,0 +1,78 @@
+<a class="sprung" href="#inhalt" (click)="zumInhalt($event)">{{ t.zumInhalt }}</a>
+
+<header class="kopf">
+  <div class="kopf__innen rahmen">
+    <a class="wortmarke" routerLink="/">
+      <ki-marke />
+      <span class="wortmarke__name">{{ t.name }}</span>
+      <span class="wortmarke__zusatz">{{ t.zusatz }}</span>
+    </a>
+    <nav class="navi" [attr.aria-label]="t.navigation">
+      <ul class="navi__liste">
+        <li>
+          <a
+            class="navi__link"
+            routerLink="/"
+            routerLinkActive="navi__link--aktiv"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+            >{{ t.nav.uebersicht }}</a
+          >
+        </li>
+        <li>
+          <a class="navi__link" routerLink="/pruefpunkte" routerLinkActive="navi__link--aktiv" ariaCurrentWhenActive="page">{{
+            t.nav.pruefpunkte
+          }}</a>
+        </li>
+        <li>
+          <a class="navi__link" routerLink="/fristen" routerLinkActive="navi__link--aktiv" ariaCurrentWhenActive="page">{{
+            t.nav.fristen
+          }}</a>
+        </li>
+        <li>
+          <a class="navi__link" routerLink="/verzeichnis" routerLinkActive="navi__link--aktiv" ariaCurrentWhenActive="page">{{
+            t.nav.verzeichnis
+          }}</a>
+        </li>
+        <li>
+          <a class="navi__link" routerLink="/daten" routerLinkActive="navi__link--aktiv" ariaCurrentWhenActive="page">{{
+            t.nav.daten
+          }}</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="inhalt" class="inhalt rahmen" tabindex="-1">
+  @if (dienst.ladeFehler(); as fehler) {
+    <div class="hinweis meldung" role="alert">
+      <p><strong>Die gespeicherten Daten lassen sich nicht lesen.</strong> {{ fehler }}</p>
+      <p>
+        Nichts wurde überschrieben. Unter <a routerLink="/daten">Daten</a> kannst du eine Sicherung
+        laden oder neu beginnen; die unlesbaren Daten kommen dabei beiseite.
+      </p>
+    </div>
+  }
+  @if (dienst.speicherFehler()) {
+    <div class="hinweis meldung" role="alert">
+      <p>
+        <strong>Der Browser hat das Speichern verweigert.</strong> Der Speicher ist voll oder
+        gesperrt. Sichere deine Angaben unter <a routerLink="/daten">Daten</a> als Datei.
+      </p>
+    </div>
+  }
+  <router-outlet />
+</main>
+
+<footer class="fuss">
+  <div class="fuss__innen rahmen">
+    <p class="fuss__rechtsberatung">{{ t.keineRechtsberatung }}</p>
+    <p>{{ t.rechtsstand }}</p>
+    <ul class="fuss__links">
+      <li><a routerLink="/impressum">{{ t.impressum }}</a></li>
+      <li><a routerLink="/datenschutz">{{ t.datenschutz }}</a></li>
+      <li><a [href]="quellcode" rel="noopener">{{ t.quellcode }}</a></li>
+    </ul>
+  </div>
+</footer>

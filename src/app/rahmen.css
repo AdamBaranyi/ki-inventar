@@ -1,0 +1,135 @@
+/* Kopf, Navigation, Inhalt und Fuss der App (app.html). */
+
+.sprung {
+  position: absolute;
+  top: var(--a-2);
+  left: var(--a-2);
+  z-index: 10;
+  padding: var(--a-3) var(--a-4);
+  background: var(--tinte);
+  color: var(--papier);
+  font-weight: 650;
+  transform: translateY(-200%);
+}
+
+.sprung:focus-visible {
+  transform: none;
+}
+
+.kopf {
+  border-bottom: 1px solid var(--linie);
+  background: var(--papier);
+}
+
+.kopf__innen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--a-2) var(--a-6);
+  padding-block: var(--a-3);
+}
+
+.wortmarke {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--a-2);
+  min-height: var(--tippflaeche);
+  text-decoration: none;
+}
+
+.marke {
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+}
+
+.wortmarke__name {
+  font-size: var(--text-xl);
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.wortmarke__zusatz {
+  color: var(--graphit);
+  font-size: var(--text-s);
+}
+
+.navi__liste {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--a-1);
+  margin: 0 calc(var(--a-3) * -1);
+  padding: 0;
+  list-style: none;
+}
+
+.navi__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tippflaeche);
+  padding: 0 var(--a-3);
+  border-bottom: 3px solid transparent;
+  font-size: var(--text-s);
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color var(--dauer) var(--kurve);
+}
+
+@media (hover: hover) {
+  .navi__link:hover {
+    border-bottom-color: var(--linie);
+  }
+}
+
+.navi__link--aktiv,
+.navi__link--aktiv:hover {
+  border-bottom-color: var(--tinte);
+}
+
+.inhalt {
+  flex: 1;
+  padding-block: var(--a-6) var(--a-8);
+}
+
+.inhalt:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.meldung {
+  margin-bottom: var(--a-6);
+}
+
+.fuss {
+  border-top: 1px solid var(--linie);
+  color: var(--graphit);
+  font-size: var(--text-s);
+}
+
+.fuss__innen {
+  display: grid;
+  gap: var(--a-2);
+  padding-block: var(--a-5) var(--a-6);
+}
+
+.fuss__rechtsberatung {
+  color: var(--tinte);
+  font-weight: 600;
+}
+
+.fuss__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--a-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fuss__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tippflaeche);
+}
