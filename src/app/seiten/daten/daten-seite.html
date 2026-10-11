@@ -1,0 +1,68 @@
+<section class="daten-seite">
+  <h1 tabindex="-1">{{ titel }}</h1>
+  <p>{{ t.einleitung }}</p>
+  <p class="leise">{{ t.ort }}</p>
+  @if (fluechtig) {
+    <p class="hinweis" role="alert">{{ t.fluechtig }}</p>
+  }
+
+  <div class="daten-seite__meldung" aria-live="polite">
+    @if (meldung(); as m) {
+      <p class="hinweis" [class.daten-seite__fehler]="m.art === 'fehler'">{{ m.text }}</p>
+    }
+  </div>
+
+  <section class="daten-block" aria-labelledby="sichern-titel">
+    <h2 id="sichern-titel">{{ t.sichernTitel }}</h2>
+    <p>{{ t.sichernText }}</p>
+    @if (anzahl() > 0) {
+      <button class="knopf" type="button" (click)="sichere()">{{ t.sichern }}</button>
+    } @else {
+      <p class="leise">{{ t.leerHinweis }}</p>
+    }
+  </section>
+
+  <section class="daten-block" aria-labelledby="tabelle-titel">
+    <h2 id="tabelle-titel">{{ t.tabelleTitel }}</h2>
+    <p>{{ t.tabelleText }}</p>
+    @if (anzahl() > 0) {
+      <button class="knopf knopf--zweit" type="button" (click)="tabelle()">{{ t.tabelle }}</button>
+    }
+  </section>
+
+  <section class="daten-block" aria-labelledby="wieder-titel">
+    <h2 id="wieder-titel">{{ t.wiederTitel }}</h2>
+    <p>{{ t.wiederText }}</p>
+    <div class="datei-wahl">
+      <input id="sicherung-datei" class="unsichtbar" type="file" accept="application/json,.json"
+        (change)="waehle($event)" />
+      <label class="knopf knopf--zweit" for="sicherung-datei">{{ t.wahl }}</label>
+    </div>
+  </section>
+
+  @if (anzahl() > 0) {
+    <section class="daten-block" aria-labelledby="loeschen-titel">
+      <h2 id="loeschen-titel">{{ t.loeschenTitel }}</h2>
+      <p>{{ t.loeschenText }}</p>
+      <button class="knopf knopf--zweit" type="button" (click)="frageLoeschen()">{{ t.loeschen }}</button>
+    </section>
+  }
+</section>
+
+<dialog #ersetzenDialog class="dialog" aria-labelledby="ersetzen-frage" (cancel)="wartend.set(null)">
+  <h2 id="ersetzen-frage">{{ t.ersetzenTitel }}</h2>
+  <p>{{ t.ersetzenText(anzahl(), wartend()?.werkzeuge?.length ?? 0) }}</p>
+  <div class="knopfreihe">
+    <button class="knopf" type="button" (click)="ersetze()">{{ t.ersetzen }}</button>
+    <button class="knopf knopf--zweit" type="button" (click)="schliesse(ersetzenDialog)">{{ t.abbrechen }}</button>
+  </div>
+</dialog>
+
+<dialog #loeschenDialog class="dialog" aria-labelledby="loeschen-frage">
+  <h2 id="loeschen-frage">{{ t.loeschenFrage }}</h2>
+  <p>{{ t.loeschenWarnung }}</p>
+  <div class="knopfreihe">
+    <button class="knopf" type="button" (click)="loesche()">{{ t.loeschenJa }}</button>
+    <button class="knopf knopf--zweit" type="button" (click)="schliesse(loeschenDialog)">{{ t.abbrechen }}</button>
+  </div>
+</dialog>

@@ -1,0 +1,31 @@
+.daten-seite {
+  max-width: var(--breite-text);
+}
+
+.daten-seite > * + * {
+  margin-top: var(--a-4);
+}
+
+.daten-block {
+  display: grid;
+  gap: var(--a-3);
+  justify-items: start;
+  padding-top: var(--a-5);
+  border-top: 2px solid var(--tinte);
+}
+
+.daten-seite > .daten-block {
+  margin-top: var(--a-7);
+}
+
+.daten-seite__fehler {
+  border-width: 2px;
+  font-weight: 600;
+}
+
+/* Die Datei-Auswahl sieht aus wie ein Knopf; der Fokus zeigt sich an der Beschriftung. */
+.datei-wahl:has(input:focus-visible) label {
+  outline: 3px solid var(--tinte);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--offen);
+}

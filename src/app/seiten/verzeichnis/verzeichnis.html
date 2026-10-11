@@ -1,0 +1,70 @@
+<section class="verzeichnis">
+  <div class="verzeichnis__steuerung nicht-drucken">
+    <h1 tabindex="-1">{{ seitenTitel }}</h1>
+    <p>{{ t.einleitung }}</p>
+    <div class="feld">
+      <label class="feld__label" for="v-firma">{{ t.firma }}</label>
+      <input id="v-firma" class="eingabe" type="text" maxlength="120" autocomplete="organization" [formControl]="firma" />
+    </div>
+    <button class="knopf" type="button" (click)="drucke()">{{ t.drucken }}</button>
+  </div>
+
+  <article class="blatt" aria-labelledby="blatt-titel">
+    <header class="blatt__kopf">
+      @if (firma.value) {
+        <p class="blatt__firma">{{ firma.value }}</p>
+      }
+      <h2 class="blatt__titel" id="blatt-titel">{{ t.titel }}</h2>
+      <p class="blatt__stand">{{ stand() }}</p>
+    </header>
+
+    @if (werkzeuge().length) {
+      <div class="blatt__tabelle" role="region" [attr.aria-label]="t.tabellenBereich" tabindex="0">
+        <table>
+          <caption class="unsichtbar">{{ t.tabelle }}</caption>
+          <thead>
+            <tr>
+              @for (spalte of t.spalten; track spalte) {
+                <th scope="col">{{ spalte }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (w of werkzeuge(); track w.id) {
+              <tr>
+                <th scope="row">{{ w.name }}</th>
+                <td>{{ w.anbieter }}</td>
+                <td>{{ w.zweck }}</td>
+                <td>{{ w.verantwortlich }}</td>
+                <td>{{ w.personendaten }}</td>
+                <td class="zahl">{{ w.offen }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blatt__abschnitt">{{ t.punkteTitel }}</h3>
+      @for (w of werkzeuge(); track w.id) {
+        <section class="blatt__werkzeug" [attr.aria-label]="w.name">
+          <h4 class="blatt__werkzeugname">{{ w.name }}</h4>
+          <ul class="blatt__punkte">
+            @for (punkt of w.punkte; track punkt.regel) {
+              <li [class.blatt__punkt--offen]="punkt.status === 'offen'">
+                <span class="blatt__punkttitel">{{ punkt.titel }}</span>,
+                {{ punkt.quellen[0]?.text }}:&ngsp;<span class="blatt__punktstand">{{ punktStand(punkt) }}</span>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    } @else {
+      <p>{{ t.leer }}</p>
+    }
+
+    <footer class="blatt__fuss">
+      <p>{{ hinweis }}</p>
+      <p>{{ rechtsstand }}</p>
+    </footer>
+  </article>
+</section>

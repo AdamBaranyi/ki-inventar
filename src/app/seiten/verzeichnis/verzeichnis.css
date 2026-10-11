@@ -1,0 +1,99 @@
+.verzeichnis__steuerung {
+  display: grid;
+  gap: var(--a-4);
+  justify-items: start;
+  max-width: var(--breite-text);
+}
+
+.verzeichnis__steuerung .feld {
+  width: 100%;
+}
+
+/* Auf dem Bildschirm ein Blatt; gedruckt fällt der Rahmen weg (druck.css). */
+.blatt {
+  margin-top: var(--a-7);
+  padding: var(--a-5) var(--a-4);
+  border: 1px solid var(--linie);
+  background: var(--blatt);
+}
+
+@media (min-width: 48rem) {
+  .blatt {
+    padding: var(--a-7);
+  }
+}
+
+.blatt__kopf {
+  padding-bottom: var(--a-4);
+  border-bottom: 2px solid var(--tinte);
+}
+
+.blatt__firma {
+  font-weight: 700;
+}
+
+.blatt__titel {
+  font-size: var(--text-2xl);
+}
+
+.blatt__stand {
+  color: var(--graphit);
+}
+
+.blatt__tabelle {
+  margin-top: var(--a-5);
+  overflow-x: auto;
+}
+
+.blatt table {
+  width: 100%;
+  min-width: 40rem;
+  border-collapse: collapse;
+}
+
+.blatt th,
+.blatt td {
+  padding: var(--a-2) var(--a-3) var(--a-2) 0;
+  border-bottom: 1px solid var(--linie);
+  text-align: left;
+  vertical-align: top;
+}
+
+.blatt thead th {
+  border-bottom: 2px solid var(--tinte);
+}
+
+.blatt__abschnitt {
+  margin-top: var(--a-6);
+}
+
+.blatt__werkzeug {
+  margin-top: var(--a-4);
+}
+
+.blatt__werkzeugname {
+  font-size: var(--text-m);
+}
+
+.blatt__punkte {
+  margin-top: var(--a-1);
+  padding-left: var(--a-5);
+}
+
+.blatt__punktstand {
+  color: var(--graphit);
+}
+
+.blatt__punkt--offen .blatt__punktstand {
+  padding: 0 0.2em;
+  background: var(--offen);
+  color: var(--tinte);
+  font-weight: 650;
+}
+
+.blatt__fuss {
+  margin-top: var(--a-6);
+  padding-top: var(--a-3);
+  border-top: 1px solid var(--linie);
+  color: var(--graphit);
+}

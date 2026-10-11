@@ -11,3 +11,7 @@
 @import './app/teile/pruefpunkt/pruefpunkt.css';
 @import './app/seiten/pruefpunkte/pruefpunkte-seite.css';
 @import './app/seiten/fristen/fristen-seite.css';
+@import './app/seiten/daten/daten-seite.css';
+@import './app/seiten/verzeichnis/verzeichnis.css';
+@import './app/seiten/rechtliches/rechts-seite.css';
+@import './styles/druck.css';

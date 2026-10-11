@@ -1,0 +1,20 @@
+.rechts-seite {
+  max-width: var(--breite-text);
+}
+
+.rechts-seite__abschnitt {
+  margin-top: var(--a-6);
+}
+
+.rechts-seite__abschnitt > * + * {
+  margin-top: var(--a-3);
+}
+
+.rechts-seite__links {
+  padding-left: var(--a-5);
+}
+
+.rechts-seite__links a {
+  display: inline-block;
+  padding-block: 0.6rem;
+}

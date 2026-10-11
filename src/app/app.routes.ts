@@ -39,6 +39,28 @@ export const routes: Routes = [
     loadComponent: () => import('./seiten/fristen/fristen-seite').then((m) => m.FristenSeite),
   },
   {
+    path: 'verzeichnis',
+    title: titel(TEXTE.titel.verzeichnis),
+    loadComponent: () => import('./seiten/verzeichnis/verzeichnis').then((m) => m.Verzeichnis),
+  },
+  {
+    path: 'daten',
+    title: titel(TEXTE.titel.daten),
+    loadComponent: () => import('./seiten/daten/daten-seite').then((m) => m.DatenSeite),
+  },
+  {
+    path: 'impressum',
+    title: titel(TEXTE.titel.impressum),
+    data: { seite: 'impressum' },
+    loadComponent: () => import('./seiten/rechtliches/rechts-seite').then((m) => m.RechtsSeite),
+  },
+  {
+    path: 'datenschutz',
+    title: titel(TEXTE.titel.datenschutz),
+    data: { seite: 'datenschutz' },
+    loadComponent: () => import('./seiten/rechtliches/rechts-seite').then((m) => m.RechtsSeite),
+  },
+  {
     path: '**',
     title: titel(TEXTE.titel.nichtGefunden),
     loadComponent: () => import('./seiten/nicht-gefunden/nicht-gefunden').then((m) => m.NichtGefunden),

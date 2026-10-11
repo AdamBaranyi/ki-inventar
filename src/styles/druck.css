@@ -1,0 +1,70 @@
+/* Druck: nur das Blatt, A4, Schrift 12 pt (16 px), Seitenzahl unten rechts. */
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm 14mm 18mm;
+
+    @bottom-right {
+      content: 'Seite ' counter(page) ' von ' counter(pages);
+      font-family: 'Public Sans', Arial, sans-serif;
+      font-size: 12pt;
+    }
+  }
+
+  body {
+    display: block;
+    background: #ffffff;
+    font-size: 12pt;
+  }
+
+  .kopf,
+  .fuss,
+  .sprung,
+  .meldung,
+  .nicht-drucken {
+    display: none !important;
+  }
+
+  .inhalt {
+    padding: 0;
+    max-width: none;
+  }
+
+  .blatt {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .blatt__tabelle {
+    overflow: visible;
+  }
+
+  .blatt table {
+    min-width: 0;
+  }
+
+  .blatt thead {
+    display: table-header-group;
+  }
+
+  .blatt tr,
+  .blatt li {
+    break-inside: avoid;
+  }
+
+  .blatt__werkzeugname,
+  .blatt__abschnitt {
+    break-after: avoid;
+  }
+
+  .blatt__punkt--offen .blatt__punktstand {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
