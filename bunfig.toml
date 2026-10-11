@@ -1,0 +1,5 @@
+# Neue Paketfassungen erst nach sieben Tagen (Sekunden) installieren und
+# Fassungen fest eintragen. Regel und Begründung: docs/SECURITY.md.
+[install]
+exact = true
+minimumReleaseAge = 604800
