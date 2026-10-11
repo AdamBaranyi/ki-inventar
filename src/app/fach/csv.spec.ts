@@ -12,12 +12,12 @@ const KOPF =
   'Entscheidungen über Personen;EU-Bezug;Geschult;Verbotene Praktiken;Offene Prüfpunkte;' +
   'Erledigte Prüfpunkte;Nicht zutreffend';
 
-const zeilen = (csv: string) => csv.replace(/^﻿/, '').split('\r\n');
+const zeilen = (csv: string) => csv.replace(/^\uFEFF/, '').split('\r\n');
 
 describe('alsCsv', () => {
   it('beginnt mit BOM und Kopfzeile, damit Excel Umlaute und Spalten erkennt', () => {
     const csv = alsCsv(leeresInventar(), HEUTE);
-    expect(csv.startsWith('﻿')).toBe(true);
+    expect(csv.startsWith('\uFEFF')).toBe(true);
     expect(zeilen(csv)).toEqual([KOPF]);
   });
 

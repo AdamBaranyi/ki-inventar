@@ -3,6 +3,9 @@ import type { Inventar } from './inventar';
 import { pruefpunkte, type Pruefpunkt, type Status } from './regeln';
 import type { Werkzeug } from './werkzeug';
 
+/** Byte Order Mark: Excel erkennt die Datei damit als UTF-8 (Umlaute). */
+const BOM = '\uFEFF';
+
 const KOPF = [
   'Werkzeug',
   'Anbieter',
@@ -33,7 +36,7 @@ const KOPF = [
  */
 export function alsCsv(inventar: Inventar, heute: string): string {
   const zeilen = [KOPF, ...inventar.werkzeuge.map((w) => zeile(w, heute))];
-  return `﻿${zeilen.map((felder) => felder.map(csvFeld).join(';')).join('\r\n')}`;
+  return `${BOM}${zeilen.map((felder) => felder.map(csvFeld).join(';')).join('\r\n')}`;
 }
 
 function zeile(w: Werkzeug, heute: string): string[] {

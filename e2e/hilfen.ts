@@ -98,9 +98,15 @@ export function kleineZiele(page: Page): Promise<string[]> {
   });
 }
 
-/** Wie weit die Seite breiter ist als das Fenster; mehr als 0 heisst Querscrollen. */
+/**
+ * Wie weit die Seite breiter ist als das Fenster; mehr als 0 heisst Querscrollen.
+ * Nicht `innerWidth`: Im Handy-Profil wächst sie mit überbreitem Inhalt mit
+ * (gemessen 754 statt 390 px), `clientWidth` bleibt bei der Breite des Fensters.
+ */
 export function querscrollen(page: Page): Promise<number> {
-  return page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  return page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
 }
 
 /** Der Druckdialog hält Tests an; im Test zählt er nur mit. */

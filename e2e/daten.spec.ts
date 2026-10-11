@@ -43,7 +43,7 @@ test.describe('Daten', () => {
 
     const csv = await herunterladen(page, 'Tabelle herunterladen (CSV)');
     expect(csv.name).toBe('ki-inventar-2026-10-11.csv');
-    expect(csv.inhalt.startsWith('﻿Werkzeug;Anbieter;')).toBe(true);
+    expect(csv.inhalt.startsWith('\uFEFFWerkzeug;Anbieter;')).toBe(true);
     expect(csv.inhalt.split('\r\n')).toHaveLength(8);
   });
 

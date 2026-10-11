@@ -27,6 +27,11 @@ function ersetze(gruppe, name, datei, suche, ersatz, befehl = UNIT) {
   return { gruppe, name, datei, suche, ersatz, befehl };
 }
 
+const BAU = 'bun run build > /dev/null 2>&1';
+const E2E = (datei, projekt = 'desktop') => `${BAU} && ./node_modules/.bin/playwright test ${datei} --project=${projekt}`;
+const PRUEFE = 'node scripts/pruefe-quelltext.mjs';
+const FORMULAR = 'src/app/seiten/werkzeug-formular/werkzeug-formular.ts';
+
 export const SABOTAGEN = [
   umkehren('R1', 'mitPersonendaten'),
   umkehren('R2', "(w) => mitPersonendaten(w) && w.avv !== 'ja'"),
@@ -54,4 +59,29 @@ export const SABOTAGEN = [
   ersetze('regeln', 'R3: USA-Text für alle', R, "w.standort === 'usa' ? T.R3.grundUsa", 'true ? T.R3.grundUsa'),
   ersetze('regeln', 'R12 nicht mehr am dringendsten', R, "dringlichkeit: 'hoechste'", "dringlichkeit: 'hoch'"),
   ersetze('regeln', 'Gespeicherter Status ignoriert', R, 'return { status: pruefung.status,', "return { status: 'offen' as const,"),
+
+  // Daten: Speichern, Laden, Tabelle
+  ersetze('daten', 'Ungültiges wird trotzdem gespeichert', 'src/app/daten/inventar-dienst.ts', "if (this.ladeFehler() || !inventarSchema.safeParse(neu).success) return false;", 'if (this.ladeFehler()) return false;'),
+  ersetze('daten', 'Unlesbare Daten werden überschrieben', 'src/app/daten/inventar-dienst.ts', 'if (this.ladeFehler() || !inventarSchema', 'if (!inventarSchema'),
+  ersetze('daten', 'Unlesbares nicht beiseitegelegt', 'src/app/daten/inventar-dienst.ts', '      legeUnlesbaresBeiseite(this.speicher);\n', ''),
+  ersetze('daten', 'CSV: Formel mit «=» nicht entschärft', 'src/app/fach/csv.ts', '/^[=+\\-@\\t\\r]/', '/^[+\\-@\\t\\r]/'),
+  ersetze('daten', 'CSV: ohne BOM', 'src/app/fach/csv.ts', 'return `${BOM}${', 'return `${'),
+
+  // Quelltext-Regeln
+  ersetze('quelltext', 'Datei über 400 Zeilen', 'src/app/fach/datum.ts', 'const TAG_MS = 86_400_000;', `const TAG_MS = 86_400_000;${'\n'.repeat(400)}`, PRUEFE),
+  ersetze('quelltext', 'Zod direkt importiert', 'src/app/fach/inventar.ts', "import * as z from '../zod';", "import * as z from 'zod';", PRUEFE),
+  ersetze('quelltext', 'Komponente mit eigenen Stilen', 'src/app/seiten/nicht-gefunden/nicht-gefunden.ts', "selector: 'ki-nicht-gefunden',", "selector: 'ki-nicht-gefunden',\n  styles: ['h1 { color: red }'],", PRUEFE),
+  ersetze('quelltext', 'Schrift 14 px im Stylesheet', 'src/styles/bedienung.css', '  font-size: var(--text-s);\n  font-weight: 650;\n  line-height: 1.5;', '  font-size: 14px;\n  font-weight: 650;\n  line-height: 1.5;', PRUEFE),
+
+  // Browser: jede Grundregel muss auf dem echten Build brechen
+  ersetze('browser', 'Zod ohne jitless (CSP-Verstoss)', 'src/app/zod.ts', 'config({ jitless: true });', 'config({});', E2E('e2e/start.spec.ts')),
+  ersetze('browser', 'Bild von fremdem Ursprung', 'src/index.html', '<ki-root></ki-root>', '<ki-root></ki-root><img src="https://example.org/punkt.gif" alt="">', E2E('e2e/start.spec.ts')),
+  ersetze('browser', 'Schrift unter 16 px, am Quelltext vorbei', 'src/styles/bedienung.css', '  font-size: var(--text-s);\n  font-weight: 650;\n  line-height: 1.5;', '  font-size: calc(var(--text-s) - 2px);\n  font-weight: 650;\n  line-height: 1.5;', E2E('e2e/start.spec.ts')),
+  ersetze('browser', 'Tippflächen 40 px', 'src/styles/token.css', '--tippflaeche: 48px;', '--tippflaeche: 40px;', E2E('e2e/start.spec.ts')),
+  ersetze('browser', 'Tabelle schiebt die Seite in die Breite', 'src/app/seiten/verzeichnis/verzeichnis.css', '  margin-top: var(--a-5);\n  overflow-x: auto;', '  margin-top: var(--a-5);', E2E('e2e/kette.spec.ts', 'handy-390')),
+  ersetze('browser', 'Feld ohne Beschriftung (axe)', 'src/app/seiten/werkzeug-formular/werkzeug-formular.html', 'for="f-anbieter"', 'for="f-anbieterx"', E2E('e2e/werkzeug.spec.ts')),
+  ersetze('browser', 'Kein Autosave', FORMULAR, 'subscribe(() => this.speichere());', 'subscribe(() => this.werte.set(this.form.getRawValue()));', E2E('e2e/werkzeug.spec.ts')),
+  ersetze('browser', 'Druck zeigt die Navigation', 'src/styles/druck.css', '  .kopf,\n', '', E2E('e2e/kette.spec.ts')),
+  ersetze('browser', 'Ohne 404.html für tiefe Links', 'scripts/nach-build.mjs', "copyFileSync(index, join(ZIEL, '404.html'));", '', E2E('e2e/werkzeug.spec.ts')),
+  ersetze('browser', 'Fokus bleibt nicht beim Punkt', 'src/app/teile/pruefpunkt/pruefpunkt.ts', '      ziel?.focus({ preventScroll', '      void ({ preventScroll', E2E('e2e/werkzeug.spec.ts')),
 ];
