@@ -6,7 +6,7 @@ nach dem Schweizer Datenschutzgesetz (DSG) und der EU-KI-Verordnung, dazu die Fr
 KI-Verordnung mit dem Hinweis, wann sie ein Schweizer Unternehmen überhaupt betreffen. Alles bleibt im
 Browser: kein Konto, kein Server, keine Übermittlung.
 
-**Live:** https://ki-inventar.adambaranyi.xyz (eigener Server, nach dem Ausrollen) und
+**Live:** https://ki-inventar.adambaranyi.xyz (eigener Server mit Sicherheits-Kopfzeilen) und
 https://adambaranyi.github.io/ki-inventar/ (GitHub Pages).
 
 **Keine Rechtsberatung.** Das Werkzeug übersetzt Angaben in Prüfpunkte; verbindlich sind der
