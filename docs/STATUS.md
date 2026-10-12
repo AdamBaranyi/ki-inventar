@@ -1,5 +1,22 @@
 # Stand
 
+## Eigener Server (vorbereitet 12.10.2026)
+
+`ki-inventar.adambaranyi.xyz` auf vps1, hinter dem Caddy von Tallyroom (PR
+AdamBaranyi/tallyroom#32). Abbild aus `infra/Dockerfile` (Node und Bun bauen, Caddy liefert aus),
+`infra/compose.prod.yml` hängt den Dienst als `ki-inventar-web` ins Netz `tallyroom-prod_default`.
+CI baut das Abbild und prüft es von aussen. Ausrollen durch Adam:
+
+1. DNS: A-Eintrag `ki-inventar` → `185.150.28.175` im FSIT-cPanel (kein AAAA, IPv6 ist kaputt).
+2. Tallyroom-PR mergen, in `/opt/tallyroom/infra/.env.production`
+   `KI_INVENTAR_SITE_ADDRESS=ki-inventar.adambaranyi.xyz` eintragen, `sudo /opt/tallyroom/infra/deploy.sh`.
+3. `sudo git clone https://github.com/AdamBaranyi/ki-inventar.git /opt/ki-inventar`,
+   dann `sudo /opt/ki-inventar/infra/deploy.sh`.
+4. Abnahme von aussen: Seite, Kopfzeilen, Zertifikat.
+
+Danach entscheidet Adam, ob GitHub Pages bleibt. Daten wandern nicht von selbst: Sie liegen je
+Adresse im Browser; umziehen mit «Sicherung herunterladen» und «Sicherung wählen».
+
 ## Version 1.0 (12.10.2026)
 
 - **Vorlagen** für ChatGPT, Microsoft Copilot, Claude, Gemini und DeepL, je privat und Firma:

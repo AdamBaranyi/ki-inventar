@@ -23,8 +23,15 @@ Dokument hält fest, was trotzdem gilt und wie es geprüft wird.
   beim Neubeginn unter `ki-inventar-unlesbar` beiseitegelegt.
 - **CSV-Export** entschärft Formeln: Felder, die mit `=`, `+`, `-`, `@`, Tab oder Wagenrücklauf
   beginnen, bekommen ein Apostroph davor (`src/app/fach/csv.ts`, mit Tests).
-- **Header** wie `X-Frame-Options` oder HSTS lassen sich auf GitHub Pages nicht setzen. Mit dem Umzug
-  auf eine eigene Subdomain kommen sie in den Caddy-Block.
+- **Kopfzeilen** setzt auf vps1 (`ki-inventar.adambaranyi.xyz`) der Caddy im Abbild
+  (`infra/Caddyfile`): CSP als Kopfzeile mit `frame-ancestors 'none'`, `nosniff`,
+  `Referrer-Policy: no-referrer`, `Permissions-Policy`, COOP, CORP, `X-Frame-Options: DENY`, kein
+  `Server`. TLS und HSTS kommen vom vorgelagerten Caddy (Tallyroom). GitHub Pages kann keine
+  Kopfzeilen setzen; dort gilt nur die CSP im Meta-Tag.
+- **Abbild:** läuft nur lesbar, als Benutzer 65534, mit `cap_drop: ALL`, `no-new-privileges`,
+  128 MB und 64 Prozessen; Caddy ohne Datei-Capability, Verwaltungsschnittstelle aus. Die CI baut
+  es bei jedem Push und prüft es von aussen (`scripts/abbild-pruefen.sh`); drei Sabotagen
+  verlangen, dass diese Prüfung rot wird.
 
 ## Abhängigkeiten
 

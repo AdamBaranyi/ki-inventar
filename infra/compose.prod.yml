@@ -1,0 +1,34 @@
+# KI-Inventar auf vps1. Eigenes Projekt, kein eigener Port: Der Caddy von
+# Tallyroom besitzt 80 und 443 und reicht ki-inventar.adambaranyi.xyz hierher
+# durch. Dafür hängt der Dienst in dessen Netz und heisst dort ki-inventar-web.
+name: ki-inventar-prod
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+    image: ki-inventar-web:${KI_INVENTAR_VERSION:-local}
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    user: '65534:65534'
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 128m
+    pids_limit: 64
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '-O', '/dev/null', 'http://127.0.0.1:8080/']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      proxy:
+        aliases: [ki-inventar-web]
+
+networks:
+  proxy:
+    name: ${PROXY_NETWORK:-tallyroom-prod_default}
+    external: true

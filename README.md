@@ -6,7 +6,8 @@ nach dem Schweizer Datenschutzgesetz (DSG) und der EU-KI-Verordnung, dazu die Fr
 KI-Verordnung mit dem Hinweis, wann sie ein Schweizer Unternehmen überhaupt betreffen. Alles bleibt im
 Browser: kein Konto, kein Server, keine Übermittlung.
 
-**Live:** https://adambaranyi.github.io/ki-inventar/
+**Live:** https://ki-inventar.adambaranyi.xyz (eigener Server, nach dem Ausrollen) und
+https://adambaranyi.github.io/ki-inventar/ (GitHub Pages).
 
 **Keine Rechtsberatung.** Das Werkzeug übersetzt Angaben in Prüfpunkte; verbindlich sind der
 Gesetzestext und eine Fachberatung. Rechtsstand geprüft am 11.10.2026 gegen
@@ -106,8 +107,9 @@ Rechtsstand, Fristen und Vorlagen.
 
 - **Kein Server und kein Konto.** Ein Werkzeug, das Datenschutz prüft, soll keine Daten einsammeln.
   Darum gibt es keinen Abgleich zwischen Geräten; die Sicherung als Datei ersetzt ihn.
-- **Keine Sicherheits-Header** wie HSTS oder `X-Frame-Options`: GitHub Pages erlaubt keine eigenen
-  Header. Sie kommen mit dem Umzug auf eine eigene Subdomain.
+- **Keine Kopfzeilen auf GitHub Pages:** Pages erlaubt keine eigenen. Die Adresse auf dem eigenen
+  Server (`ki-inventar.adambaranyi.xyz`, Abbild aus `infra/`) setzt CSP mit `frame-ancestors`,
+  HSTS und die übrigen Sicherheits-Kopfzeilen.
 - **Keine PDF-Erzeugung im Code.** Der Druck des Browsers erzeugt das PDF; das spart eine Bibliothek.
 - **Nur Deutsch.** Alle Texte liegen in `src/app/texte/`; Französisch, Italienisch und Englisch
   folgen dort.
