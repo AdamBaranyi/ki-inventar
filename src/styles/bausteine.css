@@ -55,7 +55,7 @@ a.zeile {
 
 @media (hover: hover) {
   a.zeile:hover {
-    background: #faf9f6;
+    background: var(--schwebe);
   }
 
   a.zeile:hover .zeile__titel {
@@ -130,9 +130,9 @@ a.zeile:focus-visible {
 }
 
 .kreis--stopp {
-  background: var(--stopp);
+  background: var(--stopp-flaeche);
   box-shadow: none;
-  color: var(--auf-tinte);
+  color: var(--auf-stopp);
 }
 
 /* Anfangsbuchstabe eines Werkzeugs, als ruhiges Kärtchen. */
@@ -235,6 +235,13 @@ a.zeile:focus-visible {
 
 .legende__punkt--erledigt {
   background: var(--tinte);
+}
+
+/* Ein Link im Text, der allein steht: ganze Tippfläche, ohne die Zeile aufzublähen. */
+.link-ziel {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tippflaeche);
 }
 
 .zurueck-link {

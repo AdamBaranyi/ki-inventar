@@ -91,6 +91,7 @@
 
 .frist-kurz--heute {
   background: var(--offen);
+  color: var(--auf-offen);
 }
 
 @media (min-width: 48rem) {

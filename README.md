@@ -22,10 +22,14 @@ durch die Digital-Omnibus-Verordnung (EU) 2026/1744).
 
 ## Was es tut
 
-- **Erfassen:** zehn Fragen je Werkzeug, eine je Bildschirm, vom Standort des Anbieters über
+- **Erfassen:** zehn Fragen je Werkzeug, eine je Bildschirm, vom Ort der Bearbeitung über
   Personendaten, Training und Vertrag zur Auftragsbearbeitung bis zu EU-Bezug und verbotenen
   Praktiken. Jede gültige Änderung speichert sich sofort. «Weiss ich nicht» lässt eine Antwort offen;
   sie erscheint als offene Antwort, und die Datenschutz-Regeln zählen sie vorsichtig mit.
+- **Vorlagen:** Für ChatGPT, Microsoft Copilot, Claude, Gemini und DeepL schlägt die erste Frage je
+  Variante (privat oder Firma) Antworten zu Anbieter, Zugang, Training und AVV vor, mit Hinweis und
+  Quellen (`src/app/fach/vorlagen.ts`, Stand 12.10.2026). Eine Vorlage füllt nur Offenes und nie
+  den Standort.
 - **Prüfpunkte:** 14 Regeln als reine Funktionen (`src/app/fach/regeln.ts`). Jeder Punkt hat einen
   Grund, eine Quelle mit Link und einen Status: offen, erledigt oder trifft nicht zu (mit Begründung).
   Die jährliche Überprüfung wird nach 365 Tagen von selbst wieder fällig. Die Übersicht zeigt den
@@ -33,12 +37,17 @@ durch die Digital-Omnibus-Verordnung (EU) 2026/1744).
 - **Fristen:** Zeitachse der KI-Verordnung nach dem Digital-Omnibus, mit einer Marke für heute.
 - **Sichern und drucken:** JSON zum Wiederherstellen, CSV für Excel (Formeln entschärft), Verzeichnis
   als Druckansicht auf A4.
+- **Bearbeitungsverzeichnis:** Entwurf nach Art. 12 DSG als CSV, eine Zeile je Werkzeug mit
+  Personendaten; Unbekanntes steht als «zu ergänzen» da, die Befreiung nach Art. 24 DSV ist erklärt.
+- **Kalender:** Termine für die jährliche Überprüfung als `.ics` (RFC 5545, ganztägig mit
+  Erinnerung um 9 Uhr).
+- **Dunkel:** folgt der Einstellung des Geräts; gedruckt bleibt alles hell.
 
 | Regel | Greift, wenn … | Prüfpunkt | Quelle |
 |---|---|---|---|
 | R1 | Personendaten nicht ausgeschlossen | Datenschutzerklärung ergänzen | DSG Art. 19 |
 | R2 | Personendaten und kein AVV | Vertrag zur Auftragsbearbeitung | DSG Art. 9 |
-| R3 | Personendaten und Anbieter ausserhalb CH/EWR | Bekanntgabe ins Ausland prüfen | DSG Art. 16, 17 |
+| R3 | Personendaten und Bearbeitung ausserhalb CH/EWR | Bekanntgabe ins Ausland prüfen | DSG Art. 16, 17 |
 | R4 | besonders schützenswerte Daten | Einwilligung oder Grundlage, Folgenabschätzung | DSG Art. 6 Abs. 7, Art. 22 |
 | R5 | Training nicht ausgeschlossen und vertrauliche Eingaben | Training ausschliessen | DSG Art. 7, 8 |
 | R6 | private Konten und vertrauliche Eingaben | Firmenkonto statt privater Konten | DSG Art. 8 |
@@ -86,8 +95,12 @@ erledigen, drucken, exportieren, neu laden».
 bun run sabotage
 ```
 
-baut 53 Fehler ein (jede Regel umgekehrt, Fortschritt, Speicher, CSV, Formular-Schritte,
-Quelltext-Regeln, Browser-Grundregeln) und verlangt, dass jedes Mal ein Test rot wird.
+baut 62 Fehler ein (jede Regel umgekehrt, Fortschritt, Speicher, CSV, Bearbeitungsverzeichnis,
+Kalender, Vorlagen, Formular-Schritte, Quelltext-Regeln, Browser-Grundregeln) und verlangt, dass
+jedes Mal ein Test rot wird. Die Browser-Tests laufen zusätzlich dunkel (`e2e/dunkel.spec.ts`).
+
+Zwei geplante Läufe erinnern per Issue: wöchentlich an offene Pull Requests, monatlich an
+Rechtsstand, Fristen und Vorlagen.
 
 ## Bewusst nicht gebaut
 

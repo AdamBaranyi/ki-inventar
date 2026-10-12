@@ -1,5 +1,21 @@
 # Stand
 
+## Version 1.0 (12.10.2026)
+
+- **Vorlagen** für ChatGPT, Microsoft Copilot, Claude, Gemini und DeepL, je privat und Firma:
+  Anbieter, Zugang, Training, AVV als Vorschlag, mit Hinweis und Quellen. Geprüft am 12.10.2026:
+  Anthropic (Consumer Terms 2025), DeepL (Datenschutzerklärung, Pro), Microsoft (Copilot-Datenschutz,
+  Stand 08.10.2026) direkt; OpenAI und Google nur über Suchauszüge, die Seiten blockten den Abruf.
+  Den Standort setzt keine Vorlage.
+- **Frage 1** fragt jetzt nach dem Ort der Bearbeitung statt nur nach dem Vertragspartner: Bei
+  ChatGPT ist der Vertragspartner in Irland, bearbeitet wird auch in den USA; R3 soll greifen.
+- **Bearbeitungsverzeichnis** (Art. 12 DSG) als CSV-Entwurf; Text zu Art. 24 DSV gegen fedlex
+  geprüft (DSV Stand 01.12.2025).
+- **Kalender** (.ics) für die jährliche Überprüfung.
+- **Dunkelmodus** nach Systemeinstellung, alle Paare ab 4,5:1; Druck bleibt hell.
+- **Erinnerungen** per Issue: wöchentlich offene Pull Requests, monatlich Wartung.
+- Tests: 144 Unit-Tests, 95 Browser-Tests (davon 6 dunkel), 62 Sabotagen.
+
 ## Gestaltung «Prüfpult» (12.10.2026)
 
 Umbau nach der freigegebenen Stilprobe (`~/Code/portfolio/design/ki-inventar/`):
@@ -39,20 +55,17 @@ Live auf https://adambaranyi.github.io/ki-inventar/, gebaut und geprüft von der
 
 ## Als Nächstes
 
-1. Adams Gerätetest am iPhone (Safari): eigenes Werkzeug erfassen, Prüfpunkt erledigen, Sicherung
-   herunterladen, Druckansicht als PDF.
-2. Lizenz: erledigt am 11.10.2026, «Alle Rechte vorbehalten» wie Tallyroom und Hundebüechli (`LICENSE`).
-3. Browser-Lauf mit WebKit und Firefox (`playwright.browsers.config.ts`) vor dem nächsten Deploy.
-4. Erinnerungs-Workflows (wöchentlich offene PRs, monatliche Checkliste) wie in Tallyroom.
-5. Subdomain `ki-inventar.adambaranyi.xyz` auf vps1 mit Caddy und Sicherheits-Headern; DNS-Eintrag
-   setzt Adam.
+1. Adams Gerätetest am iPhone (Safari): Werkzeug mit Vorlage erfassen, Prüfpunkt erledigen,
+   Sicherung und Kalender herunterladen, Druckansicht als PDF, Dunkelmodus.
+2. Subdomain `ki-inventar.adambaranyi.xyz` auf vps1 mit Caddy und Sicherheits-Headern; DNS-Eintrag
+   und sudo-Befehle durch Adam.
+3. Browser-Lauf mit WebKit und Firefox (`playwright.browsers.config.ts`) vor jedem Deploy.
 
 ## Vorgemerkt, nicht im MVP
 
-Mehrsprachigkeit (FR, IT, EN), Vorlagen je bekanntem Werkzeug (Standort und Trainings-Einstellung
-von ChatGPT, Copilot, Claude, Gemini, DeepL als Vorschlag), Team-Sync mit Server, Import aus Excel,
-Bearbeitungsverzeichnis nach Art. 12 DSG, PDF-Erzeugung ohne Browserdruck, Erinnerung zur jährlichen
-Prüfung, Dunkelmodus (Token sind dafür angelegt).
+Mehrsprachigkeit (FR, IT, EN; die Rechtstexte brauchen dafür die amtlichen Fassungen von DSG und
+KI-VO), Team-Sync mit Server, Import aus Excel, PDF-Erzeugung ohne Browserdruck, Umschalter für
+hell und dunkel in der App (heute folgt sie dem Gerät).
 
 ## Aufgefallen
 

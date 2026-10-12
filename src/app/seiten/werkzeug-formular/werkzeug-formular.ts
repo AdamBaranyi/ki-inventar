@@ -7,10 +7,13 @@ import { Router, RouterLink } from '@angular/router';
 
 import { InventarDienst } from '../../daten/inventar-dienst';
 import { fehlendeAngaben } from '../../fach/auswertung';
+import { datumCh } from '../../fach/datum';
+import { passendeVorlagen, VORLAGEN_STAND, wendeAn, type Vorlage } from '../../fach/vorlagen';
 import { GRENZEN } from '../../fach/werkzeug';
 import { Auswahl } from '../../teile/auswahl/auswahl';
 import { Zeichen } from '../../teile/zeichen/zeichen';
 import { ANGABEN, FRAGEN, TEXTE } from '../../texte/de-CH';
+import { VORLAGEN_TEXTE } from '../../texte/de-CH-vorlagen';
 import { antwortenAus, antwortenAusFormular, baueFormular } from './formular-modell';
 import { AUSWAHL_OPTIONEN } from './formular-optionen';
 import { fehlerImSchritt, SCHRITTE, schrittNummer } from './schritte';
@@ -38,6 +41,7 @@ export class WerkzeugFormular implements OnInit {
   private readonly location = inject(Location);
 
   protected readonly t = TEXTE.formular;
+  protected readonly neuerTab = TEXTE.status.neuerTab;
   protected readonly f = FRAGEN;
   protected readonly o = AUSWAHL_OPTIONEN;
   protected readonly schritte = SCHRITTE;
@@ -63,6 +67,11 @@ export class WerkzeugFormular implements OnInit {
     return id ? ['/werkzeug', id] : ['/'];
   });
   protected readonly standText = computed(() => this.t[this.zustand()]);
+  protected readonly v = VORLAGEN_TEXTE;
+  protected readonly vorlagenStand = datumCh(VORLAGEN_STAND);
+  /** Vorschläge für bekannte Werkzeuge, nur in der ersten Frage. */
+  protected readonly vorlagen = computed(() => (this.schritt() === 1 ? passendeVorlagen(this.werte().name) : []));
+  protected readonly gewaehlt = signal<Vorlage | null>(null);
 
   constructor() {
     this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => this.speichere());
@@ -96,6 +105,13 @@ export class WerkzeugFormular implements OnInit {
     if (steuerung.hasError('maxlength')) return this.t.zuLang(GRENZEN[feld]);
     if (steuerung.hasError('max')) return this.t.zuGross(GRENZEN.anzahl.toLocaleString('de-CH'));
     return this.t.ganzzahl;
+  }
+
+  /** Trägt die Antworten einer Vorlage ein, wo noch nichts steht; das speichert sich wie jede Änderung. */
+  protected uebernehme(vorlage: Vorlage) {
+    const { anbieter, zugang, training, avv } = wendeAn(antwortenAusFormular(this.form), vorlage);
+    this.form.patchValue({ anbieter, zugang, training, avv });
+    this.gewaehlt.set(vorlage);
   }
 
   /** «Weiter» prüft nur die Felder dieses Schritts; nach dem letzten geht es zum Werkzeug. */

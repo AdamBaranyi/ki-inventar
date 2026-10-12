@@ -40,6 +40,37 @@
               <p class="feld__fehler" id="f-name-fehler">{{ text }}</p>
             }
           </div>
+          @if (vorlagen().length) {
+            <section class="karte karte--innen vorlagen" aria-labelledby="vorlagen-titel">
+              <h2 id="vorlagen-titel">{{ v.titel }}</h2>
+              <p class="leise klein">{{ v.einleitung(vorlagenStand) }}</p>
+              <div class="vorlagen__wahl">
+                @for (vorlage of vorlagen(); track vorlage.id) {
+                  <button class="knopf knopf--zweit" type="button" (click)="uebernehme(vorlage)">
+                    {{ vorlage.werkzeug }}: {{ vorlage.variante }}
+                  </button>
+                }
+              </div>
+            </section>
+          }
+          <div class="vorlagen__stand" aria-live="polite">
+            @if (gewaehlt(); as g) {
+              <div class="hinweis">
+                <p><strong>{{ v.uebernommen(g.werkzeug, g.variante) }}</strong></p>
+                <p>{{ g.hinweis }}</p>
+                <p>{{ v.quellen }}:</p>
+                <ul class="vorlagen__quellen">
+                  @for (quelle of g.quellen; track quelle.text) {
+                    <li>
+                      <a class="link-ziel" [href]="quelle.url" target="_blank" rel="noopener noreferrer"
+                        >{{ quelle.text }}<span class="unsichtbar"> {{ neuerTab }}</span></a
+                      >
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
           <div class="feld">
             <label class="feld__label" for="f-anbieter">{{ f.q1.anbieter }}</label>
             <input id="f-anbieter" class="eingabe" type="text" formControlName="anbieter" autocomplete="off"

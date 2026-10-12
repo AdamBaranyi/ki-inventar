@@ -63,5 +63,6 @@
 .zeitachse__heute {
   padding: var(--a-3) var(--a-4);
   background: var(--offen);
+  color: var(--auf-offen);
   font-weight: 700;
 }

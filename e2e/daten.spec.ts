@@ -47,6 +47,21 @@ test.describe('Daten', () => {
     expect(csv.inhalt.split('\r\n')).toHaveLength(8);
   });
 
+  test('lädt den Entwurf des Bearbeitungsverzeichnisses und die Termine für den Kalender', async ({ page }) => {
+    await mitBeispielAufDaten(page);
+    await expect(page.getByText('In 1 Werkzeug gelangen besonders schützenswerte Personendaten.')).toBeVisible();
+    const art12 = await herunterladen(page, 'Entwurf herunterladen (CSV)');
+    expect(art12.name).toBe('ki-inventar-bearbeitungsverzeichnis-2026-10-11.csv');
+    expect(art12.inhalt.startsWith('\uFEFFBearbeitung (Werkzeug);Verantwortlicher;')).toBe(true);
+    expect(art12.inhalt.split('\r\n')).toHaveLength(7);
+
+    await expect(page.getByText('Bei 6 Werkzeugen ist die Überprüfung noch nicht festgehalten')).toBeVisible();
+    const ics = await herunterladen(page, 'Termin herunterladen (.ics)');
+    expect(ics.name).toBe('ki-inventar-termine-2026-10-11.ics');
+    expect(ics.inhalt).toContain('DTSTART;VALUE=DATE:20270915');
+    expect(ics.inhalt).toContain('URL:http://localhost:4300/ki-inventar/werkzeug/beispiel-copilot');
+  });
+
   test('stellt eine Sicherung wieder her, nach Rückfrage, wenn schon Daten da sind', async ({ page }) => {
     await mitBeispielAufDaten(page);
     const json = await herunterladen(page, 'Sicherung herunterladen (JSON)');

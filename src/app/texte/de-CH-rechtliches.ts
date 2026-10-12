@@ -36,7 +36,7 @@ export const IMPRESSUM: readonly Abschnitt[] = [
   {
     titel: 'Links',
     absaetze: [
-      'Für die Inhalte verlinkter Seiten, etwa fedlex und EUR-Lex, sind ausschliesslich deren Betreiber verantwortlich.',
+      'Für die Inhalte verlinkter Seiten, etwa fedlex, EUR-Lex oder die Seiten der Anbieter in den Vorlagen, sind ausschliesslich deren Betreiber verantwortlich.',
     ],
   },
 ];
@@ -74,9 +74,9 @@ export const DATENSCHUTZ: readonly Abschnitt[] = [
     ],
   },
   {
-    titel: 'Links zu Gesetzestexten',
+    titel: 'Links zu Gesetzestexten und Anbietern',
     absaetze: [
-      'Die Quellen der Prüfpunkte verweisen auf fedlex und EUR-Lex. Erst wenn du einen solchen Link öffnest, ruft dein Browser die fremde Seite auf; dort gilt deren Datenschutzerklärung.',
+      'Die Quellen der Prüfpunkte verweisen auf fedlex und EUR-Lex, die Vorlagen auf Seiten der Anbieter wie OpenAI, Microsoft, Anthropic, Google und DeepL. Erst wenn du einen solchen Link öffnest, ruft dein Browser die fremde Seite auf; dort gilt deren Datenschutzerklärung.',
     ],
   },
   {

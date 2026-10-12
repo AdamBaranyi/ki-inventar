@@ -94,7 +94,7 @@
 .blatt__punkt--offen .blatt__punktstand {
   padding: 0 0.2em;
   background: var(--offen);
-  color: var(--tinte);
+  color: var(--auf-offen);
   font-weight: 650;
 }
 

@@ -63,6 +63,31 @@
   color: var(--graphit);
 }
 
+/* Vorlagen für bekannte Werkzeuge: ruhig unter dem Namen, Wahl als Knöpfe untereinander. */
+.vorlagen {
+  display: grid;
+  gap: var(--a-3);
+}
+
+.vorlagen__wahl {
+  display: grid;
+  gap: var(--a-2);
+}
+
+.vorlagen__wahl .knopf {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.vorlagen__stand:empty {
+  display: none;
+}
+
+.vorlagen__quellen {
+  margin: 0;
+  padding-left: var(--a-5);
+}
+
 /* Am Handy fest am unteren Rand; die Tab-Leiste ist im Ablauf ausgeblendet. */
 .ablauf__leiste {
   position: fixed;
