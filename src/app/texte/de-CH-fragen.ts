@@ -49,8 +49,9 @@ export const FRAGEN = {
     titel: 'Werkzeug und Anbieter',
     name: 'Name des Werkzeugs',
     anbieter: 'Anbieter',
-    standort: 'Wo sitzt der Anbieter?',
-    standortHilfe: 'Massgebend ist die Firma, mit der ihr den Vertrag habt.',
+    standort: 'Wo bearbeitet der Anbieter die Eingaben?',
+    standortHilfe:
+      'Massgebend ist der Ort der Bearbeitung, nicht nur der Sitz des Vertragspartners. Bearbeitet er auch in den USA, wähle USA.',
   },
   q2: {
     titel: 'Zweck',

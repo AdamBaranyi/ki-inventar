@@ -30,6 +30,36 @@
     }
   </section>
 
+  <section class="karte karte--innen daten-block" aria-labelledby="art12-titel">
+    <h2 id="art12-titel">{{ t.art12Titel }}</h2>
+    <p>{{ t.art12Text }}</p>
+    <p class="leise">{{ t.art12Pflicht }}</p>
+    <p>
+      <a class="link-ziel" [href]="t.art12Quelle" target="_blank" rel="noopener noreferrer"
+        >{{ t.art12QuelleText }}<span class="unsichtbar"> {{ neuerTab }}</span></a
+      >
+    </p>
+    @if (besondere() > 0) {
+      <p class="hinweis">{{ t.art12Besondere(besondere()) }}</p>
+    }
+    @if (mitPersonendaten() > 0) {
+      <button class="knopf knopf--zweit" type="button" (click)="bearbeitungsverzeichnis()">{{ t.art12Knopf }}</button>
+    } @else {
+      <p class="leise">{{ t.art12Leer }}</p>
+    }
+  </section>
+
+  <section class="karte karte--innen daten-block" aria-labelledby="kalender-titel">
+    <h2 id="kalender-titel">{{ t.kalenderTitel }}</h2>
+    <p>{{ t.kalenderText }}</p>
+    @if (termine().ohneTermin > 0 && anzahl() > 0) {
+      <p class="leise">{{ t.kalenderOhne(termine().ohneTermin) }}</p>
+    }
+    @if (termine().termine.length > 0) {
+      <button class="knopf knopf--zweit" type="button" (click)="kalender()">{{ t.kalenderKnopf(termine().termine.length) }}</button>
+    }
+  </section>
+
   <section class="karte karte--innen daten-block" aria-labelledby="wieder-titel">
     <h2 id="wieder-titel">{{ t.wiederTitel }}</h2>
     <p>{{ t.wiederText }}</p>

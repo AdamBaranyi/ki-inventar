@@ -137,6 +137,7 @@ html {
 .navi__link--aktiv .navi__symbol,
 .navi__link--bereich .navi__symbol {
   background: var(--offen);
+  color: var(--auf-offen);
 }
 
 .navi__zahl {

@@ -4,8 +4,10 @@ import { herunterladen, MAX_SICHERUNG_BYTES } from '../../daten/herunterladen';
 import { InventarDienst } from '../../daten/inventar-dienst';
 import { FluechtigerSpeicher, SPEICHER } from '../../daten/speicher';
 import { Uhr } from '../../daten/uhr';
+import { alsBearbeitungsverzeichnis, bearbeitungen, mitBesonderenDaten } from '../../fach/bearbeitungsverzeichnis';
 import { alsCsv } from '../../fach/csv';
 import { liesInventar, type Inventar } from '../../fach/inventar';
+import { alsIcs, jahresTermine } from '../../fach/kalender';
 import { TEXTE } from '../../texte/de-CH';
 
 interface Meldung {
@@ -23,10 +25,14 @@ export class DatenSeite {
   private readonly uhr = inject(Uhr);
   protected readonly t = TEXTE.daten;
   protected readonly titel = TEXTE.titel.daten;
+  protected readonly neuerTab = TEXTE.status.neuerTab;
   protected readonly fluechtig = inject(SPEICHER) instanceof FluechtigerSpeicher;
   protected readonly meldung = signal<Meldung | null>(null);
   protected readonly wartend = signal<Inventar | null>(null);
   protected readonly anzahl = computed(() => this.dienst.inventar().werkzeuge.length);
+  protected readonly mitPersonendaten = computed(() => bearbeitungen(this.dienst.inventar()).length);
+  protected readonly besondere = computed(() => mitBesonderenDaten(this.dienst.inventar()));
+  protected readonly termine = computed(() => jahresTermine(this.dienst.inventar(), this.uhr.heute()));
   private readonly ersetzenDialog = viewChild<ElementRef<HTMLDialogElement>>('ersetzenDialog');
   private readonly loeschenDialog = viewChild<ElementRef<HTMLDialogElement>>('loeschenDialog');
 
@@ -37,6 +43,19 @@ export class DatenSeite {
 
   protected tabelle() {
     herunterladen(this.dateiname('csv'), alsCsv(this.dienst.inventar(), this.uhr.heute()), 'text/csv;charset=utf-8');
+  }
+
+  protected bearbeitungsverzeichnis() {
+    herunterladen(
+      this.dateiname('csv', 'bearbeitungsverzeichnis'),
+      alsBearbeitungsverzeichnis(this.dienst.inventar()),
+      'text/csv;charset=utf-8',
+    );
+  }
+
+  protected kalender() {
+    const ics = alsIcs(this.termine().termine, this.uhr.jetzt(), document.baseURI);
+    herunterladen(this.dateiname('ics', 'termine'), ics, 'text/calendar;charset=utf-8');
   }
 
   protected async waehle(ereignis: Event) {
@@ -82,7 +101,7 @@ export class DatenSeite {
     this.wartend.set(null);
   }
 
-  private dateiname(endung: 'json' | 'csv') {
-    return `ki-inventar-${this.uhr.heute()}.${endung}`;
+  private dateiname(endung: 'json' | 'csv' | 'ics', art = '') {
+    return `ki-inventar-${art ? `${art}-` : ''}${this.uhr.heute()}.${endung}`;
   }
 }

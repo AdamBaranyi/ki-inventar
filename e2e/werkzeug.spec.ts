@@ -78,6 +78,23 @@ test.describe('Werkzeug erfassen', () => {
     await pruefeBildschirm(page, gesehen, 'Werkzeug neu');
   });
 
+  test('schlägt für bekannte Werkzeuge eine Vorlage vor und füllt nur offene Fragen', async ({ page, gesehen }) => {
+    await oeffne(page, 'werkzeug/neu');
+    await page.getByLabel('Name des Werkzeugs').fill('ChatGPT');
+    await expect(page.getByRole('heading', { name: 'Vorlage verwenden' })).toBeVisible();
+    await page.getByRole('button', { name: 'ChatGPT: Free, Plus oder Pro mit privatem Konto' }).click();
+    await expect(page.getByText('Vorlage übernommen: ChatGPT, Free, Plus oder Pro mit privatem Konto.')).toBeVisible();
+    await expect(page.getByRole('textbox', { name: 'Anbieter', exact: true })).toHaveValue('OpenAI');
+    await expect(page.getByRole('radio', { name: 'Weiss ich nicht' })).toBeChecked();
+    await pruefeBildschirm(page, gesehen, 'Formular mit Vorlage');
+
+    await weiter(page);
+    await weiter(page);
+    await weiter(page);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Zugang');
+    await expect(page.getByRole('radio', { name: 'Private oder kostenlose Konten' })).toBeChecked();
+  });
+
   test('«Weiter» verlangt einen Namen und eine ganze Zahl, ohne zu speichern', async ({ page, gesehen }) => {
     await oeffne(page, 'werkzeug/neu');
     await weiter(page);

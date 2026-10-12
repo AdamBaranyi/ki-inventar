@@ -98,7 +98,7 @@
 
 .pille--offen {
   background: var(--offen);
-  color: var(--tinte);
+  color: var(--auf-offen);
 }
 
 .pille--erledigt {
@@ -108,8 +108,8 @@
 }
 
 .pille--stopp {
-  background: var(--stopp);
-  color: var(--auf-tinte);
+  background: var(--stopp-flaeche);
+  color: var(--auf-stopp);
 }
 
 .merkmale {

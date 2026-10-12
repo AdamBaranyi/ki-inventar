@@ -30,12 +30,16 @@ const KOPF = [
   'Nicht zutreffend',
 ];
 
+/** Die Tabelle der Werkzeuge: eine Zeile je Werkzeug, mit dem Stand der Prüfpunkte. */
+export function alsCsv(inventar: Inventar, heute: string): string {
+  return csvTabelle([KOPF, ...inventar.werkzeuge.map((w) => zeile(w, heute))]);
+}
+
 /**
  * Tabelle für Excel: Semikolon als Trenner (Schweizer Einstellung), BOM für
  * die Umlaute, Zeilenende CRLF.
  */
-export function alsCsv(inventar: Inventar, heute: string): string {
-  const zeilen = [KOPF, ...inventar.werkzeuge.map((w) => zeile(w, heute))];
+export function csvTabelle(zeilen: readonly (readonly string[])[]): string {
   return `${BOM}${zeilen.map((felder) => felder.map(csvFeld).join(';')).join('\r\n')}`;
 }
 

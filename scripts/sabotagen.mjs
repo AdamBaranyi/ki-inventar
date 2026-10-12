@@ -68,6 +68,9 @@ export const SABOTAGEN = [
   ersetze('formular', '«Weiss ich nicht» fehlt beim Zugang', 'src/app/seiten/werkzeug-formular/formular-optionen.ts', 'zugang: [...optionen(ZUGAENGE, OPTIONEN.zugang), WEISS_NICHT],', 'zugang: optionen(ZUGAENGE, OPTIONEN.zugang),'),
   ersetze('formular', 'Schritt über 10 hinaus', 'src/app/seiten/werkzeug-formular/schritte.ts', 'return Math.min(Math.max(zahl, 1), SCHRITTE.length);', 'return Math.max(zahl, 1);'),
   ersetze('formular', 'Älteres «unbekannt» nicht als «Weiss ich nicht»', 'src/app/seiten/werkzeug-formular/formular-modell.ts', "standort: antworten.standort === 'unbekannt' ? null : antworten.standort,", 'standort: antworten.standort,'),
+  ersetze('formular', 'Vorlage überschreibt Antworten', 'src/app/fach/vorlagen.ts', 'if (zugang !== undefined && neu.zugang === null) neu.zugang = zugang;', 'if (zugang !== undefined) neu.zugang = zugang;'),
+  ersetze('formular', 'Vorlage setzt den Standort', 'src/app/fach/vorlagen.ts', '  return neu;', "  return { ...neu, standort: 'usa' };"),
+  ersetze('formular', 'Vorlage taucht im Formular nicht auf', 'src/app/seiten/werkzeug-formular/werkzeug-formular.html', '@if (vorlagen().length) {', '@if (vorlagen().length > 99) {', E2E('e2e/werkzeug.spec.ts')),
   ersetze('formular', '«Weiter» prüft den Schritt nicht', FORMULAR, 'const fehler = fehlerImSchritt(this.form, nummer);', 'const fehler: ReturnType<typeof fehlerImSchritt> = [];', E2E('e2e/werkzeug.spec.ts')),
 
   // Daten: Speichern, Laden, Tabelle
@@ -76,6 +79,12 @@ export const SABOTAGEN = [
   ersetze('daten', 'Unlesbares nicht beiseitegelegt', 'src/app/daten/inventar-dienst.ts', '      legeUnlesbaresBeiseite(this.speicher);\n', ''),
   ersetze('daten', 'CSV: Formel mit «=» nicht entschärft', 'src/app/fach/csv.ts', '/^[=+\\-@\\t\\r]/', '/^[+\\-@\\t\\r]/'),
   ersetze('daten', 'CSV: ohne BOM', 'src/app/fach/csv.ts', 'return `${BOM}${', 'return `${'),
+  ersetze('daten', 'Bearbeitungsverzeichnis mit Werkzeugen ohne Personendaten', 'src/app/fach/bearbeitungsverzeichnis.ts', ".filter((w) => w.personendaten !== 'nein')", '.filter(() => true)'),
+  ersetze('daten', 'Bearbeitungsverzeichnis: EU ohne angemessenen Datenschutz', 'src/app/fach/bearbeitungsverzeichnis.ts', "B.ausland[w.standort ?? 'unbekannt']", "B.ausland[w.standort === 'eu' ? 'andere' : (w.standort ?? 'unbekannt')]"),
+  ersetze('daten', 'Kalender: Termin einen Tag zu früh', 'src/app/fach/kalender.ts', 'plusTage(pruefung.datum, JAEHRLICH)', 'plusTage(pruefung.datum, JAEHRLICH - 1)'),
+  ersetze('daten', 'Kalender: Komma nicht maskiert', 'src/app/fach/kalender.ts', '.replace(/[\\\\;,]/g', '.replace(/[\\\\;]/g'),
+  ersetze('daten', 'Kalender: lange Zeilen nicht gefaltet', 'src/app/fach/kalender.ts', '(teile.length === 0 ? 75 : 74)', '(teile.length === 0 ? 7500 : 7400)'),
+  ersetze('daten', 'Kalender: Knopf fehlt auf der Seite', 'src/app/seiten/daten/daten-seite.html', '@if (termine().termine.length > 0) {', '@if (termine().termine.length > 99) {', E2E('e2e/daten.spec.ts')),
 
   // Quelltext-Regeln
   ersetze('quelltext', 'Datei über 400 Zeilen', 'src/app/fach/datum.ts', 'const TAG_MS = 86_400_000;', `const TAG_MS = 86_400_000;${'\n'.repeat(400)}`, PRUEFE),

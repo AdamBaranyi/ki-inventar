@@ -1,0 +1,61 @@
+name: Erinnerung monatlich
+
+# Für die Handgriffe, die niemand meldet: Rechtsstand und Vorlagen veralten
+# still, weil Gesetze und Bedingungen der Anbieter sich ändern, ohne dass ein
+# Test rot wird. Ohne diesen Lauf hängt das allein am Gedächtnis.
+
+on:
+  schedule:
+    # Am Ersten jedes Monats, 07:10 UTC.
+    - cron: '10 7 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  erinnern:
+    name: Wartungsliste öffnen
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Issue anlegen
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          monat=$(date +'%m.%Y')
+
+          gh label create wartung --repo "$REPO" --color 0E8A16 \
+            --description "Wiederkehrende Wartung" 2>/dev/null || true
+
+          gh issue create --repo "$REPO" \
+            --title "Monatliche Wartung $monat" \
+            --label wartung \
+            --assignee AdamBaranyi \
+            --body "$(cat <<'EOF'
+          Rund 15 Minuten. Der Reihe nach:
+
+          - [ ] **Offene Pull Requests:** grüne mergen. Das hält nebenbei die geplanten
+                Läufe am Leben; GitHub schaltet sie in öffentlichen Repositories nach
+                60 Tagen ohne Aktivität ab.
+          - [ ] **Sicherheitsmeldungen:** das offene Issue «Sicherheitsmeldungen» ansehen,
+                falls es eines gibt. Ausnahmen in `scripts/audit.sh` nur mit Grund und Datum.
+          - [ ] **Fristen:** Steht eine Frist aus `src/app/fach/fristen.ts` in den nächsten
+                drei Monaten an? Dann den Text gegen EUR-Lex und fedlex prüfen.
+
+          Alle drei Monate zusätzlich (Januar, April, Juli, Oktober):
+
+          - [ ] **Rechtsstand:** DSG und DSV auf fedlex, KI-Verordnung auf EUR-Lex auf
+                Änderungen prüfen; `RECHTSSTAND` in `src/app/texte/de-CH.ts` nachführen.
+          - [ ] **Vorlagen:** Bedingungen von OpenAI, Microsoft, Anthropic, Google und DeepL
+                gegen `src/app/fach/vorlagen.ts` prüfen (Training, AVV, Vertragspartner);
+                `VORLAGEN_STAND` nachführen.
+          - [ ] **Live-Rauchtest:** Seite laden, Beispiel laden, Sicherung herunterladen,
+                am iPhone einmal durch das Formular.
+
+          Erledigt? Issue schliessen. Am Ersten des nächsten Monats kommt das nächste.
+          EOF
+          )"

@@ -30,7 +30,7 @@
 
 @media (hover: hover) {
   .punkt__schalter:hover {
-    background: #faf9f6;
+    background: var(--schwebe);
   }
 }
 
@@ -97,7 +97,7 @@
 }
 
 .punkt__grund {
-  color: #3b4048;
+  color: var(--tinte-weich);
 }
 
 .punkt__quelle {

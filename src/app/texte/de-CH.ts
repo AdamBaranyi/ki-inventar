@@ -183,6 +183,27 @@ export const TEXTE = {
     tabelleText: 'Eine CSV-Datei für Excel: eine Zeile je Werkzeug, mit offenen und erledigten Prüfpunkten.',
     tabelle: 'Tabelle herunterladen (CSV)',
     leerHinweis: 'Noch nichts erfasst; es gibt nichts zu sichern.',
+    art12Titel: 'Bearbeitungsverzeichnis',
+    art12Text:
+      'Ein Entwurf des Verzeichnisses der Bearbeitungstätigkeiten nach Art. 12 DSG, als CSV für Excel: eine Zeile je Werkzeug mit Personendaten. Was das KI-Inventar nicht weiss, etwa die Aufbewahrungsdauer, steht als «zu ergänzen» da.',
+    art12Pflicht:
+      'Firmen mit weniger als 250 Mitarbeitenden sind von der Pflicht befreit, ausser sie bearbeiten besonders schützenswerte Personendaten in grossem Umfang oder führen ein Profiling mit hohem Risiko durch.',
+    art12Quelle: 'https://www.fedlex.admin.ch/eli/cc/2022/568/de#art_24',
+    art12QuelleText: 'Art. 24 Datenschutzverordnung (DSV)',
+    art12Besondere: (n: number) =>
+      n === 1
+        ? 'In 1 Werkzeug gelangen besonders schützenswerte Personendaten. Geschieht das in grossem Umfang, gilt die Pflicht auch unter 250 Mitarbeitenden.'
+        : `In ${n} Werkzeugen gelangen besonders schützenswerte Personendaten. Geschieht das in grossem Umfang, gilt die Pflicht auch unter 250 Mitarbeitenden.`,
+    art12Knopf: 'Entwurf herunterladen (CSV)',
+    art12Leer: 'Kein Werkzeug nimmt Personendaten auf; es gibt nichts zu verzeichnen.',
+    kalenderTitel: 'Erinnerung im Kalender',
+    kalenderText:
+      'Eine Kalenderdatei mit einem Termin je Werkzeug für den Tag, an dem die jährliche Überprüfung wieder fällig wird. Grundlage ist das Datum, an dem «Eintrag jährlich überprüfen» erledigt wurde.',
+    kalenderOhne: (n: number) =>
+      n === 1
+        ? 'Bei 1 Werkzeug ist die Überprüfung noch nicht festgehalten oder schon wieder fällig; es bekommt keinen Termin.'
+        : `Bei ${n} Werkzeugen ist die Überprüfung noch nicht festgehalten oder schon wieder fällig; sie bekommen keinen Termin.`,
+    kalenderKnopf: (n: number) => (n === 1 ? 'Termin herunterladen (.ics)' : `${n} Termine herunterladen (.ics)`),
     wiederTitel: 'Wiederherstellen',
     wiederText: 'Ersetzt alles in diesem Browser durch den Inhalt einer Sicherung.',
     wahl: 'Sicherung wählen',
