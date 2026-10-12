@@ -1,11 +1,19 @@
 # Stand
 
-## Eigener Server (vorbereitet 12.10.2026)
+## Eigener Server (live seit 12.10.2026)
+
+Live auf https://ki-inventar.adambaranyi.xyz, Stand `b2e61f1`, Zertifikat von Let's Encrypt (bis
+10.01.2027). Abnahme von aussen am 12.10.2026: 14 von 14 Prüfungen grün (HTTPS, Umleitung von HTTP,
+HSTS, CSP mit `frame-ancestors`, `nosniff`, Referrer, Rahmen, kein `Server`/`Via`, Cache, Basis,
+tiefe Links); im Browser (Chromium, WebKit) keine CSP-Verstösse, keine Fehler. Tallyroom und
+Evidarium liefen nach dem Neustart des Proxys weiter.
+
+Aufbau, wie vorbereitet:
 
 `ki-inventar.adambaranyi.xyz` auf vps1, hinter dem Caddy von Tallyroom (PR
 AdamBaranyi/tallyroom#32). Abbild aus `infra/Dockerfile` (Node und Bun bauen, Caddy liefert aus),
 `infra/compose.prod.yml` hängt den Dienst als `ki-inventar-web` ins Netz `tallyroom-prod_default`.
-CI baut das Abbild und prüft es von aussen. Ausrollen durch Adam:
+CI baut das Abbild und prüft es von aussen. Ausrollen (durch Adam, erledigt):
 
 1. DNS: A-Eintrag `ki-inventar` → `185.150.28.175` im FSIT-cPanel (kein AAAA, IPv6 ist kaputt).
 2. Tallyroom-PR mergen, in `/opt/tallyroom/infra/.env.production`
@@ -14,8 +22,9 @@ CI baut das Abbild und prüft es von aussen. Ausrollen durch Adam:
    dann `sudo /opt/ki-inventar/infra/deploy.sh`.
 4. Abnahme von aussen: Seite, Kopfzeilen, Zertifikat.
 
-Danach entscheidet Adam, ob GitHub Pages bleibt. Daten wandern nicht von selbst: Sie liegen je
-Adresse im Browser; umziehen mit «Sicherung herunterladen» und «Sicherung wählen».
+Spätere Updates: `sudo /opt/ki-inventar/infra/deploy.sh`; Tallyroom muss dafür nicht neu
+ausgerollt werden. Offen: Entscheid, ob GitHub Pages bleibt. Daten wandern nicht von selbst: Sie
+liegen je Adresse im Browser; umziehen mit «Sicherung herunterladen» und «Sicherung wählen».
 
 ## Version 1.0 (12.10.2026)
 
