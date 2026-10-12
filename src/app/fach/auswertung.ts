@@ -36,6 +36,32 @@ export function nachDringlichkeit(punkte: readonly Pruefpunkt[]): Pruefpunkt[] {
   );
 }
 
+export interface Fortschritt {
+  gesamt: number;
+  /** Erledigt oder «trifft nicht zu»: Der Punkt ist geklärt. */
+  erledigt: number;
+  offen: number;
+  sofort: number;
+  hoch: number;
+}
+
+/** Wie weit die Punkte geklärt sind, für den Balken auf Übersicht und Werkzeug. */
+export function fortschritt(punkte: readonly Pruefpunkt[]): Fortschritt {
+  const offene = punkte.filter((p) => p.status === 'offen');
+  return {
+    gesamt: punkte.length,
+    erledigt: punkte.length - offene.length,
+    offen: offene.length,
+    sofort: offene.filter((p) => p.dringlichkeit === 'hoechste').length,
+    hoch: offene.filter((p) => p.dringlichkeit === 'hoch').length,
+  };
+}
+
+/** Die dringendsten offenen Punkte über alle Werkzeuge. */
+export function naechste(punkte: readonly Pruefpunkt[], anzahl: number): Pruefpunkt[] {
+  return nachDringlichkeit(punkte.filter((p) => p.status === 'offen')).slice(0, anzahl);
+}
+
 export interface Lage {
   offen: number;
   stopp: boolean;
@@ -69,7 +95,10 @@ const AUSWAHLEN = [
 
 export type Auswahl = (typeof AUSWAHLEN)[number];
 
-/** Auswahlfragen ohne Antwort, in der Reihenfolge des Formulars. */
+/** Ältere Einträge kennen «unbekannt» und «unklar» als eigene Antwort; sie zählen wie «Weiss ich nicht». */
+const UNKLAR: readonly unknown[] = [null, 'unbekannt', 'unklar'];
+
+/** Auswahlfragen ohne klare Antwort, in der Reihenfolge des Formulars. */
 export function fehlendeAngaben(w: Readonly<Record<Auswahl, unknown>>): Auswahl[] {
-  return AUSWAHLEN.filter((feld) => w[feld] === null);
+  return AUSWAHLEN.filter((feld) => UNKLAR.includes(w[feld]));
 }

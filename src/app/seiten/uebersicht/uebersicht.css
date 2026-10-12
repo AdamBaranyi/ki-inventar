@@ -1,110 +1,152 @@
-.uebersicht > * + * {
-  margin-top: var(--a-6);
+/* Erster Besuch: Einleitung, zwei Wege, drei Schritte. */
+.einstieg {
+  display: grid;
+  gap: var(--a-4);
+  max-width: var(--breite-text);
+  padding-top: var(--a-3);
 }
 
-.uebersicht__einstieg > * + * {
-  margin-top: var(--a-3);
+.einstieg__einleitung {
+  font-size: var(--text-m);
 }
 
 @media (min-width: 48rem) {
-  .uebersicht__einleitung {
+  .einstieg__einleitung {
     font-size: var(--text-l);
   }
 }
 
-/* Die drei Zahlen als Bilanzzeile: Zahl gross, Wort direkt daneben. */
-.bilanz {
+.einstieg__schritte {
   display: grid;
   gap: var(--a-3);
-  padding: 0;
-  list-style: none;
+  margin-top: var(--a-5);
 }
 
-@media (min-width: 48rem) {
-  .bilanz {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--a-6);
-  }
+/* Mit Werkzeugen: Kopf, dann Fortschritt, nächste Punkte, Werkzeuge und Fristen. */
+.uebersicht {
+  display: grid;
+  gap: var(--a-6);
 }
 
-.bilanz__posten {
+.uebersicht__kopf {
   display: flex;
-  align-items: baseline;
-  gap: var(--a-3);
-  padding-bottom: var(--a-3);
-  border-bottom: 2px solid var(--tinte);
-}
-
-.bilanz__zahl {
-  font-size: var(--text-zahl);
-  font-weight: 750;
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-
-.bilanz__wort {
-  font-weight: 600;
-  line-height: 1.25;
-}
-
-/* Wie mit dem Leuchtstift über die Zahl gezogen. */
-.leuchtstift {
-  padding: 0 0.12em;
-  background: var(--offen);
-}
-
-.uebersicht__aktionen {
-  margin-top: var(--a-6);
-}
-
-.uebersicht__listentitel {
-  margin-top: var(--a-7);
-}
-
-.register {
-  margin-top: var(--a-3);
-  padding: 0;
-  border-top: 1px solid var(--linie);
-  list-style: none;
-}
-
-.register__zeile {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: var(--a-2) var(--a-5);
-  padding-block: var(--a-4);
-  border-bottom: 1px solid var(--linie);
+  gap: var(--a-3) var(--a-5);
+  padding-top: var(--a-3);
 }
 
-.register__text {
+.uebersicht__titel {
   display: grid;
+  gap: var(--a-1);
   min-width: 0;
 }
 
-.register__name {
-  display: inline-flex;
-  align-items: center;
-  min-width: var(--tippflaeche);
-  min-height: var(--tippflaeche);
-  font-size: var(--text-l);
-  font-weight: 700;
-  text-decoration: none;
+.uebersicht__aktionen {
+  flex-wrap: nowrap;
+  flex: none;
 }
 
-@media (hover: hover) {
-  .register__name:hover {
-    text-decoration: underline;
+/* Am Handy: nur der runde Knopf mit Plus; «Sichern» liegt unter «Mehr». */
+.uebersicht__sichern {
+  display: none;
+}
+
+.uebersicht__erfassen {
+  width: var(--tippflaeche);
+  padding: 0;
+  border-radius: 50%;
+}
+
+.uebersicht__erfassen .zeichen {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.uebersicht__erfassen-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.uebersicht__raster {
+  display: grid;
+  gap: var(--a-6);
+}
+
+/* Fristen kurz: Datum in Tabellenziffern, heute mit Leuchtstift. */
+.frist-kurz {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: var(--a-3);
+  min-height: 3.25rem;
+}
+
+.frist-kurz__datum {
+  font-weight: 650;
+}
+
+.frist-kurz--heute {
+  background: var(--offen);
+}
+
+@media (min-width: 48rem) {
+  .uebersicht__kopf {
+    align-items: flex-end;
+  }
+
+  .uebersicht__sichern {
+    display: inline-flex;
+  }
+
+  .uebersicht__erfassen {
+    width: auto;
+    padding: var(--a-2) var(--a-5);
+    border-radius: var(--radius-knopf);
+  }
+
+  .uebersicht__erfassen .zeichen {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .uebersicht__erfassen-text {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
   }
 }
 
-.register__meta {
-  color: var(--graphit);
-}
+/* Breit: links Fortschritt, Nächstes und Fristen, rechts die Werkzeuge. */
+@media (min-width: 75rem) {
+  .uebersicht__raster {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      'fortschritt werkzeuge'
+      'naechstes werkzeuge'
+      'fristen werkzeuge';
+    align-items: start;
+  }
 
-.lage-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--a-2);
+  .uebersicht__fortschritt {
+    grid-area: fortschritt;
+  }
+
+  .uebersicht__naechstes {
+    grid-area: naechstes;
+  }
+
+  .uebersicht__werkzeuge {
+    grid-area: werkzeuge;
+  }
+
+  .uebersicht__fristen {
+    grid-area: fristen;
+  }
 }

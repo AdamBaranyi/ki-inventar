@@ -1,25 +1,21 @@
 .daten-seite {
+  display: grid;
+  gap: var(--a-4);
   max-width: var(--breite-text);
-}
-
-.daten-seite > * + * {
-  margin-top: var(--a-4);
 }
 
 .daten-block {
   display: grid;
   gap: var(--a-3);
   justify-items: start;
-  padding-top: var(--a-5);
-  border-top: 2px solid var(--tinte);
 }
 
 .daten-seite > .daten-block {
-  margin-top: var(--a-7);
+  margin-top: var(--a-2);
 }
 
 .daten-seite__fehler {
-  border-width: 2px;
+  border: 2px solid var(--offen-tief);
   font-weight: 600;
 }
 

@@ -6,25 +6,23 @@
     <p>{{ t.leerOhneWerkzeuge }}</p>
     <p><a class="knopf" routerLink="/werkzeug/neu">{{ erfassen }}</a></p>
   } @else {
-    <fieldset class="wahl liste-seite__filter">
-      <legend class="wahl__frage">{{ t.filter }}</legend>
-      <div class="wahl__optionen wahl__optionen--zeile">
-        <label class="wahl__option">
-          <input type="radio" name="filter" [checked]="nurOffene()" (change)="nurOffene.set(true)" />
-          {{ t.nurOffene }}
-        </label>
-        <label class="wahl__option">
-          <input type="radio" name="filter" [checked]="!nurOffene()" (change)="nurOffene.set(false)" />
-          {{ t.alle }}
-        </label>
-      </div>
+    <fieldset class="umschalter liste-seite__filter">
+      <legend class="unsichtbar">{{ t.filter }}</legend>
+      <label class="umschalter__wahl">
+        <input type="radio" name="filter" [checked]="nurOffene()" (change)="nurOffene.set(true)" />
+        {{ t.nurOffene }}
+      </label>
+      <label class="umschalter__wahl">
+        <input type="radio" name="filter" [checked]="!nurOffene()" (change)="nurOffene.set(false)" />
+        {{ t.alle }}
+      </label>
     </fieldset>
 
     @for (gruppe of gruppen(); track gruppe.stufe) {
-      <section class="stufe" [attr.aria-labelledby]="'stufe-' + gruppe.stufe">
+      <section class="abschnitt stufe" [class.stufe--sofort]="gruppe.stufe === 'hoechste'" [attr.aria-labelledby]="'stufe-' + gruppe.stufe">
         <h2 class="stufe__titel" [id]="'stufe-' + gruppe.stufe">{{ stufenTitel[gruppe.stufe] }}&ngsp;<span
             class="stufe__anzahl">{{ t.anzahl(gruppe.punkte.length) }}</span></h2>
-        <ul class="punktliste">
+        <ul class="karte zeilen punktliste">
           @for (punkt of gruppe.punkte; track punkt.werkzeugId + punkt.regel) {
             <li><ki-pruefpunkt [punkt]="punkt" [mitWerkzeug]="true" /></li>
           }

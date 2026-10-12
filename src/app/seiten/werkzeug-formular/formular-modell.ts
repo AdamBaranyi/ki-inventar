@@ -50,9 +50,15 @@ export function baueFormular() {
 
 export type Formular = ReturnType<typeof baueFormular>;
 
+/** Die Antworten für das Formular; «unbekannt» und «unklar» erscheinen als «Weiss ich nicht». */
 export function antwortenAus(werkzeug: Werkzeug): Antworten {
   const { id: _id, pruefungen: _p, erfasst: _e, geaendert: _g, ...antworten } = werkzeug;
-  return antworten;
+  return {
+    ...antworten,
+    standort: antworten.standort === 'unbekannt' ? null : antworten.standort,
+    training: antworten.training === 'unbekannt' ? null : antworten.training,
+    avv: antworten.avv === 'unklar' ? null : antworten.avv,
+  };
 }
 
 /** Die Werte des Formulars, Texte ohne Leerzeichen am Rand. */

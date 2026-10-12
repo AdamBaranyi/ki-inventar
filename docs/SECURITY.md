@@ -17,7 +17,7 @@ Dokument hält fest, was trotzdem gilt und wie es geprüft wird.
   sie wenig.
 - **Geprüft** in `e2e/`: Auf jedem Bildschirm keine CSP-Verstösse und keine Anfrage an einen fremden
   Ursprung. Gegenprobe: eingeschleustes HTML mit Ereignis-Handler wird blockiert und gemeldet.
-- **Keine Netzaufrufe zur Laufzeit.** Schrift (Public Sans) liegt im Repo, keine CDN, kein Tracking.
+- **Keine Netzaufrufe zur Laufzeit.** Schrift (Mona Sans) liegt im Repo, keine CDN, kein Tracking.
 - **Eingaben** prüft Zod beim Laden aus dem Speicher und beim Wiederherstellen einer Sicherung; der
   Dienst speichert nur, was dem Schema entspricht. Unlesbare Daten werden nie überschrieben, sondern
   beim Neubeginn unter `ki-inventar-unlesbar` beiseitegelegt.

@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -9,46 +9,69 @@ import { InventarDienst } from '../../daten/inventar-dienst';
 import { fehlendeAngaben } from '../../fach/auswertung';
 import { GRENZEN } from '../../fach/werkzeug';
 import { Auswahl } from '../../teile/auswahl/auswahl';
+import { Zeichen } from '../../teile/zeichen/zeichen';
 import { ANGABEN, FRAGEN, TEXTE } from '../../texte/de-CH';
 import { antwortenAus, antwortenAusFormular, baueFormular } from './formular-modell';
 import { AUSWAHL_OPTIONEN } from './formular-optionen';
+import { fehlerImSchritt, SCHRITTE, schrittNummer } from './schritte';
 
 type Zustand = 'wartet' | 'gespeichert' | 'ungueltig' | 'verweigert';
+type Textfeld = 'name' | 'anbieter' | 'zweck' | 'abteilungen' | 'anzahl' | 'verantwortlich';
 
-/** Erfassen und Bearbeiten eines Werkzeugs; jede gültige Änderung wird sofort gespeichert. */
+/**
+ * Erfassen und Bearbeiten eines Werkzeugs, eine Frage je Bildschirm (?frage=1 bis 10).
+ * Jede gültige Änderung wird sofort gespeichert; der Name legt das Werkzeug an.
+ */
 @Component({
   selector: 'ki-werkzeug-formular',
-  imports: [ReactiveFormsModule, RouterLink, Auswahl],
+  imports: [ReactiveFormsModule, RouterLink, Auswahl, Zeichen],
   templateUrl: './werkzeug-formular.html',
 })
 export class WerkzeugFormular implements OnInit {
   /** Aus der Route; fehlt beim Erfassen. */
   readonly id = input<string>();
+  /** Aus der Adresse (?frage=5). */
+  readonly frage = input<string>();
 
   private readonly dienst = inject(InventarDienst);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
-  private readonly title = inject(Title);
 
   protected readonly t = TEXTE.formular;
   protected readonly f = FRAGEN;
   protected readonly o = AUSWAHL_OPTIONEN;
-  protected readonly grenzen = GRENZEN;
+  protected readonly schritte = SCHRITTE;
   protected readonly form = baueFormular();
   protected readonly werkzeugId = signal<string | null>(null);
   protected readonly zustand = signal<Zustand>('wartet');
   protected readonly versucht = signal(false);
   protected readonly nichtGefunden = signal(false);
   private readonly werte = signal(this.form.getRawValue());
+
+  /** Solange kein Werkzeug gespeichert ist, gibt es nur den ersten Schritt. */
+  protected readonly schritt = computed(() => (this.werkzeugId() ? schrittNummer(this.frage()) : 1));
+  protected readonly titel = computed(() => SCHRITTE[this.schritt() - 1]?.titel ?? '');
+  protected readonly letzter = computed(() => this.schritt() === SCHRITTE.length);
+  protected readonly ort = computed(() =>
+    [this.t.frageVon(this.schritt(), SCHRITTE.length), this.werte().name.trim()].filter(Boolean).join(', '),
+  );
   protected readonly fehlend = computed(() =>
     fehlendeAngaben(this.werte()).map((feld) => ANGABEN[feld]),
   );
-  protected readonly ueberschrift = computed(() =>
-    this.werkzeugId() ? TEXTE.titel.bearbeiten : TEXTE.titel.neu,
-  );
+  protected readonly schliessenZiel = computed(() => {
+    const id = this.werkzeugId();
+    return id ? ['/werkzeug', id] : ['/'];
+  });
+  protected readonly standText = computed(() => this.t[this.zustand()]);
 
   constructor() {
     this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => this.speichere());
+    const title = inject(Title);
+    effect(() => {
+      const name = this.werte().name.trim();
+      const frage = `${this.t.frageVon(this.schritt(), SCHRITTE.length)}: ${this.titel()}`;
+      title.setTitle([frage, name, TEXTE.app.name].filter(Boolean).join(' – '));
+    });
   }
 
   ngOnInit() {
@@ -63,11 +86,10 @@ export class WerkzeugFormular implements OnInit {
     this.form.setValue(antwortenAus(werkzeug), { emitEvent: false });
     this.werte.set(this.form.getRawValue());
     this.zustand.set('gespeichert');
-    this.title.setTitle(`${werkzeug.name} bearbeiten – ${TEXTE.app.name}`);
   }
 
-  /** Fehlertext eines Textfelds, sobald es berührt oder «Fertig» gedrückt wurde. */
-  protected fehler(feld: 'name' | 'anbieter' | 'zweck' | 'abteilungen' | 'anzahl' | 'verantwortlich') {
+  /** Fehlertext eines Textfelds, sobald es berührt oder «Weiter» gedrückt wurde. */
+  protected fehler(feld: Textfeld) {
     const steuerung = this.form.controls[feld];
     if (steuerung.valid || !(steuerung.touched || this.versucht())) return null;
     if (steuerung.hasError('required')) return this.t.nameFehlt;
@@ -76,15 +98,29 @@ export class WerkzeugFormular implements OnInit {
     return this.t.ganzzahl;
   }
 
-  protected fertig() {
-    this.versucht.set(true);
-    this.form.markAllAsTouched();
-    if (this.form.invalid) {
+  /** «Weiter» prüft nur die Felder dieses Schritts; nach dem letzten geht es zum Werkzeug. */
+  protected weiter() {
+    const nummer = this.schritt();
+    const fehler = fehlerImSchritt(this.form, nummer);
+    if (fehler.length) {
+      this.versucht.set(true);
+      for (const feld of fehler) this.form.controls[feld].markAsTouched();
       requestAnimationFrame(() => document.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus());
       return;
     }
     const id = this.werkzeugId();
-    if (id) void this.router.navigate(['/werkzeug', id]);
+    if (!id) return;
+    if (nummer === SCHRITTE.length) void this.router.navigate(['/werkzeug', id]);
+    else this.geheZu(id, nummer + 1);
+  }
+
+  protected zurueck() {
+    const id = this.werkzeugId();
+    if (id && this.schritt() > 1) this.geheZu(id, this.schritt() - 1);
+  }
+
+  private geheZu(id: string, nummer: number) {
+    void this.router.navigate(['/werkzeug', id, 'bearbeiten'], { queryParams: { frage: nummer } });
   }
 
   private speichere() {

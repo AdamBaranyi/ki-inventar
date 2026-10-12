@@ -1,13 +1,28 @@
-/* Kopf, Navigation, Inhalt und Fuss der App (app.html). */
+/*
+ * App-Rahmen (app.html). Am Handy: Wortmarke oben, Tab-Leiste unten; im Ablauf
+ * des Formulars fallen beide weg. Ab 60rem Breite: Seitenleiste links.
+ */
+
+.app {
+  display: block;
+  min-height: 100vh;
+  padding-bottom: calc(var(--tableiste) + env(safe-area-inset-bottom));
+}
+
+/* Was den Fokus bekommt, rutscht nicht unter die Tab-Leiste. */
+html {
+  scroll-padding-bottom: calc(var(--tableiste) + env(safe-area-inset-bottom) + var(--a-4));
+}
 
 .sprung {
   position: absolute;
   top: var(--a-2);
   left: var(--a-2);
-  z-index: 10;
+  z-index: 30;
   padding: var(--a-3) var(--a-4);
+  border-radius: var(--radius-knopf);
   background: var(--tinte);
-  color: var(--papier);
+  color: var(--auf-tinte);
   font-weight: 650;
   transform: translateY(-200%);
 }
@@ -16,81 +31,125 @@
   transform: none;
 }
 
-.kopf {
-  border-bottom: 1px solid var(--linie);
-  background: var(--papier);
+.seitenleiste {
+  display: contents;
 }
 
-.kopf__innen {
+.kopf {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--a-2) var(--a-6);
-  padding-block: var(--a-3);
+  min-height: 4rem;
+  padding: var(--a-2) max(var(--a-4), env(safe-area-inset-right)) var(--a-2)
+    max(var(--a-4), env(safe-area-inset-left));
 }
 
 .wortmarke {
   display: inline-flex;
-  flex-wrap: wrap;
   align-items: center;
-  column-gap: var(--a-2);
+  gap: var(--a-2);
   min-height: var(--tippflaeche);
+  font-size: 1.1875rem;
+  font-stretch: var(--breit);
+  font-weight: 650;
+  letter-spacing: -0.01em;
   text-decoration: none;
 }
 
 .marke {
-  width: 2rem;
-  height: 2rem;
+  width: 1.75rem;
+  height: 1.75rem;
   flex: none;
 }
 
-.wortmarke__name {
-  font-size: var(--text-xl);
-  font-weight: 750;
-  letter-spacing: -0.02em;
+.seitenleiste__zusatz,
+.seitenleiste__fuss {
+  display: none;
 }
 
-.wortmarke__zusatz {
-  color: var(--graphit);
-  font-size: var(--text-s);
+/* Tab-Leiste: vier Ziele, Beschriftung 16 px, das aktive mit Leuchtstift hinterlegt. */
+.navi {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  padding: 6px max(6px, env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom))
+    max(6px, env(safe-area-inset-left));
+  border-top: 1px solid var(--linie);
+  background: var(--blatt);
 }
 
 .navi__liste {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--a-1);
-  margin: 0 calc(var(--a-3) * -1);
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  max-width: 36rem;
+  margin: 0 auto;
   padding: 0;
   list-style: none;
 }
 
-.navi__link {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tippflaeche);
-  padding: 0 var(--a-3);
-  border-bottom: 3px solid transparent;
-  font-size: var(--text-s);
-  font-weight: 600;
-  text-decoration: none;
-  transition: border-color var(--dauer) var(--kurve);
+.navi__eintrag--breit {
+  display: none;
 }
 
-@media (hover: hover) {
-  .navi__link:hover {
-    border-bottom-color: var(--linie);
-  }
+.navi__link {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 2px;
+  min-height: 3.75rem;
+  padding: 2px;
+  border-radius: 12px;
+  color: var(--graphit);
+  font-size: var(--text-s);
+  font-stretch: var(--schmal);
+  font-weight: 550;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+}
+
+.navi__link:focus-visible {
+  outline-offset: -3px;
+}
+
+.navi__symbol {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 1.875rem;
+  border-radius: 999px;
+  transition: background-color var(--dauer) var(--kurve);
+}
+
+.navi__symbol .zeichen {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .navi__link--aktiv,
-.navi__link--aktiv:hover {
-  border-bottom-color: var(--tinte);
+.navi__link--bereich {
+  color: var(--tinte);
+  font-weight: 650;
+}
+
+.navi__link--aktiv .navi__symbol,
+.navi__link--bereich .navi__symbol {
+  background: var(--offen);
+}
+
+.navi__zahl {
+  display: none;
 }
 
 .inhalt {
-  flex: 1;
-  padding-block: var(--a-6) var(--a-8);
+  display: block;
+  width: 100%;
+  max-width: var(--breite-seite);
+  margin-inline: auto;
+  padding: var(--a-2) max(var(--a-4), env(safe-area-inset-right)) var(--a-8)
+    max(var(--a-4), env(safe-area-inset-left));
 }
 
 .inhalt:focus {
@@ -103,15 +162,15 @@
 }
 
 .fuss {
+  display: grid;
+  gap: var(--a-2);
+  max-width: var(--breite-seite);
+  margin-inline: auto;
+  padding: var(--a-5) max(var(--a-4), env(safe-area-inset-right)) var(--a-6)
+    max(var(--a-4), env(safe-area-inset-left));
   border-top: 1px solid var(--linie);
   color: var(--graphit);
   font-size: var(--text-s);
-}
-
-.fuss__innen {
-  display: grid;
-  gap: var(--a-2);
-  padding-block: var(--a-5) var(--a-6);
 }
 
 .fuss__rechtsberatung {
@@ -134,49 +193,153 @@
   min-height: var(--tippflaeche);
 }
 
-/* Am Handy: Wortmarke und «Menü» in einer Zeile, die Navigation klappt darunter auf. */
-.menue-knopf {
+/* Im Ablauf (Formular) trägt die Seite ihre eigene Leiste unten. */
+.app--ablauf {
+  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+}
+
+.app--ablauf .kopf,
+.app--ablauf .navi {
   display: none;
 }
 
-@media (max-width: 47.99rem) {
-  .kopf__innen {
-    flex-wrap: wrap;
+html:has(.app--ablauf) {
+  scroll-padding-bottom: calc(5.5rem + env(safe-area-inset-bottom) + var(--a-4));
+}
+
+@media (min-width: 60rem) and (min-height: 30rem) {
+  html,
+  html:has(.app--ablauf) {
+    scroll-padding-bottom: var(--a-4);
   }
 
-  .menue-knopf {
-    display: inline-flex;
-    padding-inline: var(--a-4);
+  .app,
+  .app--ablauf {
+    display: grid;
+    grid-template-columns: var(--seitenleiste) minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+    padding-bottom: 0;
+  }
+
+  .seitenleiste {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--a-6);
+    grid-row: 1 / 3;
+    grid-column: 1;
+    height: 100vh;
+    height: 100dvh;
+    padding: var(--a-6) var(--a-4);
+    overflow-y: auto;
+    border-right: 1px solid var(--linie);
+    background: var(--blatt);
+  }
+
+  .kopf,
+  .app--ablauf .kopf {
+    display: grid;
+    min-height: 0;
+    padding: 0 var(--a-2);
+  }
+
+  .seitenleiste__zusatz {
+    display: block;
+    color: var(--graphit);
     font-size: var(--text-s);
   }
 
-  .navi {
-    display: none;
-    width: 100%;
-  }
-
-  .navi--offen {
+  .navi,
+  .app--ablauf .navi {
+    position: static;
     display: block;
+    padding: 0;
+    border: 0;
+    background: none;
   }
 
   .navi__liste {
-    flex-direction: column;
+    grid-auto-flow: row;
+    gap: var(--a-1);
+    max-width: none;
     margin: 0;
-    padding-bottom: var(--a-2);
+  }
+
+  .navi__eintrag--breit {
+    display: block;
+  }
+
+  .navi__eintrag--handy {
+    display: none;
   }
 
   .navi__link {
-    width: 100%;
-    padding-inline: 0;
-    border-bottom: 1px solid var(--linie);
+    display: flex;
+    align-items: center;
+    gap: var(--a-3);
+    min-height: 2.875rem;
+    padding: 0 var(--a-3);
+    color: var(--tinte);
+    font-size: var(--text-m);
+    font-stretch: 100%;
+    font-weight: 520;
+    text-align: left;
+  }
+
+  .navi__symbol {
+    width: auto;
+    height: auto;
+    color: var(--graphit);
+  }
+
+  .navi__symbol .zeichen {
+    width: 1.375rem;
+    height: 1.375rem;
   }
 
   .navi__link--aktiv,
-  .navi__link--aktiv:hover {
-    border-bottom: 3px solid var(--tinte);
+  .navi__link--bereich {
+    background: var(--grund);
+    font-weight: 620;
   }
 
-  .wortmarke__zusatz {
-    display: none;
+  .navi__link--aktiv .navi__symbol,
+  .navi__link--bereich .navi__symbol {
+    background: none;
+    color: var(--tinte);
+  }
+
+  .navi__zahl {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .seitenleiste__fuss {
+    display: block;
+    margin-top: auto;
+    padding: 0 var(--a-2);
+    color: var(--graphit);
+    font-size: var(--text-s);
+  }
+
+  .inhalt {
+    grid-column: 2;
+    max-width: 76rem;
+    margin: 0;
+    padding: var(--a-7) var(--a-7) var(--a-8);
+  }
+
+  .fuss {
+    grid-column: 2;
+    max-width: 72rem;
+    margin: 0 var(--a-7);
+    padding-inline: 0;
+  }
+}
+
+@media (min-width: 60rem) and (min-height: 30rem) and (hover: hover) {
+  .navi__link:hover {
+    background: var(--grund);
   }
 }

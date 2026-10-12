@@ -1,71 +1,48 @@
 <a class="sprung" href="#inhalt" (click)="zumInhalt($event)">{{ t.zumInhalt }}</a>
 
-<header class="kopf">
-  <div class="kopf__innen rahmen">
+<div class="seitenleiste">
+  <header class="kopf">
     <a class="wortmarke" routerLink="/">
       <ki-marke />
-      <span class="wortmarke__name">{{ t.name }}</span>
-      <span class="wortmarke__zusatz">{{ t.zusatz }}</span>
+      <span>{{ t.name }}</span>
     </a>
-    <button
-      class="knopf knopf--zweit menue-knopf"
-      type="button"
-      aria-controls="hauptnavigation"
-      [attr.aria-expanded]="menueOffen()"
-      (click)="menueOffen.set(!menueOffen())"
-    >
-      {{ menueOffen() ? t.menueZu : t.menue }}
-    </button>
-    <nav
-      id="hauptnavigation"
-      class="navi"
-      [class.navi--offen]="menueOffen()"
-      [attr.aria-label]="t.navigation"
-      (keydown.escape)="schliesseMenue()"
-    >
-      <ul class="navi__liste">
-        <li>
+    <p class="seitenleiste__zusatz">{{ t.zusatz }}</p>
+  </header>
+
+  <nav class="navi" [attr.aria-label]="t.navigation">
+    <ul class="navi__liste">
+      @for (eintrag of eintraege; track eintrag.pfad) {
+        <li [class]="'navi__eintrag navi__eintrag--' + eintrag.wo">
           <a
             class="navi__link"
-            routerLink="/"
+            [routerLink]="eintrag.pfad"
             routerLinkActive="navi__link--aktiv"
-            [routerLinkActiveOptions]="{ exact: true }"
+            [routerLinkActiveOptions]="{ exact: eintrag.pfad === '/' }"
             ariaCurrentWhenActive="page"
-            >{{ t.nav.uebersicht }}</a
+            [class.navi__link--bereich]="eintrag.pfad === '/mehr' && unterMehr()"
+            [attr.aria-label]="eintrag.pfad === '/pruefpunkte' && offen() > 0 ? eintrag.text + ', ' + offen() + ' ' + t.offenZahl : null"
           >
+            <span class="navi__symbol"><ki-zeichen [name]="eintrag.zeichen" /></span>
+            <span>{{ eintrag.text }}</span>
+            @if (eintrag.pfad === '/pruefpunkte' && offen() > 0) {
+              <span class="navi__zahl pille pille--offen">{{ offen() }}</span>
+            }
+          </a>
         </li>
-        <li>
-          <a class="navi__link" routerLink="/pruefpunkte" routerLinkActive="navi__link--aktiv" ariaCurrentWhenActive="page">{{
-            t.nav.pruefpunkte
-          }}</a>
-        </li>
-        <li>
-          <a class="navi__link" routerLink="/fristen" routerLinkActive="navi__link--aktiv" ariaCurrentWhenActive="page">{{
-            t.nav.fristen
-          }}</a>
-        </li>
-        <li>
-          <a class="navi__link" routerLink="/verzeichnis" routerLinkActive="navi__link--aktiv" ariaCurrentWhenActive="page">{{
-            t.nav.verzeichnis
-          }}</a>
-        </li>
-        <li>
-          <a class="navi__link" routerLink="/daten" routerLinkActive="navi__link--aktiv" ariaCurrentWhenActive="page">{{
-            t.nav.daten
-          }}</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</header>
+      }
+    </ul>
+  </nav>
 
-<main id="inhalt" class="inhalt rahmen" tabindex="-1">
+  <p class="seitenleiste__fuss">{{ t.lokal }}</p>
+</div>
+
+<main id="inhalt" class="inhalt" tabindex="-1">
   @if (dienst.ladeFehler(); as fehler) {
     <div class="hinweis meldung" role="alert">
       <p><strong>Die gespeicherten Daten lassen sich nicht lesen.</strong> {{ fehler }}</p>
       <p>
-        Nichts wurde überschrieben. Unter <a routerLink="/daten">Daten</a> kannst du eine Sicherung
-        laden oder neu beginnen; die unlesbaren Daten kommen dabei beiseite.
+        Nichts wurde überschrieben. Unter <a routerLink="/daten">Daten sichern</a> kannst du eine
+        Sicherung laden oder neu beginnen; die unlesbaren Daten kommen dabei beiseite.
       </p>
     </div>
   }
@@ -73,7 +50,7 @@
     <div class="hinweis meldung" role="alert">
       <p>
         <strong>Der Browser hat das Speichern verweigert.</strong> Der Speicher ist voll oder
-        gesperrt. Sichere deine Angaben unter <a routerLink="/daten">Daten</a> als Datei.
+        gesperrt. Sichere deine Angaben unter <a routerLink="/daten">Daten sichern</a> als Datei.
       </p>
     </div>
   }
@@ -81,13 +58,11 @@
 </main>
 
 <footer class="fuss">
-  <div class="fuss__innen rahmen">
-    <p class="fuss__rechtsberatung">{{ t.keineRechtsberatung }}</p>
-    <p>{{ t.rechtsstand }}</p>
-    <ul class="fuss__links">
-      <li><a routerLink="/impressum">{{ t.impressum }}</a></li>
-      <li><a routerLink="/datenschutz">{{ t.datenschutz }}</a></li>
-      <li><a [href]="quellcode" rel="noopener">{{ t.quellcode }}</a></li>
-    </ul>
-  </div>
+  <p class="fuss__rechtsberatung">{{ t.keineRechtsberatung }}</p>
+  <p>{{ t.rechtsstand }}</p>
+  <ul class="fuss__links">
+    <li><a routerLink="/impressum">{{ t.impressum }}</a></li>
+    <li><a routerLink="/datenschutz">{{ t.datenschutz }}</a></li>
+    <li><a [href]="quellcode" rel="noopener">{{ t.quellcode }}</a></li>
+  </ul>
 </footer>

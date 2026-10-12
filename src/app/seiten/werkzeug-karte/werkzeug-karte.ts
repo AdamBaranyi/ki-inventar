@@ -1,21 +1,37 @@
 import { Component, computed, effect, ElementRef, inject, input, viewChild } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { InventarDienst } from '../../daten/inventar-dienst';
 import { Uhr } from '../../daten/uhr';
-import { lage, nachDringlichkeit } from '../../fach/auswertung';
+import { fortschritt, nachDringlichkeit } from '../../fach/auswertung';
 import { datumCh } from '../../fach/datum';
-import { pruefpunkte } from '../../fach/regeln';
-import { LageChips } from '../../teile/lage-chips/lage-chips';
+import { pruefpunkte, type Pruefpunkt as Punkt } from '../../fach/regeln';
+import type { Werkzeug } from '../../fach/werkzeug';
+import { FortschrittKarte } from '../../teile/fortschritt/fortschritt';
 import { Pruefpunkt } from '../../teile/pruefpunkt/pruefpunkt';
-import { OPTIONEN, TEXTE } from '../../texte/de-CH';
-import { antwortZeilen } from './antwort-zeilen';
+import { Zeichen } from '../../teile/zeichen/zeichen';
+import { TEXTE } from '../../texte/de-CH';
+import { antwortGruppen } from './antwort-zeilen';
 
-/** Die Karteikarte eines Werkzeugs: Prüfpunkte zuerst, darunter die Antworten. */
+const M = TEXTE.karte.merkmale;
+
+/** Die wichtigsten Antworten als Merkmale im Kopf, etwa «USA» oder «Kein AVV». */
+function merkmale(w: Werkzeug): string[] {
+  return [
+    w.standort && w.standort !== 'unbekannt' ? M.standort[w.standort] : '',
+    w.personendaten ? M.personendaten[w.personendaten] : '',
+    w.zugang ? M.zugang[w.zugang] : '',
+    w.avv ? M.avv[w.avv] : '',
+    w.euBezug ? M.euBezug : '',
+  ].filter(Boolean);
+}
+
+/** Ein Werkzeug: Kopf, Fortschritt, Prüfpunkte als Checkliste, darunter die Antworten. */
 @Component({
   selector: 'ki-werkzeug-karte',
-  imports: [RouterLink, LageChips, Pruefpunkt],
+  imports: [RouterLink, FortschrittKarte, Pruefpunkt, Zeichen],
   templateUrl: './werkzeug-karte.html',
 })
 export class WerkzeugKarte {
@@ -27,6 +43,8 @@ export class WerkzeugKarte {
   protected readonly t = TEXTE.karte;
   protected readonly f = TEXTE.formular;
   private readonly dialog = viewChild<ElementRef<HTMLDialogElement>>('loeschDialog');
+  /** Zeigt die Adresse auf einen Punkt (#punkt-…), beginnt er aufgeklappt. */
+  protected readonly fragment = toSignal(inject(ActivatedRoute).fragment);
 
   protected readonly werkzeug = computed(() =>
     this.dienst.inventar().werkzeuge.find((w) => w.id === this.id()),
@@ -35,20 +53,21 @@ export class WerkzeugKarte {
     const w = this.werkzeug();
     return w ? nachDringlichkeit(pruefpunkte(w, this.uhr.heute())) : [];
   });
-  protected readonly lage = computed(() => {
+  protected readonly fortschritt = computed(() => fortschritt(this.punkte()));
+  protected readonly merkmale = computed(() => {
     const w = this.werkzeug();
-    return w ? lage(w, this.uhr.heute()) : null;
+    return w ? merkmale(w) : [];
   });
-  protected readonly antworten = computed(() => {
+  protected readonly gruppen = computed(() => {
     const w = this.werkzeug();
-    return w ? antwortZeilen(w) : [];
+    return w ? antwortGruppen(w) : [];
   });
-  protected readonly meta = computed(() => {
+  protected readonly initiale = computed(() =>
+    (this.werkzeug()?.name.trim().charAt(0) ?? '').toLocaleUpperCase('de-CH'),
+  );
+  protected readonly erfasst = computed(() => {
     const w = this.werkzeug();
-    if (!w) return '';
-    return [w.kategorie ? OPTIONEN.kategorie[w.kategorie] : '', TEXTE.karte.erfasst(datumCh(w.erfasst))]
-      .filter(Boolean)
-      .join(', ');
+    return w ? this.t.erfasst(datumCh(w.erfasst)) : '';
   });
 
   constructor() {
@@ -57,6 +76,10 @@ export class WerkzeugKarte {
       const w = this.werkzeug();
       if (w) title.setTitle(`${w.name} – ${TEXTE.app.name}`);
     });
+  }
+
+  protected kennung(punkt: Punkt) {
+    return `punkt-${punkt.werkzeugId}-${punkt.regel}`;
   }
 
   protected frageLoeschen() {

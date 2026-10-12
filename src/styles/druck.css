@@ -6,18 +6,26 @@
 
     @bottom-right {
       content: 'Seite ' counter(page) ' von ' counter(pages);
-      font-family: 'Public Sans', Arial, sans-serif;
+      font-family: 'Mona Sans', Arial, sans-serif;
       font-size: 12pt;
     }
   }
 
+  html {
+    scroll-padding: 0;
+  }
+
   body {
-    display: block;
     background: #ffffff;
     font-size: 12pt;
   }
 
-  .kopf,
+  .app {
+    display: block;
+    padding: 0;
+  }
+
+  .seitenleiste,
   .fuss,
   .sprung,
   .meldung,
@@ -26,8 +34,9 @@
   }
 
   .inhalt {
-    padding: 0;
     max-width: none;
+    margin: 0;
+    padding: 0;
   }
 
   .blatt {

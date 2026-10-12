@@ -1,8 +1,12 @@
-/* Public Sans (SIL Open Font License 1.1, Lizenz unter /schrift-lizenz.txt), lokal. */
+/*
+ * Mona Sans (SIL Open Font License 1.1, Lizenz unter /schrift-lizenz.txt), lokal aus
+ * @fontsource-variable/mona-sans 5.3.0. Zwei Achsen: Gewicht 200–900, Breite 75–125 %.
+ */
 @font-face {
-  font-family: 'Public Sans';
-  src: url('./schrift/public-sans-latin-wght-normal.woff2') format('woff2');
-  font-weight: 100 900;
+  font-family: 'Mona Sans';
+  src: url('./schrift/mona-sans-latin-standard-normal.woff2') format('woff2');
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
   font-style: normal;
   font-display: swap;
   unicode-range:
@@ -11,9 +15,10 @@
 }
 
 @font-face {
-  font-family: 'Public Sans';
-  src: url('./schrift/public-sans-latin-ext-wght-normal.woff2') format('woff2');
-  font-weight: 100 900;
+  font-family: 'Mona Sans';
+  src: url('./schrift/mona-sans-latin-ext-standard-normal.woff2') format('woff2');
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
   font-style: normal;
   font-display: swap;
   unicode-range:

@@ -1,72 +1,87 @@
-.formular > * + * {
-  margin-top: var(--a-4);
-}
-
-.formular__einleitung {
-  color: var(--graphit);
-}
-
-.formular__fragen {
+/* Ablauf: eine Frage je Bildschirm, Striche für den Fortschritt, Leiste mit «Zurück» und «Weiter». */
+.ablauf {
   display: grid;
-  gap: var(--a-7);
+  gap: var(--a-4);
   max-width: var(--breite-text);
-  margin-top: var(--a-6);
+  padding-top: var(--a-2);
 }
 
-/* Eine Frage wie ein Feld auf einem Formular: Nummer, Titel, darunter die Felder. */
-.frage {
-  display: grid;
-  gap: var(--a-5);
-  min-width: 0;
-  margin: 0;
-  padding: var(--a-5) 0 0;
-  border: 0;
-  border-top: 2px solid var(--tinte);
-}
-
-.frage__titel {
+.ablauf__kopf {
   display: flex;
-  align-items: baseline;
-  gap: var(--a-3);
-  float: left;
-  width: 100%;
-  margin-bottom: var(--a-1);
-  padding: 0;
-  font-size: var(--text-xl);
-  font-weight: 700;
-  line-height: var(--zeile-eng);
-}
-
-.frage__titel + * {
-  clear: both;
-}
-
-.frage__nummer {
-  min-width: 1.6em;
-  color: var(--graphit);
-}
-
-.formular__offen {
-  color: var(--graphit);
-}
-
-/* Stand und «Fertig» bleiben beim Scrollen sichtbar. */
-.formular__leiste {
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
-  display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--a-2) var(--a-4);
-  margin-inline: calc(var(--a-4) * -1);
-  padding: var(--a-3) var(--a-4);
-  border-top: 1px solid var(--linie);
-  background: var(--papier);
+  gap: var(--a-3);
 }
 
-.formular__stand {
+.ablauf__kopf .zeichen {
+  width: 1.375rem;
+  height: 1.375rem;
+}
+
+.ablauf__stand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--a-1);
+  color: var(--graphit);
   font-size: var(--text-s);
-  font-weight: 600;
+  text-align: right;
+}
+
+.ablauf__stand--ok {
+  color: var(--tinte);
+}
+
+.ablauf__stand .zeichen {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.ablauf__striche {
+  display: flex;
+  gap: 4px;
+  margin-top: var(--a-1);
+}
+
+.ablauf__strich {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--linie);
+}
+
+.ablauf__strich--da {
+  background: var(--tinte);
+}
+
+.ablauf__form {
+  display: grid;
+  gap: var(--a-6);
+  margin-top: var(--a-2);
+}
+
+.ablauf__offen {
+  color: var(--graphit);
+}
+
+/* Am Handy fest am unteren Rand; die Tab-Leiste ist im Ablauf ausgeblendet. */
+.ablauf__leiste {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  gap: var(--a-3);
+  padding: var(--a-3) max(var(--a-4), env(safe-area-inset-right))
+    calc(var(--a-3) + env(safe-area-inset-bottom)) max(var(--a-4), env(safe-area-inset-left));
+  border-top: 1px solid var(--linie);
+  background: var(--grund);
+}
+
+@media (min-width: 60rem) and (min-height: 30rem) {
+  .ablauf__leiste {
+    position: sticky;
+    margin-inline: calc(var(--a-4) * -1);
+    padding-inline: var(--a-4);
+  }
 }

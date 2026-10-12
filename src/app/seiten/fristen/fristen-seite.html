@@ -5,7 +5,7 @@
     <p class="fristen-seite__bei-dir">{{ mitEu() > 0 ? t.beiDir(mitEu()) : t.keinEu }}</p>
   }
 
-  <ol class="zeitachse">
+  <ol class="karte zeilen zeitachse">
     @for (frist of vorbei; track frist.datum) {
       <li class="frist frist--gilt">
         <ng-container [ngTemplateOutlet]="eintrag" [ngTemplateOutletContext]="{ $implicit: frist, stand: t.giltSeit }" />
@@ -21,7 +21,7 @@
 </section>
 
 <ng-template #eintrag let-frist let-stand="stand">
-  <p class="frist__datum zahl">{{ datum(frist) }}</p>
+  <p class="frist__datum">{{ datum(frist) }}</p>
   <div class="frist__text">
     <h2 class="frist__titel">{{ frist.titel }}</h2>
     <p class="frist__stand">{{ stand }}, {{ frist.eu ? t.eu : t.schweiz }}</p>

@@ -119,10 +119,36 @@ export async function ohneDruckdialog(page: Page) {
   });
 }
 
-/** Folgt einem Link der Hauptnavigation; am Handy klappt vorher das Menü auf. */
+/**
+ * Ein Name, der mit `text` beginnt, gefolgt von Komma oder Ende (etwa «Prüfpunkte, 35 offen»).
+ * Chrome setzt zwischen Blöcken ein Leerzeichen, auch vor ein unsichtbares Komma.
+ */
+export function beginntMit(text: string): RegExp {
+  return new RegExp(`^${text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*(,|$)`);
+}
+
+/**
+ * Folgt einem Ziel der Hauptnavigation. Am Handy liegen Verzeichnis, Daten und
+ * Rechtliches unter «Mehr»; dann geht der Weg über diese Seite.
+ */
 export async function geheZu(page: Page, name: string) {
-  const menue = page.getByRole('button', { name: 'Menü', exact: true });
-  if (await menue.isVisible()) await menue.click();
-  await page.getByRole('navigation').getByRole('link', { name, exact: true }).click();
+  const navi = page.getByRole('navigation', { name: 'Hauptnavigation' });
+  const link = navi.getByRole('link', { name: beginntMit(name) });
+  if (await link.isVisible()) {
+    await link.click();
+  } else {
+    await navi.getByRole('link', { name: 'Mehr', exact: true }).click();
+    await page.getByRole('heading', { level: 1, name: 'Mehr' }).waitFor();
+    await page.getByRole('main').getByRole('link', { name: beginntMit(name) }).click();
+  }
   await page.getByRole('heading', { level: 1 }).first().waitFor();
+}
+
+/** Unterkante der freien Fläche: über der Tab-Leiste, solange sie am unteren Rand liegt. */
+export function sichtbarBis(page: Page): Promise<number> {
+  return page.evaluate(() => {
+    const navi = document.querySelector('nav');
+    if (!navi || getComputedStyle(navi).position !== 'fixed') return window.innerHeight;
+    return navi.getBoundingClientRect().top;
+  });
 }

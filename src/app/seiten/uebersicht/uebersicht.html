@@ -1,56 +1,123 @@
-<section class="uebersicht">
-  <h1 tabindex="-1">{{ ueberschrift() }}</h1>
-
-  @if (leer()) {
-    <div class="uebersicht__einstieg">
-      <p class="uebersicht__einleitung">{{ t.einleitung }}</p>
-      <p class="leise">{{ t.lokal }}</p>
+@if (leer()) {
+  <section class="einstieg">
+    <h1 tabindex="-1">{{ t.titel }}</h1>
+    <p class="einstieg__einleitung">{{ t.einleitung }}</p>
+    <p class="leise">{{ t.lokal }}</p>
+    <div class="knopfreihe">
+      <a class="knopf" routerLink="/werkzeug/neu"><ki-zeichen name="plus" />{{ t.erfassen }}</a>
+      <button class="knopf knopf--zweit" type="button" (click)="ladeBeispiel()">{{ t.beispiel }}</button>
     </div>
-  } @else {
-    <ul class="bilanz" [attr.aria-label]="t.zahlen">
-      <li class="bilanz__posten">
-        <span class="bilanz__zahl zahl">{{ zahlen().werkzeuge }}</span>&ngsp;
-        <span class="bilanz__wort">{{ t.werkzeuge(zahlen().werkzeuge) }}</span>
-      </li>
-      <li class="bilanz__posten">
-        <span class="bilanz__zahl zahl" [class.leuchtstift]="zahlen().offen > 0">{{
-          zahlen().offen
-        }}</span>&ngsp;
-        <span class="bilanz__wort">{{ t.offen(zahlen().offen) }}</span>
-      </li>
-      <li class="bilanz__posten">
-        <span class="bilanz__zahl zahl">{{ zahlen().personendaten }}</span>&ngsp;
-        <span class="bilanz__wort">{{ t.personendaten }}</span>
-      </li>
-    </ul>
-  }
+    <p class="leise klein">{{ t.beispielHinweis }}</p>
 
-  <div class="knopfreihe uebersicht__aktionen">
-    <a class="knopf" routerLink="/werkzeug/neu">{{ t.erfassen }}</a>
-    @if (leer()) {
-      <button class="knopf knopf--zweit" type="button" (click)="ladeBeispiel()">
-        {{ t.beispiel }}
-      </button>
-    }
-  </div>
-  @if (leer()) {
-    <p class="leise">{{ t.beispielHinweis }}</p>
-  }
+    <section class="einstieg__schritte" aria-labelledby="schritte-titel">
+      <h2 id="schritte-titel">{{ t.schritteTitel }}</h2>
+      <ol class="karte zeilen">
+        @for (schritt of t.schritte; track $index) {
+          <li class="zeile">
+            <span class="monogramm" aria-hidden="true">{{ $index + 1 }}</span>
+            <span class="zeile__text">
+              <span class="zeile__titel">{{ schritt[0] }}<span class="unsichtbar">:</span></span>
+              <span class="zeile__meta">{{ schritt[1] }}</span>
+            </span>
+          </li>
+        }
+      </ol>
+    </section>
+  </section>
+} @else {
+  <section class="uebersicht">
+    <header class="uebersicht__kopf">
+      <div class="uebersicht__titel">
+        <h1 tabindex="-1">{{ ueberschrift() }}</h1>
+        <p class="leise">{{ untertitel() }}</p>
+      </div>
+      <div class="knopfreihe uebersicht__aktionen">
+        <a class="knopf knopf--zweit uebersicht__sichern" routerLink="/daten"
+          ><ki-zeichen name="daten" />{{ t.sichern }}</a
+        >
+        <a class="knopf uebersicht__erfassen" routerLink="/werkzeug/neu"
+          ><ki-zeichen name="plus" /><span class="uebersicht__erfassen-text">{{ t.erfassen }}</span></a
+        >
+      </div>
+    </header>
 
-  @if (!leer()) {
-    <h2 class="uebersicht__listentitel">{{ t.liste }}</h2>
-    <ul class="register">
-      @for (zeile of zeilen(); track zeile.id) {
-        <li class="register__zeile">
-          <div class="register__text">
-            <a class="register__name" [routerLink]="['/werkzeug', zeile.id]">{{ zeile.name }}</a>
-            @if (zeile.meta) {
-              <span class="register__meta">{{ zeile.meta }}</span>
+    <div class="uebersicht__raster">
+      <ki-fortschritt class="uebersicht__fortschritt" [stand]="fortschritt()" />
+
+      @if (naechste().length) {
+        <section class="abschnitt uebersicht__naechstes" aria-labelledby="naechstes-titel">
+          <h2 id="naechstes-titel">{{ t.naechstes }}</h2>
+          <ul class="karte zeilen">
+            @for (p of naechste(); track p.werkzeugId + p.regel) {
+              <li>
+                <a class="zeile" [routerLink]="['/werkzeug', p.werkzeugId]" [fragment]="'punkt-' + p.werkzeugId + '-' + p.regel">
+                  <span class="kreis kreis--offen" [class.kreis--stopp]="p.regel === 'R12'" aria-hidden="true"></span>
+                  <span class="zeile__text">
+                    <span class="zeile__titel">{{ p.titel }}<span class="unsichtbar">,</span></span>
+                    <span class="zeile__meta">{{ p.werkzeugName }}, {{ stufe(p) }}</span>
+                  </span>
+                  <ki-zeichen class="zeile__pfeil" name="weiter" />
+                </a>
+              </li>
             }
-          </div>
-          <ki-lage-chips [lage]="zeile.lage" />
-        </li>
+          </ul>
+        </section>
       }
-    </ul>
-  }
-</section>
+
+      <section class="abschnitt uebersicht__werkzeuge" aria-labelledby="werkzeuge-titel">
+        <h2 id="werkzeuge-titel">{{ t.liste }}</h2>
+        <ul class="karte zeilen">
+          @for (zeile of zeilen(); track zeile.id) {
+            <li>
+              <a class="zeile" [routerLink]="['/werkzeug', zeile.id]">
+                <span class="monogramm" aria-hidden="true">{{ zeile.initiale }}</span>
+                <span class="zeile__text">
+                  <span class="zeile__titel">{{ zeile.name }}<span class="unsichtbar">,</span></span>
+                  @if (zeile.meta) {
+                    <span class="zeile__meta">{{ zeile.meta }}<span class="unsichtbar">,</span></span>
+                  }
+                  @if (zeile.lage.fehlend > 0) {
+                    <span class="zeile__meta zeile__meta--offen"
+                      >{{ t.fehlend(zeile.lage.fehlend) }}<span class="unsichtbar">,</span></span
+                    >
+                  }
+                </span>
+                <ki-lage-pille [lage]="zeile.lage" />
+                <ki-zeichen class="zeile__pfeil" name="weiter" />
+              </a>
+            </li>
+          }
+        </ul>
+      </section>
+
+      <section class="abschnitt uebersicht__fristen" aria-labelledby="fristen-titel">
+        <h2 id="fristen-titel">{{ t.fristen }}</h2>
+        <ul class="karte zeilen">
+          @let f = fristen();
+          @for (frist of f.vorbei; track frist.datum) {
+            <li class="zeile frist-kurz">
+              <span class="frist-kurz__datum">{{ datum(frist) }}</span>&ngsp;
+              <span class="leise">{{ frist.titel }}</span>
+            </li>
+          }
+          <li class="zeile frist-kurz frist-kurz--heute">
+            <span class="frist-kurz__datum">{{ t.heute }}</span>&ngsp;
+            <span>{{ f.heute }}</span>
+          </li>
+          @for (frist of f.kommend; track frist.datum) {
+            <li class="zeile frist-kurz">
+              <span class="frist-kurz__datum">{{ datum(frist) }}</span>&ngsp;
+              <span>{{ frist.titel }}</span>
+            </li>
+          }
+          <li>
+            <a class="zeile" routerLink="/fristen">
+              <span class="zeile__text"><span class="zeile__titel">{{ t.alleFristen }}</span></span>
+              <ki-zeichen class="zeile__pfeil" name="weiter" />
+            </a>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </section>
+}

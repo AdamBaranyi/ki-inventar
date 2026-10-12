@@ -1,9 +1,12 @@
 .rechts-seite {
+  display: grid;
+  gap: var(--a-5);
   max-width: var(--breite-text);
 }
 
 .rechts-seite__abschnitt {
-  margin-top: var(--a-6);
+  padding-top: var(--a-5);
+  border-top: 1px solid var(--linie);
 }
 
 .rechts-seite__abschnitt > * + * {
