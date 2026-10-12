@@ -42,7 +42,8 @@ durch die Digital-Omnibus-Verordnung (EU) 2026/1744).
   Personendaten; Unbekanntes steht als «zu ergänzen» da, die Befreiung nach Art. 24 DSV ist erklärt.
 - **Kalender:** Termine für die jährliche Überprüfung als `.ics` (RFC 5545, ganztägig mit
   Erinnerung um 9 Uhr).
-- **Immer hell:** auch auf Geräten mit dunkler Einstellung (Entscheid 12.10.2026).
+- **Darstellung:** hell (Vorgabe), dunkel oder wie das Gerät; Umschalter in der Seitenleiste und unter
+  «Mehr». Gedruckt immer hell.
 
 | Regel | Greift, wenn … | Prüfpunkt | Quelle |
 |---|---|---|---|
@@ -96,10 +97,10 @@ erledigen, drucken, exportieren, neu laden».
 bun run sabotage
 ```
 
-baut 67 Fehler ein (jede Regel umgekehrt, Fortschritt, Speicher, CSV, Bearbeitungsverzeichnis,
+baut 71 Fehler ein (jede Regel umgekehrt, Fortschritt, Speicher, CSV, Bearbeitungsverzeichnis,
 Kalender, Vorlagen, Formular-Schritte, Quelltext-Regeln, Browser-Grundregeln) und verlangt, dass
-jedes Mal ein Test rot wird. Ein Browser-Test prüft, dass die App auch auf dunkel eingestellten
-Geräten hell bleibt (`e2e/hell.spec.ts`).
+jedes Mal ein Test rot wird. Die Darstellung prüft `e2e/darstellung.spec.ts`: hell als Vorgabe auch
+auf dunkel eingestellten Geräten, die Wahl bleibt nach dem Neuladen, kein Aufblitzen beim Laden.
 
 Zwei geplante Läufe erinnern per Issue: wöchentlich an offene Pull Requests, monatlich an
 Rechtsstand, Fristen und Vorlagen.

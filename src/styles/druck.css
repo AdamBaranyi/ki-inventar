@@ -11,6 +11,12 @@
     }
   }
 
+  /* Gedruckt immer hell, egal welche Darstellung gewählt ist. */
+  :root,
+  :root[data-darstellung] {
+    color-scheme: light;
+  }
+
   html {
     scroll-padding: 0;
   }

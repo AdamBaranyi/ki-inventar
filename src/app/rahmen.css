@@ -317,7 +317,8 @@ html:has(.app--ablauf) {
   }
 
   .seitenleiste__fuss {
-    display: block;
+    display: grid;
+    gap: var(--a-4);
     margin-top: auto;
     padding: 0 var(--a-2);
     color: var(--graphit);

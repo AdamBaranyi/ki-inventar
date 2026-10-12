@@ -58,6 +58,7 @@ export const DATENSCHUTZ: readonly Abschnitt[] = [
     absaetze: [
       'Deine Angaben und der Stand der Prüfpunkte liegen im lokalen Speicher dieses Browsers (localStorage) unter dem Schlüssel «ki-inventar». Lassen sich gespeicherte Daten nicht lesen und beginnst du neu, kommen sie unter «ki-inventar-unlesbar» beiseite.',
       'Der Speicher ist für die Funktion nötig: Ohne ihn wäre alles beim Schliessen weg. Die Daten verlassen dein Gerät nur, wenn du selbst eine Sicherung oder Tabelle herunterlädst.',
+      'Wählst du eine Darstellung (hell, dunkel oder wie das Gerät), merkt sich der Browser das unter «ki-inventar-darstellung».',
       'Löschen kannst du alles unter «Daten» mit «Alle Daten in diesem Browser löschen» oder über die Website-Daten in den Einstellungen deines Browsers.',
     ],
   },

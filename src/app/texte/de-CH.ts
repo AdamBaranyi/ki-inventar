@@ -139,6 +139,10 @@ export const TEXTE = {
       euBezug: 'EU-Bezug',
     },
   },
+  darstellung: {
+    titel: 'Darstellung',
+    optionen: { hell: 'Hell', dunkel: 'Dunkel', system: 'System' },
+  },
   mehr: {
     verzeichnis: 'Druckansicht, auch als PDF',
     daten: 'Sicherung, Tabelle für Excel, Wiederherstellen',

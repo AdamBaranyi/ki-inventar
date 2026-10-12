@@ -73,6 +73,7 @@ export const SABOTAGEN = [
   ersetze('formular', 'Vorlage setzt den Standort', 'src/app/fach/vorlagen.ts', '  return neu;', "  return { ...neu, standort: 'usa' };"),
   ersetze('formular', 'Vorlage taucht im Formular nicht auf', 'src/app/seiten/werkzeug-formular/werkzeug-formular.html', '@if (vorlagen().length) {', '@if (vorlagen().length > 99) {', E2E('e2e/werkzeug.spec.ts')),
   ersetze('formular', 'Fehler im Schritt bekommt keinen Fokus', FORMULAR, "      document.querySelector<HTMLElement>('[aria-invalid=\"true\"]')?.focus();\n", '', E2E('e2e/werkzeug.spec.ts')),
+  ersetze('formular', 'Fehlermeldung schon beim Verlassen des Feldes', FORMULAR, 'if (steuerung.valid || !this.versucht()) return null;', 'if (steuerung.valid || !(steuerung.touched || this.versucht())) return null;', E2E('e2e/werkzeug.spec.ts')),
   ersetze('formular', '«Weiter» prüft den Schritt nicht', FORMULAR, 'const fehler = fehlerImSchritt(this.form, nummer);', 'const fehler: ReturnType<typeof fehlerImSchritt> = [];', E2E('e2e/werkzeug.spec.ts')),
 
   // Daten: Speichern, Laden, Tabelle
@@ -111,6 +112,9 @@ export const SABOTAGEN = [
   ersetze('abbild', 'Abbild: CSP ohne frame-ancestors', 'infra/Caddyfile', "; frame-ancestors 'none'\"", '"', ABBILD),
   ersetze('abbild', 'Abbild: tiefe Links ohne index.html', 'infra/Caddyfile', '\ttry_files {path} /index.html\n', '', ABBILD),
   ersetze('abbild', 'Abbild: index.html im Cache', 'infra/Caddyfile', 'header @ohneHash Cache-Control "no-cache"', 'header @ohneHash Cache-Control "max-age=3600"', ABBILD),
-  ersetze('browser', 'Dunkel auf dunklem Gerät', 'src/styles/token.css', '  color-scheme: light;\n  accent-color: var(--tinte);\n}\n', '  color-scheme: light;\n  accent-color: var(--tinte);\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --grund: #121315;\n    --tinte: #eeece6;\n  }\n}\n', E2E('e2e/hell.spec.ts')),
+  ersetze('regeln', 'Darstellung: Vorgabe System statt hell', 'src/app/daten/darstellung.ts', "return wert === 'dunkel' || wert === 'system' ? wert : 'hell';", "return wert === 'dunkel' || wert === 'hell' ? wert : 'system';"),
+  ersetze('browser', 'Darstellung wird nicht gemerkt', 'src/app/daten/darstellung.ts', '      this.speicher.setItem(SCHLUESSEL_DARSTELLUNG, darstellung);\n', '', E2E('e2e/darstellung.spec.ts')),
+  ersetze('browser', 'Darstellung blitzt hell auf (frühes Skript fehlt)', 'src/index.html', '  <script src="darstellung.js"></script>\n', '', E2E('e2e/darstellung.spec.ts')),
+  ersetze('browser', 'Druck dunkel', 'src/styles/druck.css', '  :root,\n  :root[data-darstellung] {\n    color-scheme: light;\n  }\n', '', E2E('e2e/darstellung.spec.ts')),
   ersetze('browser', 'Fokus bleibt nicht beim Punkt', 'src/app/teile/pruefpunkt/pruefpunkt.ts', '      ziel?.focus({ preventScroll', '      void ({ preventScroll', E2E('e2e/werkzeug.spec.ts')),
 ];

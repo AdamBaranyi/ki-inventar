@@ -98,10 +98,14 @@ export class WerkzeugFormular implements OnInit {
     this.zustand.set('gespeichert');
   }
 
-  /** Fehlertext eines Textfelds, sobald es berührt oder «Weiter» gedrückt wurde. */
+  /**
+   * Fehlertext eines Textfelds, erst nach dem ersten «Weiter». Erschiene er schon
+   * beim Verlassen des Feldes, schöbe er den Knopf zwischen Drücken und Loslassen
+   * der Maus weg, und der Klick ginge ins Leere.
+   */
   protected fehler(feld: Textfeld) {
     const steuerung = this.form.controls[feld];
-    if (steuerung.valid || !(steuerung.touched || this.versucht())) return null;
+    if (steuerung.valid || !this.versucht()) return null;
     if (steuerung.hasError('required')) return this.t.nameFehlt;
     if (steuerung.hasError('maxlength')) return this.t.zuLang(GRENZEN[feld]);
     if (steuerung.hasError('max')) return this.t.zuGross(GRENZEN.anzahl.toLocaleString('de-CH'));
