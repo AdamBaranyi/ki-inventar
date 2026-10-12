@@ -118,7 +118,8 @@ test.describe('Startseite', () => {
       };
     });
     expect(schrift.geladen).toBe(true);
-    expect(schrift.familie.startsWith('"Mona Sans"')).toBe(true);
+    // Chromium schreibt den Namen in Anführungszeichen, WebKit ohne.
+    expect(schrift.familie).toMatch(/^"?Mona Sans"?,/);
     expect(Math.abs(schrift.einsen - schrift.nullen)).toBeLessThan(0.5);
   });
 

@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -39,6 +39,7 @@ export class WerkzeugFormular implements OnInit {
   private readonly dienst = inject(InventarDienst);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
+  private readonly ansicht = inject(ChangeDetectorRef);
 
   protected readonly t = TEXTE.formular;
   protected readonly neuerTab = TEXTE.status.neuerTab;
@@ -121,7 +122,10 @@ export class WerkzeugFormular implements OnInit {
     if (fehler.length) {
       this.versucht.set(true);
       for (const feld of fehler) this.form.controls[feld].markAsTouched();
-      requestAnimationFrame(() => document.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus());
+      // Sofort zeichnen, dann fokussieren: ohne Warten auf ein Animationsbild,
+      // das je nach Browser vor oder nach dem Zeichnen kommt.
+      this.ansicht.detectChanges();
+      document.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
       return;
     }
     const id = this.werkzeugId();

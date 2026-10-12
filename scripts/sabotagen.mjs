@@ -72,6 +72,7 @@ export const SABOTAGEN = [
   ersetze('formular', 'Vorlage überschreibt Antworten', 'src/app/fach/vorlagen.ts', 'if (zugang !== undefined && neu.zugang === null) neu.zugang = zugang;', 'if (zugang !== undefined) neu.zugang = zugang;'),
   ersetze('formular', 'Vorlage setzt den Standort', 'src/app/fach/vorlagen.ts', '  return neu;', "  return { ...neu, standort: 'usa' };"),
   ersetze('formular', 'Vorlage taucht im Formular nicht auf', 'src/app/seiten/werkzeug-formular/werkzeug-formular.html', '@if (vorlagen().length) {', '@if (vorlagen().length > 99) {', E2E('e2e/werkzeug.spec.ts')),
+  ersetze('formular', 'Fehler im Schritt bekommt keinen Fokus', FORMULAR, "      document.querySelector<HTMLElement>('[aria-invalid=\"true\"]')?.focus();\n", '', E2E('e2e/werkzeug.spec.ts')),
   ersetze('formular', '«Weiter» prüft den Schritt nicht', FORMULAR, 'const fehler = fehlerImSchritt(this.form, nummer);', 'const fehler: ReturnType<typeof fehlerImSchritt> = [];', E2E('e2e/werkzeug.spec.ts')),
 
   // Daten: Speichern, Laden, Tabelle
