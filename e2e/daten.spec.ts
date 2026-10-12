@@ -116,5 +116,7 @@ test.describe('Rechtliches', () => {
     await oeffne(page, 'datenschutz');
     await expect(page.getByRole('main')).toContainText('unter dem Schlüssel «ki-inventar»');
     await expect(page.getByRole('main')).toContainText('GitHub Pages (GitHub, Inc., USA)');
+    await expect(page.getByRole('main')).toContainText('eigenen Server bei FSIT (fsit.ch) in der Schweiz');
+    await expect(page.getByRole('main')).toContainText('nach 14 Tagen gelöscht');
   });
 });

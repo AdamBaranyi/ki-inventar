@@ -62,9 +62,11 @@ export const DATENSCHUTZ: readonly Abschnitt[] = [
     ],
   },
   {
-    titel: 'Hosting',
+    titel: 'Hosting und Serverprotokolle',
     absaetze: [
-      'Die Seite liegt bei GitHub Pages (GitHub, Inc., USA). Beim Aufruf verarbeitet GitHub technisch nötige Daten wie die IP-Adresse und den Zeitpunkt, um die Seite auszuliefern und vor Missbrauch zu schützen. Das ist eine Bekanntgabe in die USA. Einzelheiten stehen in der Datenschutzerklärung von GitHub.',
+      'Unter ki-inventar.adambaranyi.xyz läuft das KI-Inventar auf einem eigenen Server bei FSIT (fsit.ch) in der Schweiz. FSIT stellt die Maschine bereit und bearbeitet die Daten in meinem Auftrag.',
+      'Bei jedem Aufruf speichert der Server technische Daten: IP-Adresse, Datum und Uhrzeit, aufgerufene Adresse, Statuscode, übertragene Datenmenge und Browserkennung. Das ist nötig, um die Seite auszuliefern, Fehler zu finden und Angriffe abzuwehren. Die Daten werden nicht mit anderen zusammengeführt und nach 14 Tagen gelöscht. Was du im KI-Inventar erfasst, erreicht den Server nie.',
+      'Unter adambaranyi.github.io/ki-inventar liegt dieselbe App bei GitHub Pages (GitHub, Inc., USA). Dort verarbeitet GitHub technisch nötige Daten wie die IP-Adresse und den Zeitpunkt, um die Seite auszuliefern und vor Missbrauch zu schützen. Das ist eine Bekanntgabe in die USA. Einzelheiten stehen in der Datenschutzerklärung von GitHub.',
     ],
     links: [
       {
@@ -82,7 +84,7 @@ export const DATENSCHUTZ: readonly Abschnitt[] = [
   {
     titel: 'Deine Rechte',
     absaetze: [
-      'Über deine Daten im Browser verfügst du selbst. Zu den Daten, die beim Hosting entstehen, kannst du Auskunft verlangen; wende dich dafür an den Verantwortlichen oder an GitHub.',
+      'Über deine Daten im Browser verfügst du selbst. Zu den Daten, die beim Hosting entstehen, kannst du Auskunft verlangen; wende dich dafür an den Verantwortlichen, bei GitHub Pages auch an GitHub.',
     ],
   },
 ];

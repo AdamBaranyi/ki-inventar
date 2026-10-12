@@ -1,0 +1,14 @@
+# Ins Abbild kommt nur, was das Dockerfile ausdrücklich kopiert; das hier hält
+# den Kontext klein und Geheimnisse wie lokale Einstellungen draussen.
+.git
+.github
+.angular
+.claude
+node_modules
+dist
+e2e
+test-results
+playwright-report
+docs
+scripts
+*.log

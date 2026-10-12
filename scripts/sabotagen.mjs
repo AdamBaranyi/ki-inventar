@@ -30,6 +30,7 @@ function ersetze(gruppe, name, datei, suche, ersatz, befehl = UNIT) {
 const BAU = 'bun run build > /dev/null 2>&1';
 const E2E = (datei, projekt = 'desktop') => `${BAU} && ./node_modules/.bin/playwright test ${datei} --project=${projekt}`;
 const PRUEFE = 'node scripts/pruefe-quelltext.mjs';
+const ABBILD = 'bash scripts/abbild-pruefen.sh';
 const FORMULAR = 'src/app/seiten/werkzeug-formular/werkzeug-formular.ts';
 const AUSWERTUNG = 'src/app/fach/auswertung.ts';
 
@@ -106,5 +107,8 @@ export const SABOTAGEN = [
   ersetze('browser', 'Punkt aus der Adresse bleibt zu', 'src/app/seiten/werkzeug-karte/werkzeug-karte.html', '[aufgeklappt]="fragment() === kennung(punkt)"', '[aufgeklappt]="false"', E2E('e2e/start.spec.ts')),
   ersetze('browser', 'Seitenleiste ohne Zahl offener Punkte im Namen', 'src/app/app.html', '[attr.aria-label]="eintrag.pfad', '[attr.data-name]="eintrag.pfad', E2E('e2e/start.spec.ts')),
   ersetze('browser', 'Ohne 404.html für tiefe Links', 'scripts/nach-build.mjs', "copyFileSync(index, join(ZIEL, '404.html'));", '', E2E('e2e/werkzeug.spec.ts')),
+  ersetze('abbild', 'Abbild: CSP ohne frame-ancestors', 'infra/Caddyfile', "; frame-ancestors 'none'\"", '"', ABBILD),
+  ersetze('abbild', 'Abbild: tiefe Links ohne index.html', 'infra/Caddyfile', '\ttry_files {path} /index.html\n', '', ABBILD),
+  ersetze('abbild', 'Abbild: index.html im Cache', 'infra/Caddyfile', 'header @ohneHash Cache-Control "no-cache"', 'header @ohneHash Cache-Control "max-age=3600"', ABBILD),
   ersetze('browser', 'Fokus bleibt nicht beim Punkt', 'src/app/teile/pruefpunkt/pruefpunkt.ts', '      ziel?.focus({ preventScroll', '      void ({ preventScroll', E2E('e2e/werkzeug.spec.ts')),
 ];

@@ -83,6 +83,20 @@ jobs:
         with:
           path: dist/ki-inventar/browser
 
+  # Das Abbild für vps1 entsteht auf dem Server; hier wird es genauso gebaut
+  # und von aussen geprüft, damit ein Fehler nicht erst beim Ausrollen auffällt.
+  abbild:
+    name: Produktionsabbild für vps1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Abbild bauen und von aussen prüfen
+        run: bash scripts/abbild-pruefen.sh
+
   veroeffentlichen:
     name: Auf GitHub Pages
     needs: pruefung
