@@ -2,27 +2,32 @@
  * «Prüfpult»: weisse Blätter mit Haarlinie auf warmem Grund, Tinte für Text und
  * Hauptaktionen, ein Leuchtstift-Gelb als einzige Datenfarbe für «offen». Rot nur
  * für den Stopp nach R12. Keine Schatten, keine Verläufe.
+ *
+ * Jede Farbe trägt ihren hellen und dunklen Wert (light-dark). Welcher gilt,
+ * bestimmt die Wahl unter «Darstellung»: hell (Vorgabe), dunkel oder wie das
+ * Gerät. Gelb bleibt Gelb; Text darauf bleibt dunkel (--auf-offen). Alle Paare
+ * halten mindestens 4,5:1 (Text) und 3:1 (Ränder von Feldern).
  */
 :root {
-  --grund: #f4f2ed;
-  --blatt: #ffffff;
-  --linie: #e3e0d8;
-  --tinte: #15171b;
-  --tinte-hell: #2d3138;
-  --graphit: #5c636c;
-  /* Ränder von Feldern und Auswahlkreisen: mindestens 3:1 gegen Weiss. */
-  --kante: #7a828c;
+  --grund: light-dark(#f4f2ed, #121315);
+  --blatt: light-dark(#ffffff, #1b1d21);
+  --linie: light-dark(#e3e0d8, #2f3238);
+  --tinte: light-dark(#15171b, #eeece6);
+  --tinte-hell: light-dark(#2d3138, #d9d6cf);
+  --graphit: light-dark(#5c636c, #a9afb7);
+  /* Ränder von Feldern und Auswahlkreisen: mindestens 3:1 gegen das Blatt. */
+  --kante: light-dark(#7a828c, #868d96);
   --offen: #ffe15a;
-  --offen-rand: #a08300;
-  --offen-tief: #7d5a00;
-  --stopp: #a4271c;
-  --stopp-flaeche: #a4271c;
+  --offen-rand: light-dark(#a08300, #c9a400);
+  --offen-tief: light-dark(#7d5a00, #f2cf55);
+  --stopp: light-dark(#a4271c, #ff8a7e);
+  --stopp-flaeche: light-dark(#a4271c, #b8382b);
   --auf-stopp: #ffffff;
-  --auf-tinte: #ffffff;
+  --auf-tinte: light-dark(#ffffff, #15171b);
   --auf-offen: #15171b;
-  --tinte-weich: #3b4048;
-  --schwebe: #faf9f6;
-  --abdunkeln: rgb(21 23 27 / 0.5);
+  --tinte-weich: light-dark(#3b4048, #d3d6db);
+  --schwebe: light-dark(#faf9f6, #24272c);
+  --abdunkeln: light-dark(rgb(21 23 27 / 0.5), rgb(0 0 0 / 0.6));
 
   --schrift: 'Mona Sans', 'Helvetica Neue', Arial, sans-serif;
   /* Überschriften und Zahlen breit gesetzt, Beschriftungen in Leisten leicht schmal. */
@@ -66,29 +71,10 @@
   accent-color: var(--tinte);
 }
 
-/*
- * Dunkel nach der Einstellung des Geräts: dieselbe Ordnung, Blätter dunkelgrau
- * auf fast schwarzem Grund. Das Gelb bleibt; Text darauf bleibt dunkel (--auf-offen).
- * Alle Paare halten mindestens 4,5:1 (Text) und 3:1 (Ränder von Feldern).
- */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --grund: #121315;
-    --blatt: #1b1d21;
-    --linie: #2f3238;
-    --tinte: #eeece6;
-    --tinte-hell: #d9d6cf;
-    --tinte-weich: #d3d6db;
-    --graphit: #a9afb7;
-    --kante: #868d96;
-    --offen-rand: #c9a400;
-    --offen-tief: #f2cf55;
-    --stopp: #ff8a7e;
-    --stopp-flaeche: #b8382b;
-    --auf-tinte: #15171b;
-    --schwebe: #24272c;
-    --abdunkeln: rgb(0 0 0 / 0.6);
+:root[data-darstellung='dunkel'] {
+  color-scheme: dark;
+}
 
-    color-scheme: dark;
-  }
+:root[data-darstellung='system'] {
+  color-scheme: light dark;
 }

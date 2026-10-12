@@ -10,9 +10,11 @@ import {
 } from '@angular/router';
 import { filter } from 'rxjs';
 
+import { DarstellungDienst } from './daten/darstellung';
 import { InventarDienst } from './daten/inventar-dienst';
 import { Uhr } from './daten/uhr';
 import { zahlen } from './fach/auswertung';
+import { DarstellungWahl } from './teile/darstellung-wahl/darstellung-wahl';
 import { Marke } from './teile/marke/marke';
 import { Zeichen, type ZeichenName } from './teile/zeichen/zeichen';
 import { QUELLCODE, TEXTE } from './texte/de-CH';
@@ -40,7 +42,7 @@ const UNTER_MEHR = ['/verzeichnis', '/daten', '/impressum', '/datenschutz'];
 
 @Component({
   selector: 'ki-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Marke, Zeichen],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, Marke, Zeichen, DarstellungWahl],
   templateUrl: './app.html',
   host: { class: 'app', '[class.app--ablauf]': 'ablauf()' },
 })
@@ -57,6 +59,8 @@ export class App {
   protected readonly offen = computed(() => zahlen(this.dienst.inventar(), this.uhr.heute()).offen);
 
   constructor() {
+    // Hält `data-darstellung` an <html> mit der Wahl im Einklang (public/darstellung.js setzt sie zuerst).
+    inject(DarstellungDienst);
     const router = inject(Router);
     let erste = true;
     router.events

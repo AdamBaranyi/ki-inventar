@@ -38,7 +38,11 @@ liegen je Adresse im Browser; umziehen mit «Sicherung herunterladen» und «Sic
 - **Bearbeitungsverzeichnis** (Art. 12 DSG) als CSV-Entwurf; Text zu Art. 24 DSV gegen fedlex
   geprüft (DSV Stand 01.12.2025).
 - **Kalender** (.ics) für die jährliche Überprüfung.
-- **Dunkelmodus** nach Systemeinstellung, alle Paare ab 4,5:1; Druck bleibt hell.
+- **Darstellung:** zuerst automatisch nach dem Gerät; am 12.10.2026 ersetzt durch einen Umschalter
+  Hell (Vorgabe), Dunkel, System (Adams Wunsch). `public/darstellung.js` setzt die Wahl vor dem
+  Zeichnen, die Farben tragen ihren hellen und dunklen Wert (`light-dark()`).
+- **Fehlermeldungen im Formular** erscheinen erst nach «Weiter»: Beim Verlassen des Feldes schoben
+  sie den Knopf zwischen Drücken und Loslassen der Maus weg (gefunden im Lauf mit Firefox).
 - **Erinnerungen** per Issue: wöchentlich offene Pull Requests, monatlich Wartung.
 - Tests: 144 Unit-Tests, 95 Browser-Tests (davon 6 dunkel), 62 Sabotagen.
 
@@ -82,7 +86,7 @@ Live auf https://adambaranyi.github.io/ki-inventar/, gebaut und geprüft von der
 ## Als Nächstes
 
 1. Adams Gerätetest am iPhone (Safari): Werkzeug mit Vorlage erfassen, Prüfpunkt erledigen,
-   Sicherung und Kalender herunterladen, Druckansicht als PDF, Dunkelmodus.
+   Sicherung und Kalender herunterladen, Druckansicht als PDF.
 2. Subdomain `ki-inventar.adambaranyi.xyz` auf vps1 mit Caddy und Sicherheits-Headern; DNS-Eintrag
    und sudo-Befehle durch Adam.
 3. Browser-Lauf mit WebKit und Firefox (`playwright.browsers.config.ts`) vor jedem Deploy.
@@ -90,8 +94,7 @@ Live auf https://adambaranyi.github.io/ki-inventar/, gebaut und geprüft von der
 ## Vorgemerkt, nicht im MVP
 
 Mehrsprachigkeit (FR, IT, EN; die Rechtstexte brauchen dafür die amtlichen Fassungen von DSG und
-KI-VO), Team-Sync mit Server, Import aus Excel, PDF-Erzeugung ohne Browserdruck, Umschalter für
-hell und dunkel in der App (heute folgt sie dem Gerät).
+KI-VO), Team-Sync mit Server, Import aus Excel, PDF-Erzeugung ohne Browserdruck.
 
 ## Aufgefallen
 

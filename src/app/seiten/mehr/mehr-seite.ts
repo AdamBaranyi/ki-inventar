@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { DarstellungWahl } from '../../teile/darstellung-wahl/darstellung-wahl';
 import { Zeichen, type ZeichenName } from '../../teile/zeichen/zeichen';
 import { QUELLCODE, TEXTE } from '../../texte/de-CH';
 
@@ -22,7 +23,7 @@ const ZIELE: readonly Ziel[] = [
 /** Am Handy der vierte Tab: was in der Seitenleiste des Desktops steht, und das Rechtliche. */
 @Component({
   selector: 'ki-mehr-seite',
-  imports: [RouterLink, Zeichen],
+  imports: [RouterLink, Zeichen, DarstellungWahl],
   template: `
     <section class="mehr-seite">
       <h1 tabindex="-1">{{ titel }}</h1>
@@ -51,6 +52,9 @@ const ZIELE: readonly Ziel[] = [
           </a>
         </li>
       </ul>
+      <div class="karte karte--innen">
+        <ki-darstellung-wahl name="darstellung-mehr" />
+      </div>
       <p class="leise">{{ lokal }}</p>
     </section>
   `,

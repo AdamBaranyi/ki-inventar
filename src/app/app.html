@@ -33,7 +33,10 @@
     </ul>
   </nav>
 
-  <p class="seitenleiste__fuss">{{ t.lokal }}</p>
+  <div class="seitenleiste__fuss">
+    <ki-darstellung-wahl name="darstellung-leiste" />
+    <p>{{ t.lokal }}</p>
+  </div>
 </div>
 
 <main id="inhalt" class="inhalt" tabindex="-1">

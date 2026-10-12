@@ -115,6 +115,23 @@ test.describe('Werkzeug erfassen', () => {
     await pruefeBildschirm(page, gesehen, 'Formular mit Fehlern');
   });
 
+  test('eine Fehlermeldung schiebt «Weiter» nicht weg, bevor geklickt ist', async ({ page }) => {
+    await oeffne(page, 'werkzeug/neu');
+    await page.getByLabel('Name des Werkzeugs').fill('Perplexity');
+    await weiter(page);
+    await weiter(page);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Wer nutzt es');
+    await page.getByLabel('Ungefähre Zahl der Nutzenden').fill('1.5');
+    const knopf = page.getByRole('button', { name: 'Weiter' });
+    const vorher = await knopf.boundingBox();
+    // Wie beim Drücken der Maus: Das Feld verliert den Fokus, bevor der Klick zählt.
+    await page.getByLabel('Ungefähre Zahl der Nutzenden').blur();
+    await expect(page.getByText('Bitte eine ganze Zahl ab 0 eingeben.')).toBeHidden();
+    expect((await knopf.boundingBox())?.y).toBe(vorher?.y);
+    await weiter(page);
+    await expect(page.getByText('Bitte eine ganze Zahl ab 0 eingeben.')).toBeVisible();
+  });
+
   test('am Handy ohne Tab-Leiste, mit eigener Leiste unten', async ({ page, isMobile }) => {
     test.skip(!isMobile, 'Am Desktop bleibt die Seitenleiste.');
     await oeffne(page, 'werkzeug/neu');
