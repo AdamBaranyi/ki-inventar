@@ -134,6 +134,10 @@ export function beginntMit(text: string): RegExp {
 export async function geheZu(page: Page, name: string) {
   const navi = page.getByRole('navigation', { name: 'Hauptnavigation' });
   const link = navi.getByRole('link', { name: beginntMit(name) });
+  const mehr = navi.getByRole('link', { name: 'Mehr', exact: true });
+  // Erst warten, bis die Navigation gezeichnet ist: `isVisible` wartet nicht, und
+  // direkt nach einem Neuladen wäre sonst noch gar nichts sichtbar.
+  await link.or(mehr).first().waitFor();
   if (await link.isVisible()) {
     await link.click();
   } else {
