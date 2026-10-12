@@ -111,5 +111,6 @@ export const SABOTAGEN = [
   ersetze('abbild', 'Abbild: CSP ohne frame-ancestors', 'infra/Caddyfile', "; frame-ancestors 'none'\"", '"', ABBILD),
   ersetze('abbild', 'Abbild: tiefe Links ohne index.html', 'infra/Caddyfile', '\ttry_files {path} /index.html\n', '', ABBILD),
   ersetze('abbild', 'Abbild: index.html im Cache', 'infra/Caddyfile', 'header @ohneHash Cache-Control "no-cache"', 'header @ohneHash Cache-Control "max-age=3600"', ABBILD),
+  ersetze('browser', 'Dunkel auf dunklem Gerät', 'src/styles/token.css', '  color-scheme: light;\n  accent-color: var(--tinte);\n}\n', '  color-scheme: light;\n  accent-color: var(--tinte);\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --grund: #121315;\n    --tinte: #eeece6;\n  }\n}\n', E2E('e2e/hell.spec.ts')),
   ersetze('browser', 'Fokus bleibt nicht beim Punkt', 'src/app/teile/pruefpunkt/pruefpunkt.ts', '      ziel?.focus({ preventScroll', '      void ({ preventScroll', E2E('e2e/werkzeug.spec.ts')),
 ];

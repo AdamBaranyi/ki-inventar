@@ -65,30 +65,3 @@
   color-scheme: light;
   accent-color: var(--tinte);
 }
-
-/*
- * Dunkel nach der Einstellung des Geräts: dieselbe Ordnung, Blätter dunkelgrau
- * auf fast schwarzem Grund. Das Gelb bleibt; Text darauf bleibt dunkel (--auf-offen).
- * Alle Paare halten mindestens 4,5:1 (Text) und 3:1 (Ränder von Feldern).
- */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --grund: #121315;
-    --blatt: #1b1d21;
-    --linie: #2f3238;
-    --tinte: #eeece6;
-    --tinte-hell: #d9d6cf;
-    --tinte-weich: #d3d6db;
-    --graphit: #a9afb7;
-    --kante: #868d96;
-    --offen-rand: #c9a400;
-    --offen-tief: #f2cf55;
-    --stopp: #ff8a7e;
-    --stopp-flaeche: #b8382b;
-    --auf-tinte: #15171b;
-    --schwebe: #24272c;
-    --abdunkeln: rgb(0 0 0 / 0.6);
-
-    color-scheme: dark;
-  }
-}

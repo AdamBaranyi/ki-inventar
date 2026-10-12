@@ -11,17 +11,6 @@
     }
   }
 
-  :root {
-    --grund: #ffffff;
-    --blatt: #ffffff;
-    --linie: #d9d6cc;
-    --tinte: #15171b;
-    --graphit: #5c636c;
-    --offen-tief: #7d5a00;
-
-    color-scheme: light;
-  }
-
   html {
     scroll-padding: 0;
   }
