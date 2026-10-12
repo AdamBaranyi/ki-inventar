@@ -1,81 +1,92 @@
-/* Die Karteikarte: ein Blatt mit kräftiger Kopflinie, ohne Schatten. */
-.karte {
+/* Ein Werkzeug: Leiste, Kopf mit Monogramm, Merkmale, Fortschritt, Checkliste, Antworten. */
+.werkzeug {
+  display: grid;
+  gap: var(--a-5);
   max-width: var(--breite-text);
 }
 
-.karte__kopf {
-  display: grid;
+.werkzeug__leiste {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: var(--a-3);
-  padding-bottom: var(--a-5);
-  border-bottom: 2px solid var(--tinte);
+  margin-inline: calc(var(--a-2) * -1) 0;
 }
 
-.karte__anbieter {
-  font-size: var(--text-l);
+.werkzeug__kopf {
+  display: flex;
+  align-items: center;
+  gap: var(--a-4);
+}
+
+.werkzeug__name {
+  display: grid;
+  min-width: 0;
+}
+
+.werkzeug__fuss {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--a-2) var(--a-4);
+}
+
+/* Antworten je Frage, mit «Ändern» zum passenden Schritt des Formulars. */
+.antworten__gruppe {
+  padding: var(--a-4) var(--a-4) var(--a-3);
+}
+
+.antworten__gruppe + .antworten__gruppe {
+  border-top: 1px solid var(--linie);
+}
+
+.antworten__kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--a-3);
+}
+
+.antworten__kopf h3 {
+  font-size: var(--text-m);
+}
+
+.antworten__aendern {
+  display: inline-flex;
+  align-items: center;
+  min-width: var(--tippflaeche);
+  min-height: var(--tippflaeche);
+  justify-content: flex-end;
   font-weight: 600;
 }
 
-.karte__meta {
-  color: var(--graphit);
-}
-
-.karte__abschnitt {
-  margin-top: var(--a-7);
-}
-
-.karte__abschnitt > h2 {
-  padding-bottom: var(--a-2);
-  border-bottom: 1px solid var(--linie);
-}
-
-.antworten {
-  margin-top: var(--a-2);
+.antworten__liste {
+  display: grid;
+  gap: var(--a-1);
 }
 
 .antworten__zeile {
   display: grid;
-  gap: 0 var(--a-5);
-  padding-block: var(--a-3);
-  border-bottom: 1px solid var(--linie);
+  gap: 0 var(--a-4);
 }
 
 @media (min-width: 40rem) {
   .antworten__zeile {
-    grid-template-columns: 14rem 1fr;
+    grid-template-columns: 13rem 1fr;
   }
 }
 
 .antworten__zeile dt {
   color: var(--graphit);
+  hyphens: auto;
 }
 
 .antworten__zeile dd {
   margin: 0;
-  font-weight: 600;
+  font-weight: 560;
 }
 
 dd.antworten__offen {
-  color: var(--offen-kante);
-}
-
-/* Bestätigung als nativer Dialog: hält den Fokus, Escape schliesst. */
-.dialog {
-  width: min(32rem, calc(100vw - 2rem));
-  padding: var(--a-6);
-  border: 2px solid var(--tinte);
-  border-radius: var(--radius);
-  background: var(--blatt);
-  color: var(--tinte);
-}
-
-.dialog::backdrop {
-  background: rgb(30 35 41 / 0.45);
-}
-
-.dialog > * + * {
-  margin-top: var(--a-4);
-}
-
-html:has(.dialog[open]) {
-  overflow: hidden;
+  color: var(--offen-tief);
 }

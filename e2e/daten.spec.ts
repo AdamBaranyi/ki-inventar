@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 async function mitBeispielAufDaten(page: Page) {
   await oeffne(page);
   await page.getByRole('button', { name: 'Beispiel laden' }).click();
-  await geheZu(page, 'Daten');
+  await geheZu(page, 'Daten sichern');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Daten sichern');
 }
 
@@ -68,7 +68,7 @@ test.describe('Daten', () => {
     await expect(page.getByText('Der Inhalt ist kein gültiges JSON.')).toBeVisible();
     await pruefeBildschirm(page, gesehen, 'Daten mit Fehlermeldung');
     await geheZu(page, 'Übersicht');
-    await expect(page.getByRole('list', { name: 'Stand' })).toContainText('7 Werkzeuge');
+    await expect(page.getByText('7 Werkzeuge, 6 davon mit Personendaten')).toBeVisible();
   });
 
   test('löscht alles erst nach Bestätigung', async ({ page }) => {

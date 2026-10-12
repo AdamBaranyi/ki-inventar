@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+/* Eigene «display»-Regeln dürfen «hidden» nicht aufheben. */
+[hidden] {
+  display: none !important;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -12,9 +17,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--papier);
+  background: var(--grund);
   color: var(--tinte);
   font-family: var(--schrift);
   font-size: var(--text-m);
@@ -24,28 +27,32 @@ body {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   margin: 0;
+  font-stretch: var(--breit);
+  font-weight: 600;
   line-height: var(--zeile-eng);
   text-wrap: balance;
   hyphens: auto;
 }
 
 h1 {
-  font-size: clamp(var(--text-2xl), 1.4rem + 2vw, var(--text-3xl));
-  font-weight: 750;
-  letter-spacing: -0.02em;
+  font-size: clamp(var(--text-2xl), 1.4rem + 1.6vw, var(--text-3xl));
+  letter-spacing: -0.025em;
 }
 
 h2 {
-  font-size: var(--text-xl);
-  font-weight: 700;
+  font-size: var(--text-l);
   letter-spacing: -0.01em;
 }
 
 h3 {
-  font-size: var(--text-l);
-  font-weight: 700;
+  font-size: var(--text-m);
+}
+
+h4 {
+  font-size: var(--text-m);
 }
 
 h1:focus {
@@ -95,19 +102,6 @@ a {
   white-space: nowrap;
 }
 
-.rahmen {
-  width: 100%;
-  max-width: var(--breite-seite);
-  margin-inline: auto;
-  padding-inline: var(--a-4);
-}
-
-@media (min-width: 48rem) {
-  .rahmen {
-    padding-inline: var(--a-6);
-  }
-}
-
 .stapel > * + * {
   margin-top: var(--a-5);
 }
@@ -116,10 +110,15 @@ a {
   color: var(--graphit);
 }
 
+.klein {
+  font-size: var(--text-s);
+}
+
+/* Ein Hinweis auf weissem Blatt, ringsum mit der Kante des Leuchtstifts; ein Fehler kräftiger. */
 .hinweis {
   padding: var(--a-4) var(--a-5);
-  border: 1px solid var(--offen-kante);
-  border-radius: var(--radius);
+  border: 1px solid var(--offen-rand);
+  border-radius: var(--radius-feld);
   background: var(--blatt);
 }
 

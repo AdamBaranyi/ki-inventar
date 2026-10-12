@@ -1,4 +1,4 @@
-import { geheZu, oeffne, ohneDruckdialog } from './hilfen';
+import { beginntMit, geheZu, oeffne, ohneDruckdialog } from './hilfen';
 import { expect, pruefeBildschirm, test } from './qualitaet';
 
 test.beforeEach(async ({ page }) => {
@@ -14,19 +14,20 @@ test('Beispiel laden, bearbeiten, erledigen, drucken, exportieren, neu laden: de
   await page.getByRole('button', { name: 'Beispiel laden' }).click();
 
   // Werkzeug bearbeiten: ChatGPT bekommt eine verantwortliche Person.
-  await page.getByRole('link', { name: 'ChatGPT', exact: true }).click();
-  await page.getByRole('link', { name: 'Bearbeiten' }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Werkzeug bearbeiten');
+  await page.getByRole('link', { name: beginntMit('ChatGPT') }).click();
+  await page.getByRole('region', { name: 'Wer nutzt es' }).getByRole('link', { name: 'Ändern' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Wer nutzt es');
   await page.getByRole('textbox', { name: 'Verantwortliche Person', exact: true }).fill('Lea Muster');
-  await expect(page.getByRole('status')).toHaveText('Automatisch gespeichert.');
-  await page.getByRole('button', { name: 'Fertig' }).click();
+  await expect(page.getByRole('status')).toHaveText('Gespeichert');
+  await page.getByRole('link', { name: 'Schliessen' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('ChatGPT');
   await expect(page.getByRole('article', { name: 'Datenschutzerklärung ergänzen' })).toBeVisible();
   await expect(page.getByRole('article', { name: 'Verantwortliche Person benennen' })).toHaveCount(0);
 
   // Prüfpunkt erledigen.
   const avv = page.getByRole('article', { name: 'Vertrag zur Auftragsbearbeitung abschliessen' });
-  await avv.getByRole('button', { name: 'Als erledigt markieren' }).click();
+  await avv.getByRole('button', { name: beginntMit('Vertrag zur Auftragsbearbeitung abschliessen') }).click();
+  await avv.getByRole('button', { name: 'Erledigt' }).click();
   await expect(avv).toContainText('Erledigt am 11.10.2026');
 
   // Drucken: Druckansicht, Kopf mit Firma und Datum, Druckdialog aufgerufen.
@@ -47,7 +48,7 @@ test('Beispiel laden, bearbeiten, erledigen, drucken, exportieren, neu laden: de
   await page.emulateMedia({ media: 'screen' });
 
   // Exportieren.
-  await geheZu(page, 'Daten');
+  await geheZu(page, 'Daten sichern');
   const [datei] = await Promise.all([
     page.waitForEvent('download'),
     page.getByRole('button', { name: 'Sicherung herunterladen (JSON)' }).click(),
@@ -57,11 +58,8 @@ test('Beispiel laden, bearbeiten, erledigen, drucken, exportieren, neu laden: de
   // Neu laden: derselbe Stand.
   await page.reload({ waitUntil: 'commit' });
   await geheZu(page, 'Übersicht');
-  await expect(page.getByRole('list', { name: 'Stand' }).getByRole('listitem')).toHaveText([
-    '7 Werkzeuge',
-    '33 offene Prüfpunkte',
-    '6 mit Personendaten',
-  ]);
+  await expect(page.getByText('6 von 39 Prüfpunkten erledigt')).toBeVisible();
+  await expect(page.getByText('33 offen, davon 7 hoch')).toBeVisible();
 
   // Keine Anfrage hat das Gerät mit Daten verlassen: nur GET an den eigenen Ursprung.
   expect(gesehen.fremdeAnfragen).toEqual([]);

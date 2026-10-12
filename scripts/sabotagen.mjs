@@ -31,6 +31,7 @@ const BAU = 'bun run build > /dev/null 2>&1';
 const E2E = (datei, projekt = 'desktop') => `${BAU} && ./node_modules/.bin/playwright test ${datei} --project=${projekt}`;
 const PRUEFE = 'node scripts/pruefe-quelltext.mjs';
 const FORMULAR = 'src/app/seiten/werkzeug-formular/werkzeug-formular.ts';
+const AUSWERTUNG = 'src/app/fach/auswertung.ts';
 
 export const SABOTAGEN = [
   umkehren('R1', 'mitPersonendaten'),
@@ -59,6 +60,15 @@ export const SABOTAGEN = [
   ersetze('regeln', 'R3: USA-Text für alle', R, "w.standort === 'usa' ? T.R3.grundUsa", 'true ? T.R3.grundUsa'),
   ersetze('regeln', 'R12 nicht mehr am dringendsten', R, "dringlichkeit: 'hoechste'", "dringlichkeit: 'hoch'"),
   ersetze('regeln', 'Gespeicherter Status ignoriert', R, 'return { status: pruefung.status,', "return { status: 'offen' as const,"),
+  ersetze('regeln', 'Fortschritt: «trifft nicht zu» zählt als offen', AUSWERTUNG, 'erledigt: punkte.length - offene.length,', "erledigt: punkte.filter((p) => p.status === 'erledigt').length,"),
+  ersetze('regeln', '«Als Nächstes» nicht nach Dringlichkeit', AUSWERTUNG, "return nachDringlichkeit(punkte.filter((p) => p.status === 'offen')).slice(0, anzahl);", "return punkte.filter((p) => p.status === 'offen').slice(0, anzahl);"),
+  ersetze('regeln', 'Älteres «unbekannt» zählt als beantwortet', AUSWERTUNG, "const UNKLAR: readonly unknown[] = [null, 'unbekannt', 'unklar'];", 'const UNKLAR: readonly unknown[] = [null];'),
+
+  // Formular: Schritte und «Weiss ich nicht»
+  ersetze('formular', '«Weiss ich nicht» fehlt beim Zugang', 'src/app/seiten/werkzeug-formular/formular-optionen.ts', 'zugang: [...optionen(ZUGAENGE, OPTIONEN.zugang), WEISS_NICHT],', 'zugang: optionen(ZUGAENGE, OPTIONEN.zugang),'),
+  ersetze('formular', 'Schritt über 10 hinaus', 'src/app/seiten/werkzeug-formular/schritte.ts', 'return Math.min(Math.max(zahl, 1), SCHRITTE.length);', 'return Math.max(zahl, 1);'),
+  ersetze('formular', 'Älteres «unbekannt» nicht als «Weiss ich nicht»', 'src/app/seiten/werkzeug-formular/formular-modell.ts', "standort: antworten.standort === 'unbekannt' ? null : antworten.standort,", 'standort: antworten.standort,'),
+  ersetze('formular', '«Weiter» prüft den Schritt nicht', FORMULAR, 'const fehler = fehlerImSchritt(this.form, nummer);', 'const fehler: ReturnType<typeof fehlerImSchritt> = [];', E2E('e2e/werkzeug.spec.ts')),
 
   // Daten: Speichern, Laden, Tabelle
   ersetze('daten', 'Ungültiges wird trotzdem gespeichert', 'src/app/daten/inventar-dienst.ts', "if (this.ladeFehler() || !inventarSchema.safeParse(neu).success) return false;", 'if (this.ladeFehler()) return false;'),
@@ -81,7 +91,11 @@ export const SABOTAGEN = [
   ersetze('browser', 'Tabelle schiebt die Seite in die Breite', 'src/app/seiten/verzeichnis/verzeichnis.css', '  margin-top: var(--a-5);\n  overflow-x: auto;', '  margin-top: var(--a-5);', E2E('e2e/kette.spec.ts', 'handy-390')),
   ersetze('browser', 'Feld ohne Beschriftung (axe)', 'src/app/seiten/werkzeug-formular/werkzeug-formular.html', 'for="f-anbieter"', 'for="f-anbieterx"', E2E('e2e/werkzeug.spec.ts')),
   ersetze('browser', 'Kein Autosave', FORMULAR, 'subscribe(() => this.speichere());', 'subscribe(() => this.werte.set(this.form.getRawValue()));', E2E('e2e/werkzeug.spec.ts')),
-  ersetze('browser', 'Druck zeigt die Navigation', 'src/styles/druck.css', '  .kopf,\n', '', E2E('e2e/kette.spec.ts')),
+  ersetze('browser', 'Druck zeigt die Navigation', 'src/styles/druck.css', '  .seitenleiste,\n', '', E2E('e2e/kette.spec.ts')),
+  ersetze('browser', 'Blatt dehnt sich mit der Tabelle', 'src/app/seiten/verzeichnis/verzeichnis.css', '.blatt {\n  min-width: 0;\n', '.blatt {\n', E2E('e2e/kette.spec.ts', 'handy-390')),
+  ersetze('browser', 'Tab-Leiste bleibt im Ablauf', 'src/app/rahmen.css', '.app--ablauf .kopf,\n.app--ablauf .navi {\n  display: none;\n}', '.app--ablauf .kopf {\n  display: none;\n}', E2E('e2e/werkzeug.spec.ts', 'handy-390')),
+  ersetze('browser', 'Punkt aus der Adresse bleibt zu', 'src/app/seiten/werkzeug-karte/werkzeug-karte.html', '[aufgeklappt]="fragment() === kennung(punkt)"', '[aufgeklappt]="false"', E2E('e2e/start.spec.ts')),
+  ersetze('browser', 'Seitenleiste ohne Zahl offener Punkte im Namen', 'src/app/app.html', '[attr.aria-label]="eintrag.pfad', '[attr.data-name]="eintrag.pfad', E2E('e2e/start.spec.ts')),
   ersetze('browser', 'Ohne 404.html für tiefe Links', 'scripts/nach-build.mjs', "copyFileSync(index, join(ZIEL, '404.html'));", '', E2E('e2e/werkzeug.spec.ts')),
   ersetze('browser', 'Fokus bleibt nicht beim Punkt', 'src/app/teile/pruefpunkt/pruefpunkt.ts', '      ziel?.focus({ preventScroll', '      void ({ preventScroll', E2E('e2e/werkzeug.spec.ts')),
 ];

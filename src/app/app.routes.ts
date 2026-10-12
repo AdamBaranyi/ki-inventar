@@ -13,6 +13,7 @@ export const routes: Routes = [
   {
     path: 'werkzeug/neu',
     title: titel(TEXTE.titel.neu),
+    data: { ablauf: true },
     loadComponent: () =>
       import('./seiten/werkzeug-formular/werkzeug-formular').then((m) => m.WerkzeugFormular),
   },
@@ -24,6 +25,7 @@ export const routes: Routes = [
   {
     path: 'werkzeug/:id/bearbeiten',
     title: titel(TEXTE.titel.bearbeiten),
+    data: { ablauf: true },
     loadComponent: () =>
       import('./seiten/werkzeug-formular/werkzeug-formular').then((m) => m.WerkzeugFormular),
   },
@@ -47,6 +49,11 @@ export const routes: Routes = [
     path: 'daten',
     title: titel(TEXTE.titel.daten),
     loadComponent: () => import('./seiten/daten/daten-seite').then((m) => m.DatenSeite),
+  },
+  {
+    path: 'mehr',
+    title: titel(TEXTE.titel.mehr),
+    loadComponent: () => import('./seiten/mehr/mehr-seite').then((m) => m.MehrSeite),
   },
   {
     path: 'impressum',

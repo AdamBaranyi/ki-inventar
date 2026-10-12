@@ -1,3 +1,8 @@
+.verzeichnis {
+  display: grid;
+  gap: var(--a-6);
+}
+
 .verzeichnis__steuerung {
   display: grid;
   gap: var(--a-4);
@@ -9,11 +14,13 @@
   width: 100%;
 }
 
-/* Auf dem Bildschirm ein Blatt; gedruckt fällt der Rahmen weg (druck.css). */
+/* Auf dem Bildschirm ein Blatt; gedruckt fällt der Rahmen weg (druck.css). Die breite
+   Tabelle verschiebt sich in ihrem eigenen Bereich, nicht die Seite. */
 .blatt {
-  margin-top: var(--a-7);
+  min-width: 0;
   padding: var(--a-5) var(--a-4);
   border: 1px solid var(--linie);
+  border-radius: var(--radius-karte);
   background: var(--blatt);
 }
 

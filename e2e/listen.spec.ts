@@ -31,15 +31,21 @@ test.describe('Prüfpunkte', () => {
     await pruefeBildschirm(page, gesehen, 'Prüfpunkte mit Beispiel');
   });
 
-  test('nimmt einen erledigten Punkt aus der Liste der offenen und zeigt ihn unter «Alle»', async ({ page }) => {
+  test('nimmt einen erledigten Punkt aus der Liste der offenen und zeigt ihn unter «Alle»', async ({
+    page,
+    gesehen,
+  }) => {
     await mitBeispiel(page, 'Prüfpunkte');
     const erster = page.getByRole('article').first();
-    const titel = await erster.getByRole('heading', { level: 3 }).innerText();
+    const titel = await erster.locator('.punkt__titel > span').first().innerText();
     const zweiter = await page.getByRole('article').nth(1).getAttribute('id');
-    await erster.getByRole('button', { name: 'Als erledigt markieren' }).click();
+    await erster.getByRole('button', { expanded: false }).click();
+    await expect(erster.getByRole('button', { name: 'Erledigt' })).toBeVisible();
+    await pruefeBildschirm(page, gesehen, 'Prüfpunkte mit offenem Punkt');
+    await erster.getByRole('button', { name: 'Erledigt' }).click();
 
     await expect(page.getByRole('heading', { level: 2 }).first()).toHaveText('Hoch 7 Punkte');
-    await expect(page.locator(`#${zweiter} button`).first()).toBeFocused();
+    await expect(page.locator(`#${zweiter} .punkt__schalter`)).toBeFocused();
     await page.getByRole('radio', { name: 'Alle' }).check();
     await expect(page.getByRole('article', { name: titel }).first()).toContainText('Erledigt am 11.10.2026');
   });

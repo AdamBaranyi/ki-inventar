@@ -4,6 +4,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 export interface Option<T> {
   wert: T;
   text: string;
+  /** Leiser gesetzt, etwa «Weiss ich nicht». */
+  leise?: boolean;
 }
 
 /** Eine Frage mit Auswahl als Gruppe grosser Tippflächen (Radio-Knöpfe). */
@@ -16,9 +18,9 @@ export interface Option<T> {
       @if (hilfe()) {
         <p class="feld__hilfe" [id]="name() + '-hilfe'">{{ hilfe() }}</p>
       }
-      <div class="wahl__optionen" [class.wahl__optionen--zeile]="zeile()">
+      <div class="wahl__optionen" [class.wahl__optionen--zeile]="art() === 'zeile'" [class.wahl__optionen--zwei]="art() === 'zwei'">
         @for (option of optionen(); track option.text) {
-          <label class="wahl__option">
+          <label class="wahl__option" [class.wahl__option--leise]="option.leise">
             <input type="radio" [name]="name()" [value]="option.wert" [formControl]="steuerung()" />
             {{ option.text }}
           </label>
@@ -29,11 +31,12 @@ export interface Option<T> {
 })
 export class Auswahl<T> {
   readonly steuerung = input.required<FormControl<T | null>>();
-  readonly optionen = input.required<readonly Option<T>[]>();
+  readonly optionen = input.required<readonly Option<T | null>[]>();
   readonly frage = input.required<string>();
   readonly name = input.required<string>();
   readonly hilfe = input<string>();
-  readonly zeile = input(false);
+  /** Untereinander, ab 40rem in einer Zeile (Ja, Nein, …) oder in zwei Spalten (lange Listen). */
+  readonly art = input<'liste' | 'zeile' | 'zwei'>('liste');
 }
 
 /** Wandelt eine Beschriftungstabelle in Optionen um, in der Reihenfolge der Werte. */

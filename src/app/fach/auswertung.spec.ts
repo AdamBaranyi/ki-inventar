@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
-import { allePruefpunkte, fehlendeAngaben, lage, nachDringlichkeit, zahlen } from './auswertung';
+import {
+  allePruefpunkte,
+  fehlendeAngaben,
+  fortschritt,
+  lage,
+  nachDringlichkeit,
+  naechste,
+  zahlen,
+} from './auswertung';
+import { beispielInventar } from './beispiel';
 import { leeresInventar, type Inventar } from './inventar';
 import { neuesWerkzeug, type Werkzeug } from './werkzeug';
 
@@ -99,5 +108,51 @@ describe('fehlendeAngaben', () => {
 
   it('ist bei einem neuen Werkzeug vollständig offen', () => {
     expect(fehlendeAngaben(neuesWerkzeug('n', 'N', JETZT))).toHaveLength(12);
+  });
+
+  it('zählt ältere Antworten «unbekannt» und «unklar» wie «Weiss ich nicht»', () => {
+    const w = werkzeug('a', 'A', { standort: 'unbekannt', training: 'unbekannt', avv: 'unklar' });
+    expect(fehlendeAngaben(w)).toEqual(['standort', 'training', 'avv']);
+  });
+});
+
+describe('fortschritt', () => {
+  const beispiel = () => allePruefpunkte(beispielInventar().werkzeuge, HEUTE);
+
+  it('zählt «trifft nicht zu» als geklärt, wie «erledigt»', () => {
+    expect(fortschritt(beispiel())).toEqual({ gesamt: 40, erledigt: 5, offen: 35, sofort: 0, hoch: 8 });
+  });
+
+  it('zählt einen offenen Stopp (R12) als «sofort»', () => {
+    const punkte = allePruefpunkte([werkzeug('a', 'A', { verboten: true })], HEUTE);
+    expect(fortschritt(punkte)).toMatchObject({ offen: 2, sofort: 1, hoch: 0 });
+  });
+
+  it('ist ohne Punkte leer', () => {
+    expect(fortschritt([])).toEqual({ gesamt: 0, erledigt: 0, offen: 0, sofort: 0, hoch: 0 });
+  });
+});
+
+describe('naechste', () => {
+  it('nimmt die dringendsten offenen Punkte, das Dringende zuerst', () => {
+    const punkte = allePruefpunkte(
+      [
+        werkzeug('a', 'Alpha', { geschult: false }),
+        werkzeug('b', 'Beta', { verboten: true, personendaten: 'ja', avv: 'nein' }),
+      ],
+      HEUTE,
+    );
+    expect(naechste(punkte, 3).map((p) => `${p.werkzeugName} ${p.regel}`)).toEqual([
+      'Beta R12',
+      'Beta R2',
+      'Alpha R10',
+    ]);
+  });
+
+  it('lässt Erledigtes weg', () => {
+    const w = werkzeug('a', 'A', {
+      pruefungen: { R14: { status: 'erledigt', begruendung: '', datum: HEUTE } },
+    });
+    expect(naechste(allePruefpunkte([w], HEUTE), 3)).toEqual([]);
   });
 });

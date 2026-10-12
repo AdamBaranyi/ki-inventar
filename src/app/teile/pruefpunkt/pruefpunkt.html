@@ -3,84 +3,122 @@
   class="punkt"
   [id]="kennung()"
   [class.punkt--offen]="p.status === 'offen'"
+  [class.punkt--erledigt]="p.status === 'erledigt'"
   [class.punkt--stopp]="stopp() && p.status === 'offen'"
   [attr.aria-labelledby]="kennung() + '-titel'"
 >
-  <p class="punkt__kopf">
-    @if (mitWerkzeug()) {
-      <a class="punkt__werkzeug" [routerLink]="['/werkzeug', p.werkzeugId]">{{ p.werkzeugName }}</a>
-    } @else {
-      <span class="punkt__dringlichkeit">{{ t.dringlichkeit[p.dringlichkeit] }}</span>
-    }
-  </p>
-  <h3 class="punkt__titel" [id]="kennung() + '-titel'">
-    <span class="punkt__mark">{{ p.titel }}</span>
-  </h3>
-  <p class="punkt__grund">{{ p.grund }}</p>
-  <p class="punkt__quelle">
-    {{ p.quellen.length > 1 ? t.quellen : t.quelle }}:
-    @for (quelle of p.quellen; track quelle.text; let letzte = $last) {
-      @if (quelle.url) {
-        <a [href]="quelle.url" target="_blank" rel="noopener noreferrer"
-          >{{ quelle.text }}<span class="unsichtbar"> {{ t.neuerTab }}</span></a
-        >
-      } @else {
-        {{ quelle.text }}
-      }
-      @if (!letzte) {
-        ,&ngsp;
-      }
-    }
-  </p>
-
-  <div class="punkt__aktionen">
-    @switch (p.status) {
-      @case ('erledigt') {
-        <p class="punkt__stand">
-          <svg class="haken" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-            <path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          {{ t.erledigtAm(datum()) }}
-        </p>
-        <button class="knopf knopf--leise" type="button" (click)="oeffne()" [attr.aria-describedby]="kennung() + '-titel'">
-          {{ t.wiederOeffnen }}
-        </button>
-      }
-      @case ('nicht-zutreffend') {
-        <p class="punkt__stand">{{ t.nichtZutreffendAm(datum()) }}: «{{ p.begruendung }}»</p>
-        <button class="knopf knopf--leise" type="button" (click)="oeffne()" [attr.aria-describedby]="kennung() + '-titel'">
-          {{ t.wiederOeffnen }}
-        </button>
-      }
-      @default {
-        @if (p.zuletzt) {
-          <p class="punkt__stand">{{ t.wiederOffen(zuletzt()) }}</p>
-        }
-        @if (begruenden()) {
-          <div class="feld">
-            <label class="feld__label" [for]="kennung() + '-begruendung'">{{ t.begruendung }}</label>
-            <textarea class="eingabe" rows="2" [id]="kennung() + '-begruendung'" [formControl]="begruendung"
-              [attr.maxlength]="grenze" [attr.aria-invalid]="fehlt()"
-              [attr.aria-describedby]="fehlt() ? kennung() + '-fehler' : null"></textarea>
-            @if (fehlt()) {
-              <p class="feld__fehler" [id]="kennung() + '-fehler'">{{ t.begruendungFehlt }}</p>
+  <h3 class="punkt__kopf">
+    <button
+      class="punkt__schalter"
+      type="button"
+      [attr.aria-expanded]="offen()"
+      [attr.aria-controls]="kennung() + '-mehr'"
+      (click)="umschalten()"
+    >
+      <span
+        class="kreis"
+        [class.kreis--offen]="p.status === 'offen'"
+        [class.kreis--stopp]="stopp() && p.status === 'offen'"
+        [class.kreis--erledigt]="p.status === 'erledigt'"
+        [class.kreis--nicht]="p.status === 'nicht-zutreffend'"
+      >
+        @switch (p.status) {
+          @case ('erledigt') {
+            <ki-zeichen name="haken" />
+          }
+          @case ('nicht-zutreffend') {
+            <ki-zeichen name="strich" />
+          }
+          @default {
+            @if (stopp()) {
+              <ki-zeichen name="ausruf" />
             }
-          </div>
-          <div class="knopfreihe">
-            <button class="knopf" type="button" (click)="speichereBegruendung()">{{ t.speichern }}</button>
-            <button class="knopf knopf--leise" type="button" (click)="abbrechen()">{{ t.abbrechen }}</button>
-          </div>
+          }
+        }
+      </span>
+      <span class="punkt__text">
+        <span class="punkt__titel"
+          ><span [id]="kennung() + '-titel'">{{ p.titel }}</span><span class="unsichtbar">,</span></span
+        >
+        <span class="punkt__unter"
+          >@if (p.status === 'offen') {<span class="unsichtbar">{{ t.offen }}, </span>}@if (mitWerkzeug()) {<span
+              class="punkt__werkzeug"
+              >{{ p.werkzeugName }}, </span
+            >}<span
+            class="punkt__stand"
+            >{{ stand() }}</span
+          ></span
+        >
+      </span>
+      <ki-zeichen class="punkt__pfeil" name="weiter" />
+    </button>
+  </h3>
+
+  <div class="punkt__mehr" [id]="kennung() + '-mehr'" [hidden]="!offen()">
+    <p class="punkt__grund">{{ p.grund }}</p>
+    <p class="punkt__quelle">
+      {{ p.quellen.length > 1 ? t.quellen : t.quelle }}:
+      @for (quelle of p.quellen; track quelle.text; let letzte = $last) {
+        @if (quelle.url) {
+          <a [href]="quelle.url" target="_blank" rel="noopener noreferrer"
+            >{{ quelle.text }}<span class="unsichtbar"> {{ t.neuerTab }}</span></a
+          >
         } @else {
+          {{ quelle.text }}
+        }
+        @if (!letzte) {
+          ,&ngsp;
+        }
+      }
+    </p>
+
+    <div class="punkt__aktionen">
+      @switch (p.status) {
+        @case ('nicht-zutreffend') {
+          <p class="punkt__begruendung">«{{ p.begruendung }}»</p>
           <div class="knopfreihe">
-            <button class="knopf" type="button" (click)="erledige()" [attr.aria-describedby]="kennung() + '-titel'">
-              {{ t.alsErledigt }}
-            </button>
-            <button class="knopf knopf--leise" type="button" (click)="zeigeBegruendung()" [attr.aria-describedby]="kennung() + '-titel'">
-              {{ t.trifftNichtZu }}
+            <button class="knopf knopf--zweit" type="button" (click)="oeffne()" [attr.aria-describedby]="kennung() + '-titel'">
+              {{ t.wiederOeffnen }}
             </button>
           </div>
         }
+        @case ('erledigt') {
+          <div class="knopfreihe">
+            <button class="knopf knopf--zweit" type="button" (click)="oeffne()" [attr.aria-describedby]="kennung() + '-titel'">
+              {{ t.wiederOeffnen }}
+            </button>
+          </div>
+        }
+        @default {
+          @if (p.zuletzt) {
+            <p class="punkt__hinweis">{{ t.wiederOffen(zuletzt()) }}</p>
+          }
+          @if (begruenden()) {
+            <div class="feld">
+              <label class="feld__label" [for]="kennung() + '-begruendung'">{{ t.begruendung }}</label>
+              <textarea class="eingabe" rows="2" [id]="kennung() + '-begruendung'" [formControl]="begruendung"
+                [attr.maxlength]="grenze" [attr.aria-invalid]="fehlt()"
+                [attr.aria-describedby]="fehlt() ? kennung() + '-fehler' : null"></textarea>
+              @if (fehlt()) {
+                <p class="feld__fehler" [id]="kennung() + '-fehler'">{{ t.begruendungFehlt }}</p>
+              }
+            </div>
+            <div class="knopfreihe">
+              <button class="knopf" type="button" (click)="speichereBegruendung()">{{ t.speichern }}</button>
+              <button class="knopf knopf--leise" type="button" (click)="abbrechen()">{{ t.abbrechen }}</button>
+            </div>
+          } @else {
+            <div class="knopfreihe">
+              <button class="knopf" type="button" (click)="erledige()" [attr.aria-describedby]="kennung() + '-titel'">
+                <ki-zeichen name="haken" />{{ t.alsErledigt }}
+              </button>
+              <button class="knopf knopf--zweit" type="button" (click)="zeigeBegruendung()" [attr.aria-describedby]="kennung() + '-titel'">
+                {{ t.trifftNichtZu }}
+              </button>
+            </div>
+          }
+        }
       }
-    }
+    </div>
   </div>
 </article>

@@ -3,6 +3,7 @@
 @import './styles/schrift.css';
 @import './styles/token.css';
 @import './styles/basis.css';
+@import './styles/bausteine.css';
 @import './styles/bedienung.css';
 @import './app/rahmen.css';
 @import './app/seiten/uebersicht/uebersicht.css';
@@ -14,4 +15,5 @@
 @import './app/seiten/daten/daten-seite.css';
 @import './app/seiten/verzeichnis/verzeichnis.css';
 @import './app/seiten/rechtliches/rechts-seite.css';
+@import './app/seiten/mehr/mehr-seite.css';
 @import './styles/druck.css';

@@ -12,7 +12,7 @@
     }
   </div>
 
-  <section class="daten-block" aria-labelledby="sichern-titel">
+  <section class="karte karte--innen daten-block" aria-labelledby="sichern-titel">
     <h2 id="sichern-titel">{{ t.sichernTitel }}</h2>
     <p>{{ t.sichernText }}</p>
     @if (anzahl() > 0) {
@@ -22,7 +22,7 @@
     }
   </section>
 
-  <section class="daten-block" aria-labelledby="tabelle-titel">
+  <section class="karte karte--innen daten-block" aria-labelledby="tabelle-titel">
     <h2 id="tabelle-titel">{{ t.tabelleTitel }}</h2>
     <p>{{ t.tabelleText }}</p>
     @if (anzahl() > 0) {
@@ -30,7 +30,7 @@
     }
   </section>
 
-  <section class="daten-block" aria-labelledby="wieder-titel">
+  <section class="karte karte--innen daten-block" aria-labelledby="wieder-titel">
     <h2 id="wieder-titel">{{ t.wiederTitel }}</h2>
     <p>{{ t.wiederText }}</p>
     <div class="datei-wahl">
@@ -41,7 +41,7 @@
   </section>
 
   @if (anzahl() > 0) {
-    <section class="daten-block" aria-labelledby="loeschen-titel">
+    <section class="karte karte--innen daten-block" aria-labelledby="loeschen-titel">
       <h2 id="loeschen-titel">{{ t.loeschenTitel }}</h2>
       <p>{{ t.loeschenText }}</p>
       <button class="knopf knopf--zweit" type="button" (click)="frageLoeschen()">{{ t.loeschen }}</button>

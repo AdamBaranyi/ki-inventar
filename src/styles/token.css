@@ -1,44 +1,57 @@
 /*
- * Ein Verzeichnis auf Papier: Tinte auf Weiss, offene Punkte mit Leuchtstift
- * markiert. Die einzige Datenfarbe ist der Leuchtstift (--offen), Rot nur für
- * den Stopp nach R12. Hauptaktionen tragen Tinte.
+ * «Prüfpult»: weisse Blätter mit Haarlinie auf warmem Grund, Tinte für Text und
+ * Hauptaktionen, ein Leuchtstift-Gelb als einzige Datenfarbe für «offen». Rot nur
+ * für den Stopp nach R12. Keine Schatten, keine Verläufe.
  */
 :root {
-  --papier: #fbfaf6;
+  --grund: #f4f2ed;
   --blatt: #ffffff;
-  --tinte: #1e2329;
-  --graphit: #59636d;
-  --kante: #6f7882;
-  --linie: #d9d6cc;
-  --offen: #ffe36e;
-  --offen-kante: #8a6100;
+  --linie: #e3e0d8;
+  --tinte: #15171b;
+  --tinte-hell: #2d3138;
+  --graphit: #5c636c;
+  /* Ränder von Feldern und Auswahlkreisen: mindestens 3:1 gegen Weiss. */
+  --kante: #7a828c;
+  --offen: #ffe15a;
+  --offen-rand: #a08300;
+  --offen-tief: #7d5a00;
   --stopp: #a4271c;
+  --auf-tinte: #ffffff;
+  --abdunkeln: rgb(21 23 27 / 0.5);
 
-  --schrift: 'Public Sans', 'Helvetica Neue', Arial, sans-serif;
+  --schrift: 'Mona Sans', 'Helvetica Neue', Arial, sans-serif;
+  /* Überschriften und Zahlen breit gesetzt, Beschriftungen in Leisten leicht schmal. */
+  --breit: 112%;
+  --schmal: 94%;
   --text-s: 1rem;
   --text-m: 1.125rem;
-  --text-l: 1.3125rem;
+  --text-l: 1.25rem;
   --text-xl: 1.5rem;
-  --text-2xl: 2rem;
-  --text-3xl: 2.625rem;
-  --text-zahl: 3.5rem;
+  --text-2xl: 1.875rem;
+  --text-3xl: 2.5rem;
+  --text-zahl: 2.875rem;
 
-  --zeile: 1.55;
-  --zeile-eng: 1.15;
+  --zeile: 1.5;
+  --zeile-eng: 1.12;
 
   --a-1: 0.25rem;
   --a-2: 0.5rem;
   --a-3: 0.75rem;
   --a-4: 1rem;
-  --a-5: 1.5rem;
-  --a-6: 2rem;
-  --a-7: 3rem;
-  --a-8: 4.5rem;
+  --a-5: 1.25rem;
+  --a-6: 1.5rem;
+  --a-7: 2.25rem;
+  --a-8: 3.5rem;
 
-  --radius: 4px;
+  --radius-karte: 16px;
+  --radius-knopf: 12px;
+  --radius-feld: 12px;
+  --radius-option: 14px;
   --tippflaeche: 48px;
   --breite-text: 42rem;
-  --breite-seite: 62rem;
+  --breite-seite: 64rem;
+  --seitenleiste: 16rem;
+  --tableiste: 4.75rem;
 
   --dauer-kurz: 90ms;
   --dauer: 160ms;

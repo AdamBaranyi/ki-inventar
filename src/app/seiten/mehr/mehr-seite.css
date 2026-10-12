@@ -1,0 +1,11 @@
+.mehr-seite {
+  display: grid;
+  gap: var(--a-5);
+  max-width: var(--breite-text);
+}
+
+.mehr-seite__zeichen {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--graphit);
+}

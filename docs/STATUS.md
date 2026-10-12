@@ -1,11 +1,29 @@
 # Stand
 
+## Gestaltung «Prüfpult» (12.10.2026)
+
+Umbau nach der freigegebenen Stilprobe (`~/Code/portfolio/design/ki-inventar/`):
+
+- App-Rahmen: am Handy Tab-Leiste mit vier Zielen (Übersicht, Prüfpunkte, Fristen, Mehr), am Desktop
+  Seitenleiste mit der Zahl offener Punkte. Im Formular fallen Kopf und Tab-Leiste am Handy weg.
+- Übersicht: Fortschritt («5 von 40 Prüfpunkten erledigt») mit Balken, «Als Nächstes» mit den drei
+  dringendsten Punkten (öffnet das Werkzeug mit dem Punkt aufgeklappt), Werkzeuge mit Monogramm und
+  Stand, kurze Fristen mit «Heute». Leer: Einleitung, zwei Wege, drei Schritte.
+- Werkzeug: Merkmale als Chips, Fortschritt, Prüfpunkte als Checkliste zum Aufklappen, Antworten je
+  Frage mit «Ändern» direkt zum passenden Schritt.
+- Formular: eine Frage je Bildschirm (`?frage=1` bis `10`), Striche als Fortschritt, «Zurück» und
+  «Weiter» unten, «Weiss ich nicht» bei jeder Auswahl ausser dem Zweck. Ältere Antworten «unbekannt»
+  und «unklar» erscheinen als «Weiss ich nicht» und zählen als offene Antwort.
+- Schrift Mona Sans (OFL, lokal), Überschriften breit gesetzt; eigene Bildzeichen als SVG-Pfade.
+  Tabellenziffern nur in der Tabelle des Verzeichnisses (die von Mona Sans haben eine Code-Form).
+- Tests: 126 Unit-Tests, 83 Browser-Tests in drei Breiten, 53 Sabotagen, alle rot.
+
 ## Meilenstein MVP (11.10.2026): live
 
 Live auf https://adambaranyi.github.io/ki-inventar/, gebaut und geprüft von der CI auf `main`.
 
 **Fertig**
-- Übersicht mit drei Zahlen, Liste der Werkzeuge mit Status, «Werkzeug erfassen», «Beispiel laden».
+- Übersicht mit Zahlen, Liste der Werkzeuge mit Status, «Werkzeug erfassen», «Beispiel laden».
 - Formular mit zehn Fragen, Autosave, Validierung (Name, Länge, ganze Zahl), offene Angaben.
 - 14 Regeln als reine Funktionen, je Regel Tests (greift, greift nicht) und eine Sabotage; Status
   offen, erledigt, trifft nicht zu (mit Begründung); jährliche Prüfung läuft nach 365 Tagen ab.

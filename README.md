@@ -15,18 +15,21 @@ Gesetzestext und eine Fachberatung. Rechtsstand geprüft am 11.10.2026 gegen
 durch die Digital-Omnibus-Verordnung (EU) 2026/1744).
 
 <p>
-  <img src="docs/bilder/uebersicht.png" alt="Übersicht mit sieben Werkzeugen der erfundenen Muster Treuhand AG, 35 offene Prüfpunkte mit Leuchtstift markiert" width="640">
-  <img src="docs/bilder/handy-karteikarte.png" alt="Karteikarte eines Werkzeugs am Handy mit markierten offenen Prüfpunkten" width="220">
+  <img src="docs/bilder/uebersicht.png" alt="Übersicht am Desktop: Seitenleiste, 5 von 40 Prüfpunkten erledigt, die nächsten drei Punkte, sieben Werkzeuge der erfundenen Muster Treuhand AG und die Fristen" width="640">
+  <img src="docs/bilder/handy-werkzeug.png" alt="Ein Werkzeug am Handy: Merkmale, Fortschritt und Prüfpunkte als Checkliste, ein Punkt aufgeklappt mit Grund und Quelle" width="200">
+  <img src="docs/bilder/handy-formular.png" alt="Formular am Handy: Frage 5 von 10 zu Personendaten mit «Weiss ich nicht» als Antwort" width="200">
 </p>
 
 ## Was es tut
 
-- **Erfassen:** zehn Fragen je Werkzeug, vom Standort des Anbieters über Personendaten, Training und
-  Vertrag zur Auftragsbearbeitung bis zu EU-Bezug und verbotenen Praktiken. Jede gültige Änderung
-  speichert sich sofort. Was offen bleibt, zählt vorsichtig, also als möglich.
+- **Erfassen:** zehn Fragen je Werkzeug, eine je Bildschirm, vom Standort des Anbieters über
+  Personendaten, Training und Vertrag zur Auftragsbearbeitung bis zu EU-Bezug und verbotenen
+  Praktiken. Jede gültige Änderung speichert sich sofort. «Weiss ich nicht» lässt eine Antwort offen;
+  sie erscheint als offene Antwort, und die Datenschutz-Regeln zählen sie vorsichtig mit.
 - **Prüfpunkte:** 14 Regeln als reine Funktionen (`src/app/fach/regeln.ts`). Jeder Punkt hat einen
   Grund, eine Quelle mit Link und einen Status: offen, erledigt oder trifft nicht zu (mit Begründung).
-  Die jährliche Überprüfung wird nach 365 Tagen von selbst wieder fällig.
+  Die jährliche Überprüfung wird nach 365 Tagen von selbst wieder fällig. Die Übersicht zeigt den
+  Fortschritt und die drei dringendsten offenen Punkte.
 - **Fristen:** Zeitachse der KI-Verordnung nach dem Digital-Omnibus, mit einer Marke für heute.
 - **Sichern und drucken:** JSON zum Wiederherstellen, CSV für Excel (Formeln entschärft), Verzeichnis
   als Druckansicht auf A4.
@@ -51,7 +54,13 @@ durch die Digital-Omnibus-Verordnung (EU) 2026/1744).
 ## Technik
 
 Angular 22 (standalone, Signals, zoneless, Reactive Forms), TypeScript strict, Zod 4, Bun, keine
-UI-Bibliothek. Schrift Public Sans lokal. Statisch auf GitHub Pages.
+UI-Bibliothek und keine Icon-Bibliothek: eigene Bildzeichen als SVG-Pfade. Schrift Mona Sans
+(variabel in Gewicht und Breite) lokal im Repo. Statisch auf GitHub Pages.
+
+**Gestaltung «Prüfpult»:** weisse Blätter mit Haarlinie auf warmem Grund, keine Schatten. Tinte für
+Text und Hauptaktionen, Leuchtstift-Gelb als einzige Datenfarbe für «offen», Rot nur für den Stopp
+(R12). Am Handy eine Tab-Leiste mit vier Zielen, am Desktop eine Seitenleiste. Schrift nie unter
+16 px, Tippflächen ab 44 px.
 
 - **Strenge CSP** ohne Inline-Skripte und Inline-Stile: Komponenten haben keine eigenen Stile, alle
   Stile liegen als Dateien neben den Komponenten und werden gebündelt. Zod läuft `jitless`.
@@ -77,8 +86,8 @@ erledigen, drucken, exportieren, neu laden».
 bun run sabotage
 ```
 
-baut 42 Fehler ein (jede Regel umgekehrt, Speicher, CSV, Quelltext-Regeln, Browser-Grundregeln) und
-verlangt, dass jedes Mal ein Test rot wird.
+baut 53 Fehler ein (jede Regel umgekehrt, Fortschritt, Speicher, CSV, Formular-Schritte,
+Quelltext-Regeln, Browser-Grundregeln) und verlangt, dass jedes Mal ein Test rot wird.
 
 ## Bewusst nicht gebaut
 
