@@ -26,7 +26,7 @@ export const IMPRESSUM: readonly Abschnitt[] = [
   {
     titel: 'Quellcode und Schrift',
     absaetze: [
-      'Der Quellcode liegt öffentlich auf GitHub. Die Schrift Public Sans steht unter der SIL Open Font License 1.1.',
+      'Der Quellcode liegt öffentlich auf GitHub. Die Schrift Mona Sans steht unter der SIL Open Font License 1.1 und wird mit der App ausgeliefert.',
     ],
     links: [
       { text: 'Quellcode auf GitHub', href: 'https://github.com/AdamBaranyi/ki-inventar' },
