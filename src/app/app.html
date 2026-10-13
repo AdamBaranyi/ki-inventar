@@ -16,10 +16,9 @@
           <a
             class="navi__link"
             [routerLink]="eintrag.pfad"
-            routerLinkActive="navi__link--aktiv"
-            [routerLinkActiveOptions]="{ exact: eintrag.pfad === '/' }"
-            ariaCurrentWhenActive="page"
-            [class.navi__link--bereich]="eintrag.pfad === '/mehr' && unterMehr()"
+            [class.navi__link--aktiv]="zustand()[eintrag.pfad] === 'page'"
+            [class.navi__link--bereich]="zustand()[eintrag.pfad] === 'true'"
+            [attr.aria-current]="zustand()[eintrag.pfad]"
             [attr.aria-label]="eintrag.pfad === '/pruefpunkte' && offen() > 0 ? eintrag.text + ', ' + offen() + ' ' + t.offenZahl : null"
           >
             <span class="navi__symbol"><ki-zeichen [name]="eintrag.zeichen" /></span>
@@ -35,7 +34,7 @@
 
   <div class="seitenleiste__fuss">
     <ki-darstellung-wahl name="darstellung-leiste" />
-    <p>{{ t.lokal }}</p>
+    <ki-fuss kurz />
   </div>
 </div>
 
@@ -60,12 +59,4 @@
   <router-outlet />
 </main>
 
-<footer class="fuss">
-  <p class="fuss__rechtsberatung">{{ t.keineRechtsberatung }}</p>
-  <p>{{ t.rechtsstand }}</p>
-  <ul class="fuss__links">
-    <li><a routerLink="/impressum">{{ t.impressum }}</a></li>
-    <li><a routerLink="/datenschutz">{{ t.datenschutz }}</a></li>
-    <li><a [href]="quellcode" rel="noopener">{{ t.quellcode }}</a></li>
-  </ul>
-</footer>
+<ki-fuss class="app__fuss" [links]="!aufMehr()" />

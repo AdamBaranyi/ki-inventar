@@ -116,5 +116,12 @@ export const SABOTAGEN = [
   ersetze('browser', 'Darstellung wird nicht gemerkt', 'src/app/daten/darstellung.ts', '      this.speicher.setItem(SCHLUESSEL_DARSTELLUNG, darstellung);\n', '', E2E('e2e/darstellung.spec.ts')),
   ersetze('browser', 'Darstellung blitzt hell auf (frühes Skript fehlt)', 'src/index.html', '  <script src="darstellung.js"></script>\n', '', E2E('e2e/darstellung.spec.ts')),
   ersetze('browser', 'Druck dunkel', 'src/styles/druck.css', '  :root,\n  :root[data-darstellung] {\n    color-scheme: light;\n  }\n', '', E2E('e2e/darstellung.spec.ts')),
+  // Rahmen: schmale Seiten mittig, Rechtliches in der Seitenleiste, Menü
+  ersetze('browser', 'Schmale Seiten kleben links', 'src/app/rahmen.css', '.inhalt > * > :is(section, article) {\n  margin-inline: auto;', '.inhalt > * > :is(section, article) {\n  margin-inline: 0;', E2E('e2e/rahmen.spec.ts')),
+  ersetze('browser', 'Rechtliches fehlt in der Seitenleiste', 'src/app/app.html', '    <ki-fuss kurz />\n', '', E2E('e2e/rahmen.spec.ts')),
+  ersetze('browser', 'Gewählter Menüpunkt wieder blass', 'src/app/rahmen.css', '    background: var(--tinte);\n    color: var(--auf-tinte);\n    font-weight: 620;', '    background: var(--grund);\n    color: var(--tinte);\n    font-weight: 620;', E2E('e2e/rahmen.spec.ts')),
+  ersetze('browser', 'Maus nimmt dem gewählten Punkt die Tinte', 'src/app/rahmen.css', '.navi__link:not(.navi__link--aktiv, .navi__link--bereich):hover', '.navi__link:hover', E2E('e2e/rahmen.spec.ts')),
+  ersetze('regeln', 'Werkzeug ohne Bereich «Übersicht»', 'src/app/navi-zustand.ts', "  if (ziel === '/' && pfad.startsWith('/werkzeug/')) return 'true';\n", ''),
+  ersetze('browser', '«Mehr» zeigt das Rechtliche doppelt', 'src/app/app.html', '[links]="!aufMehr()"', '[links]="true"', E2E('e2e/rahmen.spec.ts', 'handy-390')),
   ersetze('browser', 'Fokus bleibt nicht beim Punkt', 'src/app/teile/pruefpunkt/pruefpunkt.ts', '      ziel?.focus({ preventScroll', '      void ({ preventScroll', E2E('e2e/werkzeug.spec.ts')),
 ];

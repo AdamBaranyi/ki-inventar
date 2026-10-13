@@ -70,8 +70,9 @@ UI-Bibliothek und keine Icon-Bibliothek: eigene Bildzeichen als SVG-Pfade. Schri
 
 **Gestaltung «Prüfpult»:** weisse Blätter mit Haarlinie auf warmem Grund, keine Schatten. Tinte für
 Text und Hauptaktionen, Leuchtstift-Gelb als einzige Datenfarbe für «offen», Rot nur für den Stopp
-(R12). Am Handy eine Tab-Leiste mit vier Zielen, am Desktop eine Seitenleiste. Schrift nie unter
-16 px, Tippflächen ab 44 px.
+(R12). Am Handy eine Tab-Leiste mit vier Zielen, am Desktop eine Seitenleiste mit dem Rechtlichen
+unten; der gewählte Punkt steht in Tinte, ein Werkzeug zählt zur Übersicht. Schmale Seiten stehen
+mittig neben der Seitenleiste. Schrift nie unter 16 px, Tippflächen ab 44 px.
 
 - **Strenge CSP** ohne Inline-Skripte und Inline-Stile: Komponenten haben keine eigenen Stile, alle
   Stile liegen als Dateien neben den Komponenten und werden gebündelt. Zod läuft `jitless`.
@@ -97,10 +98,12 @@ erledigen, drucken, exportieren, neu laden».
 bun run sabotage
 ```
 
-baut 71 Fehler ein (jede Regel umgekehrt, Fortschritt, Speicher, CSV, Bearbeitungsverzeichnis,
-Kalender, Vorlagen, Formular-Schritte, Quelltext-Regeln, Browser-Grundregeln) und verlangt, dass
-jedes Mal ein Test rot wird. Die Darstellung prüft `e2e/darstellung.spec.ts`: hell als Vorgabe auch
-auf dunkel eingestellten Geräten, die Wahl bleibt nach dem Neuladen, kein Aufblitzen beim Laden.
+baut 77 Fehler ein (jede Regel umgekehrt, Fortschritt, Speicher, CSV, Bearbeitungsverzeichnis,
+Kalender, Vorlagen, Formular-Schritte, Rahmen, Quelltext-Regeln, Browser-Grundregeln) und verlangt,
+dass jedes Mal ein Test rot wird. Die Darstellung prüft `e2e/darstellung.spec.ts`: hell als Vorgabe
+auch auf dunkel eingestellten Geräten, die Wahl bleibt nach dem Neuladen, kein Aufblitzen beim
+Laden. Den Rahmen prüft `e2e/rahmen.spec.ts`: Spalte mittig, Rechtliches je Breite an seinem Platz,
+gewählter Menüpunkt auch unter der Maus in Tinte.
 
 Zwei geplante Läufe erinnern per Issue: wöchentlich an offene Pull Requests, monatlich an
 Rechtsstand, Fristen und Vorlagen.
