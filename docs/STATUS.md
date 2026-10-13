@@ -2,8 +2,7 @@
 
 ## Eigener Server (live seit 12.10.2026)
 
-Live auf https://ki-inventar.adambaranyi.xyz, Stand `b2e61f1`, Zertifikat von Let's Encrypt (bis
-10.01.2027). Abnahme von aussen am 12.10.2026: 14 von 14 Prüfungen grün (HTTPS, Umleitung von HTTP,
+Live auf https://ki-inventar.adambaranyi.xyz, Zertifikat von Let's Encrypt (bis 10.01.2027). Abnahme von aussen am 12.10.2026: 14 von 14 Prüfungen grün (HTTPS, Umleitung von HTTP,
 HSTS, CSP mit `frame-ancestors`, `nosniff`, Referrer, Rahmen, kein `Server`/`Via`, Cache, Basis,
 tiefe Links); im Browser (Chromium, WebKit) keine CSP-Verstösse, keine Fehler. Tallyroom und
 Evidarium liefen nach dem Neustart des Proxys weiter.
@@ -52,6 +51,11 @@ Umbau nach der freigegebenen Stilprobe (`~/Code/portfolio/design/ki-inventar/`):
 
 - App-Rahmen: am Handy Tab-Leiste mit vier Zielen (Übersicht, Prüfpunkte, Fristen, Mehr), am Desktop
   Seitenleiste mit der Zahl offener Punkte. Im Formular fallen Kopf und Tab-Leiste am Handy weg.
+- Rahmen nachgeschärft (13.10.2026, Adams Rückmeldung «alles links»): schmale Seiten stehen mittig
+  neben der Seitenleiste; «Keine Rechtsberatung», Rechtsstand und Links am Desktop unten in der
+  Seitenleiste (wie in der Stilprobe), am Handy unter dem Inhalt; gewählter Menüpunkt in Tinte, auf
+  einem Werkzeug bleibt «Übersicht» als Bereich markiert (`aria-current="true"`); «Mehr» in zwei
+  Gruppen, das Rechtliche dort nicht doppelt.
 - Übersicht: Fortschritt («5 von 40 Prüfpunkten erledigt») mit Balken, «Als Nächstes» mit den drei
   dringendsten Punkten (öffnet das Werkzeug mit dem Punkt aufgeklappt), Werkzeuge mit Monogramm und
   Stand, kurze Fristen mit «Heute». Leer: Einleitung, zwei Wege, drei Schritte.

@@ -102,6 +102,11 @@ a {
   white-space: nowrap;
 }
 
+/* Kurze Seiten wie «nicht gefunden»: eine Spalte wie die übrigen schmalen Seiten. */
+.stapel {
+  max-width: var(--breite-text);
+}
+
 .stapel > * + * {
   margin-top: var(--a-5);
 }

@@ -158,20 +158,33 @@ html {
   box-shadow: none;
 }
 
+/* Seiten mit schmaler Spalte stehen mittig; breite wie die Übersicht füllen den Inhalt ohnehin. */
+.inhalt > * > :is(section, article) {
+  margin-inline: auto;
+}
+
 .meldung {
   margin-bottom: var(--a-6);
 }
 
+/* Fuss: Hinweis, Rechtsstand, Links. Am Handy unter dem Inhalt, am Desktop in der Seitenleiste. */
 .fuss {
   display: grid;
   gap: var(--a-2);
+  color: var(--graphit);
+  font-size: var(--text-s);
+}
+
+.app__fuss {
+  display: block;
+}
+
+.app__fuss .fuss {
   max-width: var(--breite-seite);
   margin-inline: auto;
   padding: var(--a-5) max(var(--a-4), env(safe-area-inset-right)) var(--a-6)
     max(var(--a-4), env(safe-area-inset-left));
   border-top: 1px solid var(--linie);
-  color: var(--graphit);
-  font-size: var(--text-s);
 }
 
 .fuss__rechtsberatung {
@@ -218,7 +231,6 @@ html:has(.app--ablauf) {
   .app--ablauf {
     display: grid;
     grid-template-columns: var(--seitenleiste) minmax(0, 1fr);
-    grid-template-rows: 1fr auto;
     padding-bottom: 0;
   }
 
@@ -228,7 +240,6 @@ html:has(.app--ablauf) {
     display: flex;
     flex-direction: column;
     gap: var(--a-6);
-    grid-row: 1 / 3;
     grid-column: 1;
     height: 100vh;
     height: 100dvh;
@@ -299,16 +310,23 @@ html:has(.app--ablauf) {
     height: 1.375rem;
   }
 
+  /* Gewählt heisst Tinte, wie beim Umschalter und beim Filter. */
   .navi__link--aktiv,
   .navi__link--bereich {
-    background: var(--grund);
+    background: var(--tinte);
+    color: var(--auf-tinte);
     font-weight: 620;
   }
 
   .navi__link--aktiv .navi__symbol,
   .navi__link--bereich .navi__symbol {
     background: none;
-    color: var(--tinte);
+    color: var(--auf-tinte);
+  }
+
+  /* Der Rahmen liegt aussen; innen verschwände er auf der Tinte. */
+  .navi__link:focus-visible {
+    outline-offset: 3px;
   }
 
   .navi__zahl {
@@ -325,23 +343,29 @@ html:has(.app--ablauf) {
     font-size: var(--text-s);
   }
 
+  /* Kurz unten in der Seitenleiste, wie in der Stilprobe. */
+  .fuss--kurz {
+    padding-top: var(--a-4);
+    border-top: 1px solid var(--linie);
+  }
+
+  .fuss--kurz .fuss__links {
+    gap: 0 var(--a-4);
+  }
+
   .inhalt {
     grid-column: 2;
     max-width: 76rem;
-    margin: 0;
     padding: var(--a-7) var(--a-7) var(--a-8);
   }
 
-  .fuss {
-    grid-column: 2;
-    max-width: 72rem;
-    margin: 0 var(--a-7);
-    padding-inline: 0;
+  .app__fuss {
+    display: none;
   }
 }
 
 @media (min-width: 60rem) and (min-height: 30rem) and (hover: hover) {
-  .navi__link:hover {
+  .navi__link:not(.navi__link--aktiv, .navi__link--bereich):hover {
     background: var(--grund);
   }
 }

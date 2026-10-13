@@ -9,13 +9,16 @@ interface Ziel {
   pfad: string;
   titel: string;
   text: string;
-  zeichen?: ZeichenName;
 }
 
 const M = TEXTE.mehr;
-const ZIELE: readonly Ziel[] = [
+/** Was am Desktop in der Seitenleiste steht, mit Zeichen wie dort. */
+const WERKZEUGE: readonly (Ziel & { zeichen: ZeichenName })[] = [
   { pfad: '/verzeichnis', titel: TEXTE.app.nav.verzeichnis, text: M.verzeichnis, zeichen: 'druck' },
   { pfad: '/daten', titel: TEXTE.app.nav.daten, text: M.daten, zeichen: 'daten' },
+];
+/** Das Rechtliche als eigene Gruppe ohne Zeichen; so stehen die Texte je Gruppe bündig. */
+const RECHTLICHES: readonly Ziel[] = [
   { pfad: '/impressum', titel: TEXTE.titel.impressum, text: M.impressum },
   { pfad: '/datenschutz', titel: TEXTE.titel.datenschutz, text: M.datenschutz },
 ];
@@ -28,12 +31,23 @@ const ZIELE: readonly Ziel[] = [
     <section class="mehr-seite">
       <h1 tabindex="-1">{{ titel }}</h1>
       <ul class="karte zeilen">
-        @for (ziel of ziele; track ziel.pfad) {
+        @for (ziel of werkzeuge; track ziel.pfad) {
           <li>
             <a class="zeile" [routerLink]="ziel.pfad">
-              @if (ziel.zeichen; as zeichen) {
-                <ki-zeichen class="mehr-seite__zeichen" [name]="zeichen" />
-              }
+              <ki-zeichen class="mehr-seite__zeichen" [name]="ziel.zeichen" />
+              <span class="zeile__text">
+                <span class="zeile__titel">{{ ziel.titel }}<span class="unsichtbar">,</span></span>
+                <span class="zeile__meta">{{ ziel.text }}</span>
+              </span>
+              <ki-zeichen class="zeile__pfeil" name="weiter" />
+            </a>
+          </li>
+        }
+      </ul>
+      <ul class="karte zeilen">
+        @for (ziel of rechtliches; track ziel.pfad) {
+          <li>
+            <a class="zeile" [routerLink]="ziel.pfad">
               <span class="zeile__text">
                 <span class="zeile__titel">{{ ziel.titel }}<span class="unsichtbar">,</span></span>
                 <span class="zeile__meta">{{ ziel.text }}</span>
@@ -61,7 +75,8 @@ const ZIELE: readonly Ziel[] = [
 })
 export class MehrSeite {
   protected readonly titel = TEXTE.titel.mehr;
-  protected readonly ziele = ZIELE;
+  protected readonly werkzeuge = WERKZEUGE;
+  protected readonly rechtliches = RECHTLICHES;
   protected readonly m = M;
   protected readonly quellcode = QUELLCODE;
   protected readonly lokal = TEXTE.app.lokal;

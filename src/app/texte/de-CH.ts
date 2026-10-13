@@ -24,6 +24,7 @@ export const TEXTE = {
     lokal: 'Alles bleibt in diesem Browser: kein Konto, kein Server.',
     keineRechtsberatung:
       'Keine Rechtsberatung. Das KI-Inventar übersetzt deine Angaben in Prüfpunkte; verbindlich sind der Gesetzestext und eine Fachberatung.',
+    keineRechtsberatungKurz: 'Keine Rechtsberatung.',
     rechtsstand: `Rechtsstand geprüft am ${RECHTSSTAND}.`,
     impressum: 'Impressum',
     datenschutz: 'Datenschutz',

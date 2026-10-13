@@ -1,23 +1,18 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  NavigationEnd,
-  Router,
-  RouterLink,
-  RouterLinkActive,
-  RouterOutlet,
-  type ActivatedRouteSnapshot,
-} from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterOutlet, type ActivatedRouteSnapshot } from '@angular/router';
 import { filter } from 'rxjs';
 
 import { DarstellungDienst } from './daten/darstellung';
 import { InventarDienst } from './daten/inventar-dienst';
 import { Uhr } from './daten/uhr';
 import { zahlen } from './fach/auswertung';
+import { naviZustand, type NaviZustand } from './navi-zustand';
 import { DarstellungWahl } from './teile/darstellung-wahl/darstellung-wahl';
+import { Fuss } from './teile/fuss/fuss';
 import { Marke } from './teile/marke/marke';
 import { Zeichen, type ZeichenName } from './teile/zeichen/zeichen';
-import { QUELLCODE, TEXTE } from './texte/de-CH';
+import { TEXTE } from './texte/de-CH';
 
 interface Eintrag {
   pfad: string;
@@ -37,25 +32,26 @@ const EINTRAEGE: readonly Eintrag[] = [
   { pfad: '/mehr', text: NAV.mehr, zeichen: 'mehr', wo: 'handy' },
 ];
 
-/** Seiten, die am Handy unter «Mehr» liegen; dort bleibt «Mehr» markiert. */
-const UNTER_MEHR = ['/verzeichnis', '/daten', '/impressum', '/datenschutz'];
-
 @Component({
   selector: 'ki-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Marke, Zeichen, DarstellungWahl],
+  imports: [RouterOutlet, RouterLink, Marke, Zeichen, DarstellungWahl, Fuss],
   templateUrl: './app.html',
   host: { class: 'app', '[class.app--ablauf]': 'ablauf()' },
 })
 export class App {
   protected readonly t = TEXTE.app;
-  protected readonly quellcode = QUELLCODE;
   protected readonly eintraege = EINTRAEGE;
   protected readonly dienst = inject(InventarDienst);
   private readonly uhr = inject(Uhr);
   /** Im Ablauf (Formular) blendet das Handy Kopf und Tab-Leiste aus. */
   protected readonly ablauf = signal(false);
-  private readonly pfad = signal('/');
-  protected readonly unterMehr = computed(() => UNTER_MEHR.some((p) => this.pfad().startsWith(p)));
+  /** Leer bis zur ersten Navigation, damit kein Eintrag vorschnell markiert ist. */
+  private readonly pfad = signal('');
+  protected readonly zustand = computed<Record<string, NaviZustand>>(() => {
+    const pfad = this.pfad();
+    return Object.fromEntries(EINTRAEGE.map((e) => [e.pfad, naviZustand(e.pfad, pfad)] as const));
+  });
+  protected readonly aufMehr = computed(() => this.pfad() === '/mehr');
   protected readonly offen = computed(() => zahlen(this.dienst.inventar(), this.uhr.heute()).offen);
 
   constructor() {

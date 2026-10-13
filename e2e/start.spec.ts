@@ -13,7 +13,7 @@ test.describe('Startseite', () => {
     await expect(page.getByRole('link', { name: 'Werkzeug erfassen' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Beispiel laden' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'So geht es' })).toBeVisible();
-    await expect(page.getByText('Keine Rechtsberatung.')).toBeVisible();
+    await expect(page.getByRole('contentinfo')).toContainText('Keine Rechtsberatung.');
     await pruefeBildschirm(page, gesehen, 'Start leer');
   });
 
