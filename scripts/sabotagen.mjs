@@ -31,6 +31,8 @@ const BAU = 'bun run build > /dev/null 2>&1';
 const E2E = (datei, projekt = 'desktop') => `${BAU} && ./node_modules/.bin/playwright test ${datei} --project=${projekt}`;
 const PRUEFE = 'node scripts/pruefe-quelltext.mjs';
 const ABBILD = 'bash scripts/abbild-pruefen.sh';
+const SKRIPTE = 'bun run test:skripte';
+const MELDUNG = 'scripts/sicherheits-meldung.sh';
 const FORMULAR = 'src/app/seiten/werkzeug-formular/werkzeug-formular.ts';
 const AUSWERTUNG = 'src/app/fach/auswertung.ts';
 
@@ -109,6 +111,10 @@ export const SABOTAGEN = [
   ersetze('browser', 'Punkt aus der Adresse bleibt zu', 'src/app/seiten/werkzeug-karte/werkzeug-karte.html', '[aufgeklappt]="fragment() === kennung(punkt)"', '[aufgeklappt]="false"', E2E('e2e/start.spec.ts')),
   ersetze('browser', 'Seitenleiste ohne Zahl offener Punkte im Namen', 'src/app/app.html', '[attr.aria-label]="eintrag.pfad', '[attr.data-name]="eintrag.pfad', E2E('e2e/start.spec.ts')),
   ersetze('browser', 'Ohne 404.html für tiefe Links', 'scripts/nach-build.mjs', "copyFileSync(index, join(ZIEL, '404.html'));", '', E2E('e2e/werkzeug.spec.ts')),
+  // Täglicher Alarm: nur das eigene Issue zählt, kein Lockvogel
+  ersetze('sicherheit', 'Meldung ohne Autor-Prüfung', MELDUNG, ' and .author.login == \\"app/github-actions\\"', '', SKRIPTE),
+  ersetze('sicherheit', 'Meldung ohne Label-Prüfung', MELDUNG, ' and any(.labels[]; .name == \\"$label\\")', '', SKRIPTE),
+  ersetze('sicherheit', 'Meldung folgt jedem Issue gleichen Titels', MELDUNG, 'select(.title == \\"$titel\\" and .author.login == \\"app/github-actions\\" and any(.labels[]; .name == \\"$label\\"))', 'select(.title == \\"$titel\\")', SKRIPTE),
   ersetze('abbild', 'Abbild: CSP ohne frame-ancestors', 'infra/Caddyfile', "; frame-ancestors 'none'\"", '"', ABBILD),
   ersetze('abbild', 'Abbild: tiefe Links ohne index.html', 'infra/Caddyfile', '\ttry_files {path} /index.html\n', '', ABBILD),
   ersetze('abbild', 'Abbild: index.html im Cache', 'infra/Caddyfile', 'header @ohneHash Cache-Control "no-cache"', 'header @ohneHash Cache-Control "max-age=3600"', ABBILD),

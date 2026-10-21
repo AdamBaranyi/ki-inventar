@@ -13,6 +13,12 @@
 # GitHub, der nachhinkt («query IssueSearch»). Die Attrappe spielt das schärfste
 # Ende davon: Der Index kennt keines der Issues, die im Test entstehen. Nur die
 # Liste ohne Filter liest direkt («query IssueList») und sieht alles.
+#
+# Wie gh liefert «issue list» das neueste Issue zuerst und nur die Felder aus
+# --json. Was die Attrappe anlegt, stammt vom Bot des Workflows
+# (app/github-actions); ein Test kann daneben fremde Issues als Ordner mit
+# eigener Datei «author» ablegen, wie sie jedes Konto im öffentlichen Repo
+# eröffnen kann.
 set -euo pipefail
 dir="${ATTRAPPE_DIR:?ATTRAPPE_DIR fehlt}"
 mkdir -p "$dir/issues"
@@ -69,9 +75,14 @@ case "$befehl" in
     [ -d "$f" ] || continue
     [ "$(cat "$f/state")" = "${opt[state]:-open}" ] || continue
     liste=$(jq --argjson n "$(basename "$f")" --rawfile t "$f/title" \
-      '. + [{number: $n, title: $t}]' <<<"$liste")
+      --rawfile a "$f/author" --rawfile l "$f/labels" \
+      '. + [{number: $n, title: $t, author: {login: $a},
+        labels: ($l | split("\n") | map(select(length > 0) | {name: .}))}]' <<<"$liste")
   done
-  ausgabe <<<"$liste"
+  jq --arg felder "${opt[json]-}" \
+    'sort_by(-.number) | ($felder | split(",")) as $f
+      | if $f == [] then . else map(with_entries(select(.key as $k | $f | index($k)))) end' \
+    <<<"$liste" | ausgabe
   ;;
 "issue create")
   if ! grep -qxF "${opt[label]-}" "$dir/labels.txt"; then
@@ -81,6 +92,7 @@ case "$befehl" in
   n=$(($(find "$dir/issues" -mindepth 1 -maxdepth 1 -type d | wc -l) + 1))
   mkdir "$dir/issues/$n"
   printf '%s' "${opt[title]}" >"$dir/issues/$n/title"
+  printf 'app/github-actions' >"$dir/issues/$n/author"
   printf '%s\n' "${opt[label]}" >"$dir/issues/$n/labels"
   printf '%s' "${opt[assignee]-}" >"$dir/issues/$n/assignee"
   printf '%s' "${opt[body]}" >"$dir/issues/$n/body"

@@ -42,6 +42,8 @@ Dokument hält fest, was trotzdem gilt und wie es geprüft wird.
   `moderate` und meldet nur: Befunde kommen in ein Issue «Sicherheitsmeldungen», das bei geänderten
   Kennungen ergänzt und bei sauberem Stand geschlossen wird. Rot wird der tägliche Lauf nur bei einem
   Geheimnis oder wenn die Prüfung nicht stattfand (Exit-Code ohne Kennung, etwa ohne Netz).
+- Als «das Issue» zählt nur eines, das der Bot des Workflows angelegt hat (`app/github-actions`) und
+  das das Label `sicherheit` trägt. Ein gleichnamiges Issue eines anderen Kontos bleibt unberührt.
 - GitHub liest `bun.lock` nicht; Dependabot macht für Bun nur Versions-Updates. Der einzige Alarm
   für Sicherheitslücken in Paketen ist darum `bun audit`.
 - Dependabot: Bun wöchentlich (Minor und Patch als ein Sammel-PR), GitHub Actions monatlich, beide
@@ -55,6 +57,22 @@ Keine. Eine Ausnahme bekäme hier eine Zeile mit Kennung, Paket, Grund und «pr�
 
 | Kennung | Paket | Grund | prüfen bis |
 | ------- | ----- | ----- | ---------- |
+
+## Behobene Befunde
+
+### Lockvogel-Issue konnte den täglichen Alarm stumm schalten · behoben 21.10.2026
+
+`scripts/sicherheits-meldung.sh` nahm das neueste offene Issue mit dem Titel «Sicherheitsmeldungen».
+Im öffentlichen Repo kann jedes Konto so ein Issue eröffnen und seinen Text mit der Markierung des
+aktuellen Stands füllen; die Markierung lässt sich aus den öffentlichen Kennungen nachrechnen. Der
+Lauf hätte dann jede neue Meldung für bekannt gehalten und geschwiegen, bei einem sauberen Lauf das
+fremde Issue geschlossen. Für die Bun-Abhängigkeiten ist das der einzige Alarm. Gefunden in
+Evidarium bei der Prüfung nach security-guidance, hier übernommen.
+
+**Behoben:** Gezählt wird nur ein Issue vom Bot dieses Workflows mit dem Label `sicherheit`; Labels
+setzen Konten ohne Rechte nicht. Gefiltert wird weiter erst nach dem Lesen, ohne Suchindex. Die
+gh-Attrappe führt fremde Issues und liefert wie gh das neueste zuerst und nur die verlangten Felder.
+Fünf Tests mit fremden Issues; ohne Autor- oder Label-Prüfung wird je einer rot.
 
 ## Geheimnisse
 
