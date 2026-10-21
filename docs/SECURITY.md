@@ -58,6 +58,12 @@ Keine. Eine Ausnahme bekäme hier eine Zeile mit Kennung, Paket, Grund und «pr�
 | Kennung | Paket | Grund | prüfen bis |
 | ------- | ----- | ----- | ---------- |
 
+### Overrides
+
+| Paket | Fassung | Grund | prüfen bis |
+| ----- | ------- | ----- | ---------- |
+| `vite` | 8.3.4 | `@angular/build` 22.2.2 legt vite fest auf 8.3.0; GHSA-587h-7wmj-h5pm (launch-editor, high) ist erst ab 8.3.3 behoben. Nur Werkzeug: Der Build ist mit und ohne Override gleich (29 von 29 Prüfsummen in `dist`, 21.10.2026). Weg, sobald `@angular/build` vite ab 8.3.3 festlegt. | 21.11.2026 |
+
 ## Behobene Befunde
 
 ### Lockvogel-Issue konnte den täglichen Alarm stumm schalten · behoben 21.10.2026
