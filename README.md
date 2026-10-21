@@ -98,9 +98,9 @@ erledigen, drucken, exportieren, neu laden».
 bun run sabotage
 ```
 
-baut 77 Fehler ein (jede Regel umgekehrt, Fortschritt, Speicher, CSV, Bearbeitungsverzeichnis,
-Kalender, Vorlagen, Formular-Schritte, Rahmen, Quelltext-Regeln, Browser-Grundregeln) und verlangt,
-dass jedes Mal ein Test rot wird. Die Darstellung prüft `e2e/darstellung.spec.ts`: hell als Vorgabe
+baut 80 Fehler ein (jede Regel umgekehrt, Fortschritt, Speicher, CSV, Bearbeitungsverzeichnis,
+Kalender, Vorlagen, Formular-Schritte, Rahmen, Sicherheitsmeldung, Quelltext-Regeln,
+Browser-Grundregeln) und verlangt, dass jedes Mal ein Test rot wird. Die Darstellung prüft `e2e/darstellung.spec.ts`: hell als Vorgabe
 auch auf dunkel eingestellten Geräten, die Wahl bleibt nach dem Neuladen, kein Aufblitzen beim
 Laden. Den Rahmen prüft `e2e/rahmen.spec.ts`: Spalte mittig, Rechtliches je Breite an seinem Platz,
 gewählter Menüpunkt auch unter der Maus in Tinte.
