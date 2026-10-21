@@ -311,6 +311,21 @@ describe('audit.sh', () => {
     expect(ergebnis.stdout).not.toContain('Keine offenen Befunde');
   });
 
+  it('entfernt die Farbcodes von bun audit und behält Text und Exit-Code', () => {
+    const esc = '\u001b';
+    writeFileSync(
+      join(dir, 'ausgabe'),
+      `${esc}[1mproxy-addr${esc}[0m  >=1.1.0 <2.0.8\n  ${esc}[31mcritical${esc}[0m: proxy-addr - https://github.com/advisories/GHSA-jqcg-44mw-7w3h\n`,
+    );
+    writeFileSync(join(dir, 'exit'), '1');
+    const ergebnis = lauf('audit.sh', ['moderate']);
+
+    expect(ergebnis.status).toBe(1);
+    expect(`${ergebnis.stdout}${ergebnis.stderr}`).not.toContain(esc);
+    expect(ergebnis.stdout).toContain('bun audit v1.3.14 (0d9b296a)');
+    expect(ergebnis.stdout).toContain('critical: proxy-addr - https://github.com/advisories/GHSA-jqcg-44mw-7w3h');
+  });
+
   it('schreibt die Entwarnung nur nach einem sauberen Lauf', () => {
     expect(lauf('audit.sh', ['high']).stdout).toContain('Keine offenen Befunde ab high.');
   });

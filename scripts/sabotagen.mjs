@@ -114,6 +114,9 @@ export const SABOTAGEN = [
   // Täglicher Alarm: nur das eigene Issue zählt, kein Lockvogel
   ersetze('sicherheit', 'Meldung ohne Autor-Prüfung', MELDUNG, ' and .author.login == \\"app/github-actions\\"', '', SKRIPTE),
   ersetze('sicherheit', 'Meldung ohne Label-Prüfung', MELDUNG, ' and any(.labels[]; .name == \\"$label\\")', '', SKRIPTE),
+  ersetze('sicherheit', 'Bericht behält die Farbcodes von bun audit', 'scripts/audit.sh', ' 2>&1 | sed "s/${esc}\\[[0-9;]*m//g"', '', SKRIPTE),
+  ersetze('sicherheit', 'Filter schluckt den Exit-Code (ohne pipefail)', 'scripts/audit.sh', 'set -euo pipefail\nstufe=', 'set -eu\nstufe=', SKRIPTE),
+  ersetze('sicherheit', 'Ansicht im Tageslauf mit Farbcodes', '.github/workflows/sicherheit-taeglich.yml', 'bun audit 2>&1 | sed "s/${esc}\\[[0-9;]*m//g" || true', 'bun audit 2>&1 || true', SKRIPTE),
   ersetze('sicherheit', 'Meldung folgt jedem Issue gleichen Titels', MELDUNG, 'select(.title == \\"$titel\\" and .author.login == \\"app/github-actions\\" and any(.labels[]; .name == \\"$label\\"))', 'select(.title == \\"$titel\\")', SKRIPTE),
   ersetze('abbild', 'Abbild: CSP ohne frame-ancestors', 'infra/Caddyfile', "; frame-ancestors 'none'\"", '"', ABBILD),
   ersetze('abbild', 'Abbild: tiefe Links ohne index.html', 'infra/Caddyfile', '\ttry_files {path} /index.html\n', '', ABBILD),

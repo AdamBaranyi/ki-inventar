@@ -18,7 +18,12 @@ case "$stufe" in
     ;;
 esac
 ausnahmen=()
+# bun audit 1.3.14 färbt auch in Dateien und Pipes, NO_COLOR wirkt nicht. Die
+# Farbcodes gehen hier weg, damit CI-Protokoll, Laufzusammenfassung und das Issue
+# lesbar bleiben; pipefail oben hält dabei den Exit-Code von bun audit. Das
+# Escape-Zeichen kommt aus printf, so läuft sed mit GNU und BSD gleich.
+esc=$(printf '\033')
 # Die Form mit «+» hält die leere Liste aus: Bash vor 4.4 bricht sonst mit
 # «unbound variable» ab.
-bun audit --audit-level="$stufe" ${ausnahmen[@]+"${ausnahmen[@]}"}
+bun audit --audit-level="$stufe" ${ausnahmen[@]+"${ausnahmen[@]}"} 2>&1 | sed "s/${esc}\[[0-9;]*m//g"
 echo "Keine offenen Befunde ab $stufe."
