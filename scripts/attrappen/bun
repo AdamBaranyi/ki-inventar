@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 # Attrappe für bun in den Tests von scripts/audit.sh: schreibt die Argumente auf
 # und endet mit dem Code aus $ATTRAPPE_DIR/exit (ohne Datei: 0).
+#
+# Wie bun audit 1.3.14 färbt sie ihre Kopfzeile auch in Dateien und Pipes; einen
+# Bericht mit Befunden legt ein Test als $ATTRAPPE_DIR/ausgabe ab, ebenfalls
+# gefärbt, wenn er das echte Verhalten nachstellen will.
 set -euo pipefail
 dir="${ATTRAPPE_DIR:?ATTRAPPE_DIR fehlt}"
 printf '%s\n' "$*" >>"$dir/bun-aufrufe.log"
+esc=$(printf '\033')
+printf '%s[0m%s[1mbun audit %s[0m%s[2mv1.3.14 (0d9b296a)%s[0m\n' "$esc" "$esc" "$esc" "$esc" "$esc"
+if [ -f "$dir/ausgabe" ]; then cat "$dir/ausgabe"; fi
 if [ -f "$dir/exit" ]; then exit "$(cat "$dir/exit")"; fi

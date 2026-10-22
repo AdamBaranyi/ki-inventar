@@ -48,7 +48,12 @@ Dokument hält fest, was trotzdem gilt und wie es geprüft wird.
   für Sicherheitslücken in Paketen ist darum `bun audit`.
 - Dependabot: Bun wöchentlich (Minor und Patch als ein Sammel-PR), GitHub Actions monatlich, beide
   mit sieben Tagen Wartezeit. Actions sind auf Commits festgelegt.
-- Die Skripte sind im Ablauf getestet (`scripts/sicherheit.test.mjs`, `gh` und `bun` als Attrappen).
+- Die Skripte sind im Ablauf getestet (`scripts/sicherheit.test.mjs`, `gh` und `bun` als Attrappen),
+  die Schritte des Tageslaufs ebenso, mit ihrem `run`-Block aus dem Workflow
+  (`scripts/tageslauf.test.mjs`).
+- bun audit färbt seine Ausgabe auch in Dateien. `scripts/audit.sh` und die Ansicht im Tageslauf
+  entfernen die Farbcodes, damit CI-Protokoll, Laufzusammenfassung und Issue lesbar bleiben; der
+  Exit-Code von bun audit bleibt dabei erhalten (`pipefail`).
 
 ### Ausnahmen
 
