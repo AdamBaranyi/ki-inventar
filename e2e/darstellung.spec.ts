@@ -66,7 +66,11 @@ test('dunkel ohne Aufblitzen: Die Wahl gilt, bevor die App startet', async ({ pa
   });
   try {
     await page.goto('', { waitUntil: 'commit' });
-    await page.waitForFunction(() => getComputedStyle(document.body).backgroundColor !== 'rgba(0, 0, 0, 0)');
+    // Nach «commit» kann <body> noch fehlen; getComputedStyle(null) würfe, und
+    // waitForFunction gäbe beim ersten Wurf auf statt weiter zu warten.
+    await page.waitForFunction(
+      () => document.body !== null && getComputedStyle(document.body).backgroundColor !== 'rgba(0, 0, 0, 0)',
+    );
     expect(await page.locator('h1').count()).toBe(0);
     expect(await farben(page)).toEqual(DUNKEL);
   } finally {
