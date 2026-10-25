@@ -40,7 +40,9 @@ Dokument hält fest, was trotzdem gilt und wie es geprüft wird.
 - `scripts/audit.sh` ist die eine Stelle für Stufe und Ausnahmen. Die CI ruft es bei Push und Pull
   Request mit `high` und blockiert. Der tägliche Lauf (`sicherheit-taeglich.yml`) ruft es mit
   `moderate` und meldet nur: Befunde kommen in ein Issue «Sicherheitsmeldungen», das bei geänderten
-  Kennungen ergänzt und bei sauberem Stand geschlossen wird. Rot wird der tägliche Lauf nur bei einem
+  Kennungen ergänzt wird und bei sauberem Stand offen bleibt und «keine Befunde» sagt (seit
+  25.10.2026; Schliessen und Neuanlegen hiess jedes Mal zuweisen und mailen). Rot wird der tägliche
+  Lauf nur bei einem
   Geheimnis oder wenn die Prüfung nicht stattfand (Exit-Code ohne Kennung, etwa ohne Netz).
 - Als «das Issue» zählt nur eines, das der Bot des Workflows angelegt hat (`app/github-actions`) und
   das das Label `sicherheit` trägt. Ein gleichnamiges Issue eines anderen Kontos bleibt unberührt.
@@ -65,10 +67,10 @@ Keine. Eine Ausnahme bekäme hier eine Zeile mit Kennung, Paket, Grund und «pr�
 
 ### Overrides
 
-| Paket | Fassung | Grund | prüfen bis |
-| ----- | ------- | ----- | ---------- |
-| `vite` | 8.3.4 | `@angular/build` 22.2.2 legt vite fest auf 8.3.0; GHSA-587h-7wmj-h5pm (launch-editor, high) ist erst ab 8.3.3 behoben. Nur Werkzeug: Der Build ist mit und ohne Override gleich (29 von 29 Prüfsummen in `dist`, 21.10.2026). Weg, sobald `@angular/build` vite ab 8.3.3 festlegt. | 21.11.2026 |
-| `zod` | 4.6.6 | `@angular/cli` 22.2.2 legt zod fest auf 4.6.5; GHSA-mrhx-c7xc-m3w5 (Speicher bei überlangen Listen, high) ist ab 4.6.6 behoben. Nur Werkzeug: zod der Anwendung selbst steht schon auf 4.6.6. Weg, sobald `@angular/cli` zod ab 4.6.6 festlegt. | 25.11.2026 |
+| Paket  | Fassung | Grund                                                                                                                                                                                                                                                                              | prüfen bis |
+| ------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `vite` | 8.3.4   | `@angular/build` 22.2.2 legt vite fest auf 8.3.0; GHSA-587h-7wmj-h5pm (launch-editor, high) ist erst ab 8.3.3 behoben. Nur Werkzeug: Der Build ist mit und ohne Override gleich (29 von 29 Prüfsummen in `dist`, 21.10.2026). Weg, sobald `@angular/build` vite ab 8.3.3 festlegt. | 21.11.2026 |
+| `zod`  | 4.6.6   | `@angular/cli` 22.2.2 legt zod fest auf 4.6.5; GHSA-mrhx-c7xc-m3w5 (Speicher bei überlangen Listen, high) ist ab 4.6.6 behoben. Nur Werkzeug: zod der Anwendung selbst steht schon auf 4.6.6. Weg, sobald `@angular/cli` zod ab 4.6.6 festlegt.                                    | 25.11.2026 |
 
 ## Behobene Befunde
 
