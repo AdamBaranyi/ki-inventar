@@ -73,6 +73,7 @@ Umbau nach der freigegebenen Stilprobe (`~/Code/portfolio/design/ki-inventar/`):
 Live auf https://adambaranyi.github.io/ki-inventar/, gebaut und geprüft von der CI auf `main`.
 
 **Fertig**
+
 - Übersicht mit Zahlen, Liste der Werkzeuge mit Status, «Werkzeug erfassen», «Beispiel laden».
 - Formular mit zehn Fragen, Autosave, Validierung (Name, Länge, ganze Zahl), offene Angaben.
 - 14 Regeln als reine Funktionen, je Regel Tests (greift, greift nicht) und eine Sabotage; Status
