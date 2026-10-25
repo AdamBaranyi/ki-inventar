@@ -13,8 +13,6 @@ updates:
     cooldown:
       default-days: 7
     open-pull-requests-limit: 5
-    assignees:
-      - AdamBaranyi
     commit-message:
       prefix: chore
       include: scope
@@ -41,7 +39,5 @@ updates:
     cooldown:
       default-days: 7
     open-pull-requests-limit: 3
-    assignees:
-      - AdamBaranyi
     commit-message:
       prefix: ci
