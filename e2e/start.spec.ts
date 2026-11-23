@@ -81,7 +81,7 @@ test.describe('Startseite', () => {
     await expect(navi.getByRole('link', { name: 'Mehr' })).toHaveClass(/navi__link--bereich/);
   });
 
-  test('am Desktop: Seitenleiste mit fünf Zielen und der Zahl offener Punkte', async ({ page, isMobile }) => {
+  test('am Desktop: Seitenleiste mit fünf Zielen', async ({ page, isMobile }) => {
     test.skip(isMobile, 'Am Handy gibt es die Tab-Leiste.');
     await oeffne(page);
     const navi = page.getByRole('navigation', { name: 'Hauptnavigation' });
@@ -92,8 +92,22 @@ test.describe('Startseite', () => {
       'Verzeichnis',
       'Daten sichern',
     ]);
+  });
+
+  test('«Prüfpunkte» nennt die offenen Punkte im Namen, am Handy auch ohne sichtbare Zahl', async ({
+    page,
+    isMobile,
+  }) => {
+    await oeffne(page);
     await page.getByRole('button', { name: 'Beispiel laden' }).click();
-    await expect(navi.getByRole('link', { name: 'Prüfpunkte, 35 offen' })).toBeVisible();
+    const link = page
+      .getByRole('navigation', { name: 'Hauptnavigation' })
+      .getByRole('link', { name: /^Prüfpunkte ?, 35 offen$/ });
+    await expect(link).toBeVisible();
+    // Der Name kommt aus dem Inhalt: So enthält er immer den sichtbaren Text (WCAG 2.5.3).
+    await expect(link).not.toHaveAttribute('aria-label');
+    const zahl = link.locator('.navi__zahl');
+    await (isMobile ? expect(zahl).toBeHidden() : expect(zahl).toHaveText('35'));
   });
 
   test('lädt Mona Sans aus dem eigenen Build; Tabellenziffern sind gleich breit', async ({ page }) => {
