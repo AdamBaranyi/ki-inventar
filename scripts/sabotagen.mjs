@@ -109,7 +109,8 @@ export const SABOTAGEN = [
   ersetze('browser', 'Blatt dehnt sich mit der Tabelle', 'src/app/seiten/verzeichnis/verzeichnis.css', '.blatt {\n  min-width: 0;\n', '.blatt {\n', E2E('e2e/kette.spec.ts', 'handy-390')),
   ersetze('browser', 'Tab-Leiste bleibt im Ablauf', 'src/app/rahmen.css', '.app--ablauf .kopf,\n.app--ablauf .navi {\n  display: none;\n}', '.app--ablauf .kopf {\n  display: none;\n}', E2E('e2e/werkzeug.spec.ts', 'handy-390')),
   ersetze('browser', 'Punkt aus der Adresse bleibt zu', 'src/app/seiten/werkzeug-karte/werkzeug-karte.html', '[aufgeklappt]="fragment() === kennung(punkt)"', '[aufgeklappt]="false"', E2E('e2e/start.spec.ts')),
-  ersetze('browser', 'Seitenleiste ohne Zahl offener Punkte im Namen', 'src/app/app.html', '[attr.aria-label]="eintrag.pfad', '[attr.data-name]="eintrag.pfad', E2E('e2e/start.spec.ts')),
+  ersetze('browser', 'Seitenleiste ohne Zahl offener Punkte im Namen', 'src/app/app.html', '<span class="unsichtbar">, {{ offen() }} {{ t.offenZahl }}</span>', '', E2E('e2e/start.spec.ts')),
+  ersetze('browser', 'Seitenleiste liest die Zahl doppelt vor', 'src/app/app.html', 'pille--offen" aria-hidden="true">', 'pille--offen">', E2E('e2e/start.spec.ts')),
   ersetze('browser', 'Ohne 404.html für tiefe Links', 'scripts/nach-build.mjs', "copyFileSync(index, join(ZIEL, '404.html'));", '', E2E('e2e/werkzeug.spec.ts')),
   // Täglicher Alarm: nur das eigene Issue zählt, kein Lockvogel
   ersetze('sicherheit', 'Meldung ohne Autor-Prüfung', MELDUNG, ' and .author.login == \\"app/github-actions\\"', '', SKRIPTE),
